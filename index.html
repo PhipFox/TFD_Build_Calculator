@@ -72,7 +72,10 @@ input[type=text],input[type=password]{background:var(--panel2);color:var(--txt);
 <style>
 /* ===== Sci-Fi-Theme im Stil des Spiels ===== */
 :root{
-  --bg:#05080d;--panel:rgba(12,20,30,.86);--panel2:rgba(18,30,44,.9);--line:rgba(120,190,220,.18);--line2:rgba(120,210,240,.42);
+  /* Hintergrund in den Farben des Charakters (Nell: schwarzes Leder, Taupe, gedecktes Rosé) */
+  --bg:#0a090a;--bg-glow1:rgba(201,138,146,.13);--bg-glow2:rgba(150,132,120,.11);--bg-grid:rgba(214,190,184,.03);
+  --hdr:linear-gradient(100deg,rgba(13,11,12,.96) 0%,rgba(27,22,24,.94) 55%,rgba(74,44,52,.55) 100%);--bar:rgba(11,9,10,.92);
+  --panel:rgba(20,18,20,.88);--panel2:rgba(31,27,30,.92);--line:rgba(120,190,220,.18);--line2:rgba(120,210,240,.42);
   --txt:#dbe7ef;--mut:#7f95a6;--acc:#3fe0ff;--acc2:#ffb347;--ok:#59f2b0;--warn:#ffb347;--bad:#ff5c6c;
   --cut:12px;--head:"Rajdhani","Bahnschrift","Segoe UI",sans-serif;
 }
@@ -80,10 +83,10 @@ html{background:var(--bg)}
 body{
   font-family:"Exo 2","Segoe UI",system-ui,sans-serif;letter-spacing:.15px;
   background:
-    radial-gradient(1200px 600px at 85% -10%,rgba(63,224,255,.10),transparent 60%),
-    radial-gradient(900px 500px at -10% 110%,rgba(255,179,71,.07),transparent 60%),
-    linear-gradient(rgba(63,224,255,.035) 1px,transparent 1px) 0 0/100% 32px,
-    linear-gradient(90deg,rgba(63,224,255,.035) 1px,transparent 1px) 0 0/32px 100%,
+    radial-gradient(1200px 600px at 85% -10%,var(--bg-glow1),transparent 60%),
+    radial-gradient(900px 500px at -10% 110%,var(--bg-glow2),transparent 60%),
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 32px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/32px 100%,
     var(--bg);
   background-attachment:fixed;min-height:100vh;
 }
@@ -93,9 +96,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
 
 /* Kopfbereich */
 header{position:relative;overflow:hidden;padding:16px 28px 22px;border-bottom:1px solid var(--line2);
-  background:linear-gradient(100deg,rgba(8,16,26,.95) 0%,rgba(10,26,40,.92) 55%,rgba(40,24,6,.55) 100%)}
+  background:var(--hdr)}
 header::before{content:"";position:absolute;right:-40px;top:0;bottom:0;width:420px;opacity:.5;
-  background:repeating-linear-gradient(-60deg,transparent 0 14px,rgba(63,224,255,.08) 14px 16px);
+  background:repeating-linear-gradient(-60deg,transparent 0 14px,rgba(214,170,174,.08) 14px 16px);
   -webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
 header::after{content:"";position:absolute;left:0;bottom:-1px;width:260px;height:3px;
   background:linear-gradient(90deg,var(--acc),transparent)}
@@ -109,7 +112,7 @@ header p{font-family:var(--head);font-size:13px;letter-spacing:1.6px;text-transf
 .switch[aria-checked="true"]::after{box-shadow:0 0 10px var(--acc2)}
 
 /* Navigation */
-nav{gap:2px;padding:0 28px;background:rgba(6,12,20,.9);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+nav{gap:2px;padding:0 28px;background:var(--bar);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
 nav button{font-family:var(--head);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:1.8px;
   border:0;border-radius:0;padding:14px 18px 12px;color:var(--mut);position:relative;transition:color .15s,background .15s}
 nav button:hover{color:var(--txt);background:rgba(63,224,255,.05)}
@@ -134,7 +137,7 @@ main{padding:22px 28px}
 
 /* Formulare */
 label span{color:var(--mut)}
-select,input[type=number],input[type=text],input[type=password]{border-radius:0;border:1px solid var(--line2);background:rgba(4,10,16,.85);
+select,input[type=number],input[type=text],input[type=password]{border-radius:0;border:1px solid var(--line2);background:rgba(8,7,8,.88);
   color:var(--txt);font-family:"Exo 2",sans-serif;padding:6px 8px;transition:border-color .15s,box-shadow .15s}
 select:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 12px rgba(63,224,255,.25)}
 input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px}
@@ -190,8 +193,28 @@ ul{padding-left:18px}li::marker{color:var(--acc)}
 a{color:var(--acc)}
 .grid{grid-template-columns:340px 1fr}
 @media(max-width:900px){.grid{grid-template-columns:1fr}nav{padding:0 10px}main,header{padding-left:14px;padding-right:14px}}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#05080d}
-::-webkit-scrollbar-thumb{background:rgba(63,224,255,.25);border:2px solid #05080d}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(63,224,255,.25);border:2px solid var(--bg)}
+
+/* Zahnrad (Daten & Annahmen) oben rechts */
+.gear{position:absolute;right:28px;top:14px;z-index:2;width:36px;height:36px;padding:7px;cursor:pointer;color:var(--mut);
+  background:rgba(8,7,8,.6);border:1px solid var(--line2);transition:color .15s,box-shadow .15s,border-color .15s;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.gear svg{display:block;width:100%;height:100%;transition:transform .4s}
+.gear:hover{color:var(--txt)}.gear:hover svg{transform:rotate(60deg)}
+.gear.on{color:var(--acc);border-color:var(--acc);box-shadow:inset 0 0 12px rgba(63,224,255,.25)}
+.gear:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media(max-width:900px){.gear{right:14px}}
+/* Charakter-Portrait */
+.hero{display:flex;gap:18px;align-items:flex-start;margin-bottom:14px}
+.hero>div:last-child{min-width:0;flex:1}
+.hero p:first-child{margin-top:0}
+.portrait{flex:none;width:168px;height:168px;position:relative;
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
+  background:radial-gradient(circle at 50% 30%,rgba(201,138,146,.28),rgba(10,9,10,.95) 75%);box-shadow:inset 0 0 0 1px var(--line2)}
+.portrait img,.portrait svg{display:block;width:100%;height:100%;object-fit:cover}
+.portrait::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(214,170,174,.45),inset 0 -30px 30px -18px rgba(10,9,10,.9)}
+@media(max-width:600px){.hero{flex-direction:column}.portrait{width:140px;height:140px}}
 
 /* ===== Waffen: Seltenheitsfarben, Karten, Tooltip ===== */
 :root{--t1:#5cc8ff;--t2:#c39bff;--t3:#ffcf5c;--t4:#ff4d5e}
@@ -239,7 +262,7 @@ a{color:var(--acc)}
 .wline .pill .wpic{width:44px;height:24px}
 .wline .pill .wn{font-size:13.5px}
 #wtip{position:fixed;z-index:60;width:320px;max-width:calc(100vw - 16px);padding:12px 14px;pointer-events:none;display:none;
-  background:#060c14;border-top:2px solid var(--tc);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 45%,transparent),0 10px 30px rgba(0,0,0,.6);font-size:12.5px}
+  background:#0e0c0e;border-top:2px solid var(--tc);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 45%,transparent),0 10px 30px rgba(0,0,0,.6);font-size:12.5px}
 #wtip.on{display:block}
 #wtip .wn{font-size:18px}
 #wtip .wt-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
@@ -254,6 +277,7 @@ a{color:var(--acc)}
 </head>
 <body>
 <header>
+  <button type="button" class="gear" id="gear" data-v="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.03Z"/></svg></button>
   <div class="lang">
     <span id="lDe" class="on">DE</span>
     <button class="switch" id="langSwitch" role="switch" aria-checked="false" aria-label="Sprache / Language"></button>
@@ -267,7 +291,6 @@ a{color:var(--acc)}
   <button data-v="weap" data-i="navWeap"></button>
   <button data-v="char" data-i="navChar"></button>
   <button data-v="farm" data-i="navFarm"></button>
-  <button data-v="data" data-i="navData"></button>
 </nav>
 <main>
 
@@ -358,10 +381,15 @@ a{color:var(--acc)}
 <section id="char" class="view">
 <div class="card">
   <h2>Nell</h2>
-  <p data-i="nellIntro"></p>
+  <div class="hero">
+    <div class="portrait" id="nellPic"></div>
+    <div>
+      <p data-i="nellIntro"></p>
+      <h3 data-i="comboH"></h3>
+      <p data-i="combo"></p>
+    </div>
+  </div>
   <table id="skillTbl"></table>
-  <h3 data-i="comboH"></h3>
-  <p data-i="combo"></p>
 </div>
 <div class="card">
   <h2 data-i="transH"></h2>
@@ -435,7 +463,7 @@ a{color:var(--acc)}
 // ---------- ÜBERSETZUNGEN ----------
 const I18N={
 de:{
- title:"TFD Build-Rechner",subtitle:"Lokale Version v0.2 · Spielstand Patch 1.4.8 (Nov. 2026) · Werte teils geschätzt, siehe „Daten“",
+ title:"TFD Build-Rechner",subtitle:"Lokale Version v0.2 · Spielstand Patch 1.4.8 (Nov. 2026) · Werte teils geschätzt, siehe Zahnrad oben rechts",
  navOpt:"Optimierer",navChar:"Nell & Skills",navFarm:"Wo bekomme ich was?",navData:"Daten & Annahmen",
  goal:"Ziel",buildType:"Build-Typ",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
  wCd:"Gewicht Cooldown",wRange:"Gewicht Reichweite",needHp:"mind. 1 HP/Überlebens-Modul",condH:"Bedingte Effekte einrechnen",
@@ -494,7 +522,7 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
  L:{sp:"Skill Power",spNA:"Non-Attr. Skill Power",spm:"Skill-Power-Mod.",spmTech:"Tech-Modifier",spmFus:"Fusion-Modifier",cr:"Skill-Critrate",cd:"Skill-Critschaden",cdr:"Cooldown −",cost:"Skill-Kosten",range:"Reichweite",hp:"Max HP"}
 },
 en:{
- title:"TFD Build Calculator",subtitle:"Local version v0.2 · Game version patch 1.4.8 (Nov 2026) · some values estimated, see “Data”",
+ title:"TFD Build Calculator",subtitle:"Local version v0.2 · Game version patch 1.4.8 (Nov 2026) · some values estimated, see the gear icon at the top right",
  navOpt:"Optimizer",navChar:"Nell & Skills",navFarm:"Where to get what?",navData:"Data & Assumptions",
  goal:"Goal",buildType:"Build type",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
  wCd:"Cooldown weight",wRange:"Range weight",needHp:"at least 1 HP/survival module",condH:"Include conditional effects",
@@ -645,6 +673,14 @@ function modGlyph(m){
 }
 // Original-Icons (werden zur Laufzeit von Nexons Servern geladen, nicht in der Datei gespeichert)
 let OFFICIAL={mods:{},skills:[]};let USE_OFFICIAL=true;
+// Nells Portrait: nur der Bild-Link (NEXON Open API, descendant.json), kein Bild im Projekt
+const NELL_IMG="https://open.api.nexon.com/static/tfd/img/0a257481650002dbfaa5d4d89397ebd1";
+const NELL_SVG='<svg viewBox="0 0 96 96" aria-hidden="true"><g fill="#c98a92" opacity=".55"><circle cx="48" cy="34" r="17"/><path d="M12 96c2-24 16-36 36-36s34 12 36 36Z"/></g></svg>';
+function nellPortrait(){
+  const url=OFFICIAL.portrait||NELL_IMG;
+  if(!USE_OFFICIAL||!/^https:\/\//.test(url))return NELL_SVG;
+  return `<img src="${esc(url)}" alt="Nell" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${NELL_SVG.replace(/"/g,"&quot;")}">`;
+}
 const esc=s=>String(s).replace(/"/g,"&quot;");
 function withImg(url,fallback,round){
   if(!url||!USE_OFFICIAL)return fallback;
@@ -667,12 +703,17 @@ function skillIcon(i){const c=SKILL_COL[i];
 
 // ---------- UI ----------
 const $=id=>document.getElementById(id);
+let lastView="opt";
 function showView(id){
-  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.v===id));
+  if(id!=="data")lastView=id;
+  document.querySelectorAll("nav button, #gear").forEach(x=>x.classList.toggle("on",x.dataset.v===id));
+  $("gear").setAttribute("aria-pressed",id==="data");
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
   window.scrollTo(0,0);
 }
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showView(b.dataset.v));
+// Zahnrad: öffnet „Daten & Annahmen“, ein zweiter Klick führt zurück zum vorherigen Reiter
+$("gear").onclick=()=>showView($("data").classList.contains("on")?lastView:"data");
 for(let i=0;i<=10;i++){const o=document.createElement("option");o.value=i;if(i==10)o.selected=true;$("lvl").appendChild(o);}
 function statTxt(o){const L=I18N[LANG].L;return Object.entries(o).map(([k,v])=>`${L[k]} ${v>0&&k!="cdr"?"+":""}${fmt(v,1).replace(/[,.]0$/,"")} %`).join(", ");}
 function fmt(x,d=1){return x.toLocaleString(LANG==="de"?"de-DE":"en-US",{maximumFractionDigits:d,minimumFractionDigits:d});}
@@ -691,6 +732,8 @@ function renderStatic(){
     SRC_EXTRA.map(r=>`<tr><td>${tr(r[0])}</td><td class="src">${tr(r[1])}</td></tr>`).join("");
   $("modTbl").innerHTML=`<tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap0")}</th><th>${t("thTag")}</th><th>${t("thEff0")}</th></tr>`+
     MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="s-${m.s}">${m.s}</td><td>${m.c}</td><td>${m.t||"–"}</td><td>${statTxt(m.st)}${m.condSt?(Object.keys(m.st).length?" · ":"")+t("cond")+": "+statTxt(m.condSt):""}</td></tr>`).join("");
+  $("nellPic").innerHTML=nellPortrait();
+  $("gear").title=t("navData");$("gear").setAttribute("aria-label",t("navData"));
   $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b class=\"trn\">Shattered Heart</b>";
   $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b class=\"trn\">Restored Heart</b>";
   renderIconStatus();
@@ -1095,6 +1138,7 @@ function applyMeta(desc,mods){
   if(Array.isArray(mods))mods.forEach(m=>{if(m&&m.module_name&&m.image_url)o.mods[String(m.module_name).toLowerCase()]=m.image_url;});
   if(Array.isArray(desc)){
     const nell=desc.find(d=>d&&/^nell$/i.test(String(d.descendant_name||"").trim()))||desc.find(d=>/nell/i.test(d&&d.descendant_name||""));
+    if(nell&&nell.descendant_image_url)o.portrait=nell.descendant_image_url;
     if(nell&&Array.isArray(nell.descendant_skill)){
       const keys=["suspicion","breach projection","ring of breach","gravitic","gaze of the abyss"];
       nell.descendant_skill.forEach((s,idx)=>{
@@ -1134,10 +1178,10 @@ $("metaFiles").onchange=async e=>{
     if(a.some(x=>x&&x.weapon_name))setWeapons(a.some(x=>x&&Object.values(W_TYPES).some(v=>v[1]===x.weapon_type))?"de":"en",a);
     else if(a.some(x=>x&&x.descendant_skill))desc=a;else if(a.some(x=>x&&x.module_name))mods=a;}catch(err){icErr=f.name+": "+err.message;}}
   const o=applyMeta(desc,mods);const old=OFFICIAL;
-  store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills});
+  store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills,portrait:o.portrait||old.portrait});
 };
 $("useOff").onchange=e=>{USE_OFFICIAL=e.target.checked;try{localStorage.setItem("tfdUseOff",USE_OFFICIAL?"1":"0");}catch(err){}rerender();};
-try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[]};
+try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[],portrait:c.portrait};
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
 ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
