@@ -216,6 +216,26 @@ a{color:var(--acc)}
 .portrait::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(214,170,174,.45),inset 0 -30px 30px -18px rgba(10,9,10,.9)}
 @media(max-width:600px){.hero{flex-direction:column}.portrait{width:140px;height:140px}}
 
+/* Descendants: Übersicht + Einzelseite */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.dcard{display:flex;flex-direction:column;gap:6px;align-items:stretch;cursor:pointer;padding:6px 6px 9px;min-width:0;border:0;color:var(--txt);
+  font-family:"Exo 2",sans-serif;background:linear-gradient(180deg,rgba(201,138,146,.10),rgba(8,7,8,.85) 70%);box-shadow:inset 0 0 0 1px var(--line);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:filter .15s,box-shadow .15s}
+.dcard:hover{filter:brightness(1.2);box-shadow:inset 0 0 0 1px var(--acc)}
+.dcard:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.dcard .dpic{display:block;aspect-ratio:1;background:radial-gradient(circle at 50% 30%,rgba(201,138,146,.22),rgba(10,9,10,.95) 75%)}
+.dcard .dpic img,.dcard .dpic svg{display:block;width:100%;height:100%;object-fit:cover}
+.dcard .dn{font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.6px;text-align:center;line-height:1.15;overflow-wrap:anywhere}
+.dcard.t3 .dn,h2.t3{color:var(--t3)}
+.btn.back{width:auto;margin:0 0 14px;font-size:14px;padding:8px 16px}
+td.pre{white-space:pre-line}
+.tscroll{overflow-x:auto}
+#dDetail td:first-child{min-width:190px}#dDetail td.pre{min-width:240px}
+.el{white-space:nowrap}
+.el{display:inline-block;font-family:var(--head);font-weight:600;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;padding:0 6px;
+  color:var(--ec,#b9c4cf);border:1px solid color-mix(in srgb,var(--ec,#b9c4cf) 45%,transparent);background:color-mix(in srgb,var(--ec,#b9c4cf) 10%,transparent)}
+.el-fire{--ec:#ff8a5c}.el-chill{--ec:#6bc7ff}.el-elec{--ec:#b79bff}.el-toxic{--ec:#7fe07a}
+
 /* ===== Waffen: Seltenheitsfarben, Karten, Tooltip ===== */
 :root{--t1:#5cc8ff;--t2:#c39bff;--t3:#ffcf5c;--t4:#ff4d5e}
 .t1{--tc:var(--t1)}.t2{--tc:var(--t2)}.t3{--tc:var(--t3)}.t4{--tc:var(--t4)}
@@ -377,28 +397,20 @@ a{color:var(--acc)}
 </div>
 </section>
 
-<!-- CHARAKTER -->
+<!-- DESCENDANTS -->
 <section id="char" class="view">
+<div id="dList">
 <div class="card">
-  <h2>Nell</h2>
-  <div class="hero">
-    <div class="portrait" id="nellPic"></div>
-    <div>
-      <p data-i="nellIntro"></p>
-      <h3 data-i="comboH"></h3>
-      <p data-i="combo"></p>
-    </div>
-  </div>
-  <table id="skillTbl"></table>
+  <h2 data-i="dAllH"></h2>
+  <div class="wfilter"><input type="text" id="dSearch" autocomplete="off"></div>
+  <p class="note"><span id="dCount"></span> · <span data-i="dHint"></span></p>
+  <div class="dgrid" id="dGrid"></div>
+  <div id="dStatus" class="status" style="margin-top:14px"></div>
+  <div class="row"><button class="btn sec" id="dReload" data-i="dReload"></button></div>
+  <p class="note" data-i="dSrcNote"></p>
 </div>
-<div class="card">
-  <h2 data-i="transH"></h2>
-  <table>
-    <tr><th data-i="thModule"></th><th data-i="thEffect"></th><th data-i="thUse"></th></tr>
-    <tr><td><div class="mname" id="icoSH"><b class="trn">Shattered Heart</b></div></td><td data-i="shEff"></td><td data-i="shUse"></td></tr>
-    <tr><td><div class="mname" id="icoRH"><b class="trn">Restored Heart</b></div></td><td data-i="rhEff"></td><td data-i="rhUse"></td></tr>
-  </table>
 </div>
+<div id="dDetail" style="display:none"></div>
 </section>
 
 <!-- FARMING -->
@@ -464,7 +476,7 @@ a{color:var(--acc)}
 const I18N={
 de:{
  title:"TFD Build-Rechner",subtitle:"Lokale Version v0.2 · Spielstand Patch 1.4.8 (Nov. 2026) · Werte teils geschätzt, siehe Zahnrad oben rechts",
- navOpt:"Optimierer",navChar:"Nell & Skills",navFarm:"Wo bekomme ich was?",navData:"Daten & Annahmen",
+ navOpt:"Optimierer",navChar:"Descendants",navFarm:"Wo bekomme ich was?",navData:"Daten & Annahmen",
  goal:"Ziel",buildType:"Build-Typ",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
  wCd:"Gewicht Cooldown",wRange:"Gewicht Reichweite",needHp:"mind. 1 HP/Überlebens-Modul",condH:"Bedingte Effekte einrechnen",
  condDec:"Decimator voll gestapelt (Mobbing)",condAmb:"Dangerous Ambush (Gegner festgesetzt)",
@@ -507,6 +519,13 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
  icFileH:"3 · JSON-Dateien manuell",icFileNote:"Falls dein Browser die Abfrage blockiert: lade descendant.json, module.json (englisch) und für die Waffen weapon.json aus der Nexon-Open-API-Doku herunter und wähle sie hier aus.",
  icNone:"Noch keine Original-Icons geladen – es werden die eigenen Symbole gezeigt.",icOk:"Original-Icons aktiv: {m} Module, {s}/5 Nell-Skills.",icErr:"Laden fehlgeschlagen: {e}",icLoading:"Lade …",
  icoNote:"Symbole sind eigene Darstellungen (Farbe = Sockel, Motiv = Hauptwirkung), keine Original-Icons aus dem Spiel.",
+ dAllH:"Alle Descendants",dSearch:"Descendant suchen …",dCount:"{n} von {m} Descendants",dHint:"Klick öffnet die Seite mit Skills und transzendenten Modulen",dNoHit:"Kein Descendant passt zur Suche.",
+ dBack:"Alle Descendants",dSkillsH:"Skills",dPassive:"Passiv",thCapRange:"Kap. (Level 0 → max)",dNoTrans:"Für diesen Descendant sind keine transzendenten Module hinterlegt.",
+ dOnlyNell:"Skills und transzendente Module laut NEXON Open API. Der Optimierer rechnet bisher nur für Nell.",
+ dNeedData:"Skills und Module werden von NEXON geladen – dafür ist eine Verbindung nötig.",
+ dSrcBase:"Eingebaute Liste (nur Namen und Bilder). Skills und Module werden von NEXON geladen, sobald eine Verbindung besteht.",
+ dSrcLive:"Descendant-Daten von NEXON aktiv: {n} Descendants.",dLoading:"Lade Descendant-Daten …",dErr:"Descendant-Daten konnten nicht geladen werden ({e}) – es wird die eingebaute Liste gezeigt.",
+ dReload:"Descendant-Daten neu laden",dSrcNote:"Namen, Skill- und Modultexte und Bilder: NEXON Open API. Bilder werden nur verlinkt, nicht gespeichert.",
  navWeap:"Waffen",wSelH:"Deine Waffen",wSelNote:"Bis zu 3 Waffen wie im Spiel. Die Auswahl wird in diesem Browser gespeichert und beim Build angezeigt – in den Score fließt sie noch nicht ein (der Rechner bewertet bisher nur Skill-Schaden).",
  wAllH:"Alle Waffen",wSearch:"Waffe oder Fähigkeit suchen …",wAllTypes:"Alle Waffentypen",wAllRounds:"Alle Munitionsarten",wEmptySlot:"Slot {n} – frei",wRemove:"{n} entfernen",
  wMax:"Es sind schon {n} Waffen gewählt – entferne zuerst eine.",wNone:"Noch keine Waffe gewählt.",wNoHit:"Keine Waffe passt zu diesen Filtern.",wCount:"{n} von {m} Waffen",
@@ -523,7 +542,7 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
 },
 en:{
  title:"TFD Build Calculator",subtitle:"Local version v0.2 · Game version patch 1.4.8 (Nov 2026) · some values estimated, see the gear icon at the top right",
- navOpt:"Optimizer",navChar:"Nell & Skills",navFarm:"Where to get what?",navData:"Data & Assumptions",
+ navOpt:"Optimizer",navChar:"Descendants",navFarm:"Where to get what?",navData:"Data & Assumptions",
  goal:"Goal",buildType:"Build type",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
  wCd:"Cooldown weight",wRange:"Range weight",needHp:"at least 1 HP/survival module",condH:"Include conditional effects",
  condDec:"Decimator fully stacked (mobbing)",condAmb:"Dangerous Ambush (enemy immobilized)",
@@ -566,6 +585,13 @@ icH:"Original icons (local)",icIntro:"This file loads the official icons straigh
  icFileH:"3 · JSON files manually",icFileNote:"If your browser blocks the request: download descendant.json, module.json (English) and, for weapons, weapon.json from the Nexon Open API docs and select them here.",
  icNone:"No original icons loaded yet – showing custom icons.",icOk:"Original icons active: {m} modules, {s}/5 Nell skills.",icErr:"Loading failed: {e}",icLoading:"Loading …",
  icoNote:"Icons are custom drawings (color = socket, symbol = main effect), not the original in-game icons.",
+ dAllH:"All Descendants",dSearch:"Search descendant …",dCount:"{n} of {m} descendants",dHint:"Click opens the page with skills and transcendent modules",dNoHit:"No descendant matches the search.",
+ dBack:"All Descendants",dSkillsH:"Skills",dPassive:"Passive",thCapRange:"Cap. (level 0 → max)",dNoTrans:"No transcendent modules are listed for this descendant.",
+ dOnlyNell:"Skills and transcendent modules as listed by the NEXON Open API. The optimizer only calculates for Nell so far.",
+ dNeedData:"Skills and modules are loaded from NEXON – this needs a connection.",
+ dSrcBase:"Built-in list (names and images only). Skills and modules are loaded from NEXON as soon as a connection is available.",
+ dSrcLive:"Descendant data from NEXON active: {n} descendants.",dLoading:"Loading descendant data …",dErr:"Descendant data could not be loaded ({e}) – showing the built-in list.",
+ dReload:"Reload descendant data",dSrcNote:"Names, skill and module texts and images: NEXON Open API. Images are only linked, never stored.",
  navWeap:"Weapons",wSelH:"Your weapons",wSelNote:"Up to 3 weapons, as in the game. Your selection is saved in this browser and shown with the build – it does not affect the score yet (the calculator only rates skill damage so far).",
  wAllH:"All weapons",wSearch:"Search weapon or ability …",wAllTypes:"All weapon types",wAllRounds:"All ammo types",wEmptySlot:"Slot {n} – empty",wRemove:"Remove {n}",
  wMax:"{n} weapons are already selected – remove one first.",wNone:"No weapon selected yet.",wNoHit:"No weapon matches these filters.",wCount:"{n} of {m} weapons",
@@ -673,14 +699,6 @@ function modGlyph(m){
 }
 // Original-Icons (werden zur Laufzeit von Nexons Servern geladen, nicht in der Datei gespeichert)
 let OFFICIAL={mods:{},skills:[]};let USE_OFFICIAL=true;
-// Nells Portrait: nur der Bild-Link (NEXON Open API, descendant.json), kein Bild im Projekt
-const NELL_IMG="https://open.api.nexon.com/static/tfd/img/0a257481650002dbfaa5d4d89397ebd1";
-const NELL_SVG='<svg viewBox="0 0 96 96" aria-hidden="true"><g fill="#c98a92" opacity=".55"><circle cx="48" cy="34" r="17"/><path d="M12 96c2-24 16-36 36-36s34 12 36 36Z"/></g></svg>';
-function nellPortrait(){
-  const url=OFFICIAL.portrait||NELL_IMG;
-  if(!USE_OFFICIAL||!/^https:\/\//.test(url))return NELL_SVG;
-  return `<img src="${esc(url)}" alt="Nell" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${NELL_SVG.replace(/"/g,"&quot;")}">`;
-}
 const esc=s=>String(s).replace(/"/g,"&quot;");
 function withImg(url,fallback,round){
   if(!url||!USE_OFFICIAL)return fallback;
@@ -706,6 +724,7 @@ const $=id=>document.getElementById(id);
 let lastView="opt";
 function showView(id){
   if(id!=="data")lastView=id;
+  if(id==="char"){if($("char").classList.contains("on"))DSEL=null;ensureDesc(true);renderDesc();}
   document.querySelectorAll("nav button, #gear").forEach(x=>x.classList.toggle("on",x.dataset.v===id));
   $("gear").setAttribute("aria-pressed",id==="data");
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
@@ -723,8 +742,6 @@ function renderStatic(){
   document.title=t("title")+" – Nell";
   document.querySelectorAll("[data-i]").forEach(el=>el.innerHTML=t(el.dataset.i));
   [...$("lvl").options].forEach((o,i)=>o.textContent=t("lvl")+" "+i+(i==10?` (${t("max")})`:""));
-  $("skillTbl").innerHTML=`<tr><th>${t("thSkill")}</th><th>${t("thType")}</th><th>${t("thEffect")}</th></tr>`+
-    NELL_SKILLS.map((s,i)=>`<tr><td><div class="sname">${skillIcon(i)}<b>${tr(s.n)}</b></div></td><td>${s.ty}</td><td>${tr(s.e)}</td></tr>`).join("");
   $("matTbl").innerHTML=`<tr><th>${t("thPart")}</th><th>${t("thMat")}</th><th>${t("thQty")}</th><th>${t("thWhere")}</th></tr>`+
     MATS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${tr(LOC[r[3]])}</td></tr>`).join("");
   $("srcTbl").innerHTML=`<tr><th>${t("thItem")}</th><th>${t("thSrc")}</th></tr>`+
@@ -732,12 +749,10 @@ function renderStatic(){
     SRC_EXTRA.map(r=>`<tr><td>${tr(r[0])}</td><td class="src">${tr(r[1])}</td></tr>`).join("");
   $("modTbl").innerHTML=`<tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap0")}</th><th>${t("thTag")}</th><th>${t("thEff0")}</th></tr>`+
     MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="s-${m.s}">${m.s}</td><td>${m.c}</td><td>${m.t||"–"}</td><td>${statTxt(m.st)}${m.condSt?(Object.keys(m.st).length?" · ":"")+t("cond")+": "+statTxt(m.condSt):""}</td></tr>`).join("");
-  $("nellPic").innerHTML=nellPortrait();
   $("gear").title=t("navData");$("gear").setAttribute("aria-label",t("navData"));
-  $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b class=\"trn\">Shattered Heart</b>";
-  $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b class=\"trn\">Restored Heart</b>";
   renderIconStatus();
   ensureWeapons();renderWeapons();
+  ensureDesc($("char").classList.contains("on"));renderDesc();
   const LG=I18N[LANG].LG;
   $("legend").innerHTML=Object.keys(LG).map(g=>`<span>${icon(g,"#c9d4e0")}${LG[g]}</span>`).join("")+
     Object.keys(SOCK).map(s=>`<span><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${SOCK[s]}"/></svg>${s}</span>`).join("");
@@ -1130,6 +1145,165 @@ document.addEventListener("focusin",e=>{const el=tipTarget(e);if(el)showTip(el);
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideTip();});
 document.addEventListener("scroll",placeTip,true);window.addEventListener("resize",placeTip);
 try{const s=JSON.parse(localStorage.getItem("tfdWeapons")||"[]");if(Array.isArray(s))WSEL=s.map(String).slice(0,W_MAX);}catch(e){}
+// ---------- DESCENDANTS ----------
+// Übersicht aller Descendants + Einzelseite (Skills, transzendente Module). Daten kommen zur Laufzeit von NEXON
+// (descendant.json + module.json in der gewählten Sprache); eingebaut ist nur die Liste mit Namen und Bild-Links.
+const D_ELEM={na:["Non-Attribute","Attributlos"],fire:["Fire","Feuer"],chill:["Chill","Kälte"],elec:["Electric","Elektro"],toxic:["Toxic","Gift"]};
+const D_SOCK={Almandine:["Almandine","Almandin"],Malachite:["Malachite","Malachit"],Rutile:["Rutile","Rutil"],Xantic:["Xantic","Xanthin"],Cerulean:["Cerulean","Coelin"]};
+const NELL_ID="101000029";
+const D_USE={"254029002":"shUse","254029001":"rhUse"}; // eigene Einsatz-Hinweise (Nell)
+const D_BASE=[
+["101000027","Serena","101200027","d106721e64d412727aec86fca600ad22"],
+["101000028","Ultimate Blair","101200012","5452e03e53350197ae827b194cf04411"],
+["101000029","Nell","101200029","0a257481650002dbfaa5d4d89397ebd1"],
+["101000030","Ultimate Luna","101200018","c5161da6b56a47ede75f19b37df4656e"],
+["101000031","Harris","101200031","798219489778cc914617a1ae52542bd9"],
+["101000032","Ultimate Yujin","101200017","97b874cf88f46df4729ef085977142b4"],
+["101000033","Dia","101200032","0580da25c301ce664bc1af709942a601"],
+["101000034","Ultimate Esiemo","101200015","8d490cc1df0e29ac1dc24a3b3945aee8"],
+["101000035","Raven","101200033","f91fbdce7c3673aeeaa15c356b806005"],
+["101000036","Ultimate Hailey","101200021","d416d87b261380b4d68582169f5b9438"],
+["101000015","Esiemo","101200015","4f2cbea689b4118dc58895e5e0771270"],
+["101000016","Enzo","101200016","dd903ca869faef90ddbe9a64127c8ca1"],
+["101000017","Yujin","101200017","2bb766e96b8aa777faf6ef1b5afcbc3f"],
+["101000018","Luna","101200018","c07d494b9cb1d8285fee1f1752ff41c0"],
+["101000019","Ultimate Bunny","101200006","d4e6462f87513fe6652633620b7f8d19"],
+["101000001","Lepic","101200001","6cecbb40acd1b4479a44caaf22817751"],
+["101000020","Ultimate Gley","101200009","c4c10b88e178305521d044f5a969583d"],
+["101000021","Hailey","101200021","3c82dcb5ee799c149a7034365a1bd698"],
+["101000022","Ultimate Valby","101200013","8ae81e3d05a981d5da24c26c09106330"],
+["101000023","Ultimate Freyna","101200008","133a00069f113afbdcd05b7bfc4c2cfa"],
+["101000002","Ajax","101200002","74d88097b3547c406a36651c9378638c"],
+["101000003","Viessa","101200003","b2be3dc734d2fb10e694de951a5d1079"],
+["101000024","Keelan","101200024","4b0e795f45dda42996c7d2719ba7821d"],
+["101000004","Ultimate Lepic","101200001","e2f1ec94648d91eede78f377c3b7aa19"],
+["101000025","Ultimate Sharen","101200011","a80304228f8f2ad8abcf54e6a15d235e"],
+["101000005","Jayber","101200005","79c5cbb60e2e06209a0a515775cfa3b6"],
+["101000006","Bunny","101200006","eaffb014c98c36d8b30d90d7778bb840"],
+["101000026","Ines","101200026","3fbc78e2b4e4253ac0b81d93d7ad3251"],
+["101000007","Ultimate Ajax","101200002","118d86964484b25593b9a4dfe62e96c1"],
+["101000008","Freyna","101200008","6737a4c79a8a2fe617cb458031e11358"],
+["101000009","Gley","101200009","d72fa90551e23916f18a81dbd4030d8f"],
+["101000010","Ultimate Viessa","101200003","665a53a9b478437b13f7d6ae5f5322db"],
+["101000011","Sharen","101200011","f14fdb3a55fc96e409a10b5dfa2b31b0"],
+["101000012","Blair","101200012","1a5ae4f83650ec541226f55c06deef64"],
+["101000013","Valby","101200013","f1236f2af539bd14c431b5befdd120f4"],
+["101000014","Kyle","101200014","2ae6db799a211e64aa6a0cd1494c1b0d"]
+];
+const D_FALLBACK=D_BASE.map(r=>({id:r[0],n:r[1],g:r[2],img:W_IMG+r[3],sk:null,tm:null}));
+function slimDescendants(desc,mods){
+  const tm={};
+  (Array.isArray(mods)?mods:[]).forEach(m=>{
+    if(!m||m.module_tier_id!=="Tier4"||!Array.isArray(m.available_descendant_id))return;
+    const st=Array.isArray(m.module_stat)?m.module_stat:[],a=st[0]||{},z=st[st.length-1]||{};
+    const o={id:String(m.module_id),n:String(m.module_name||""),img:m.image_url||"",so:wKey(D_SOCK,m.module_socket_type||""),
+      c0:a.module_capacity,c1:z.module_capacity,d:String(a.value||"").replace(/\[[+x]\]/g,"")};
+    m.available_descendant_id.forEach(id=>(tm[id]=tm[id]||[]).push(o));
+  });
+  return (Array.isArray(desc)?desc:[]).map(x=>{
+    if(!x||!x.descendant_id||!x.descendant_name)return null;
+    return{id:String(x.descendant_id),n:String(x.descendant_name),g:String(x.descendant_group_id||""),img:x.descendant_image_url||"",
+      sk:(x.descendant_skill||[]).map(s=>({n:String(s.skill_name||""),p:/passiv/i.test(s.skill_type||""),el:s.element_type||"",ek:wKey(D_ELEM,s.element_type||""),
+        ar:s.arche_type||"",img:s.skill_image_url||"",d:s.skill_description||""})),
+      tm:tm[x.descendant_id]||[]};
+  }).filter(Boolean);
+}
+let D_LIVE={},D_BUSY={},D_ERR="",DSEL=null,DQ="";
+const descendants=()=>D_LIVE[LANG]||D_FALLBACK;
+const dById=id=>descendants().find(d=>d.id===id);
+// „Ultimate“-Variante = jüngerer Eintrag derselben Gruppe
+const dBase=d=>descendants().filter(o=>o.g&&o.g===d.g).sort((a,b)=>a.id-b.id)[0]||d;
+const dUlt=d=>dBase(d).id!==d.id;
+const D_SVG='<svg viewBox="0 0 96 96" aria-hidden="true"><g fill="#c98a92" opacity=".5"><circle cx="48" cy="34" r="17"/><path d="M12 96c2-24 16-36 36-36s34 12 36 36Z"/></g></svg>';
+const okUrl=u=>USE_OFFICIAL&&/^https:\/\//.test(u||"");
+function dPic(d){
+  return okUrl(d.img)?`<img src="${escH(d.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${escH(D_SVG)}">`:D_SVG;
+}
+const D_SKILL_SVG='<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="#0f141c" stroke="#9fb3c8" stroke-opacity=".7" stroke-width="2"/><path d="M24 11 37 24 24 37 11 24Z" fill="none" stroke="#9fb3c8" stroke-width="2.5"/><circle cx="24" cy="24" r="3.5" fill="#9fb3c8"/></svg>';
+function dFiltered(){
+  const q=DQ.trim().toLowerCase();
+  return descendants().filter(d=>!q||d.n.toLowerCase().includes(q))
+    .sort((a,b)=>dBase(a).n.localeCompare(dBase(b).n)||dUlt(a)-dUlt(b));
+}
+function renderDescGrid(){
+  const list=dFiltered();
+  $("dGrid").innerHTML=list.map(d=>`<button type="button" class="dcard${dUlt(d)?" t3":""}" data-d="${escH(d.id)}"><span class="dpic">${dPic(d)}</span><span class="dn">${escH(d.n)}</span></button>`).join("")||`<p class="note">${t("dNoHit")}</p>`;
+  $("dCount").textContent=t("dCount",{n:list.length,m:descendants().length});
+  $("dSearch").placeholder=t("dSearch");$("dSearch").setAttribute("aria-label",t("dSearch"));
+}
+function nellSkillRows(){ // eigene Kurztexte, falls keine NEXON-Daten da sind
+  return NELL_SKILLS.map((s,i)=>`<tr><td><div class="sname">${skillIcon(i)}<b>${tr(s.n)}</b></div></td><td>${s.ty}</td><td>${tr(s.e)}</td></tr>`).join("");
+}
+function renderDescDetail(d){
+  const nell=d.id===NELL_ID,th=`<tr><th>${t("thSkill")}</th><th>${t("thType")}</th><th>${t("thEffect")}</th></tr>`;
+  let skills,mods;
+  if(d.sk){
+    let n=0;
+    skills=`<table>${th}`+d.sk.slice().sort((a,b)=>b.p-a.p).map(s=>{
+      const ico=okUrl(s.img)?`<img class="ico" src="${escH(s.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${escH(D_SKILL_SVG)}">`:D_SKILL_SVG;
+      return `<tr><td><div class="sname">${ico}<b>${s.p?t("dPassive"):++n} · ${escH(s.n)}</b></div></td><td><span class="el el-${escH(s.ek)}">${escH(s.el)}</span>${s.ar?`<br>${escH(s.ar)}`:""}</td><td class="pre">${escH(s.d)}</td></tr>`;}).join("")+"</table>";
+    mods=d.tm.length?`<table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCapRange")}</th><th>${t("thEffect")}</th></tr>`+d.tm.map(m=>{
+      const cap=m.c0==null?"–":m.c1!=null&&m.c1!==m.c0?`${m.c0} → ${m.c1}`:m.c0;
+      return `<tr><td><div class="mname">${okUrl(m.img)?withImg(m.img,icon("trans","#ff9f5f")):icon("trans","#ff9f5f")}<b class="trn">${escH(m.n)}</b></div></td><td class="s-${escH(m.so)}">${escH(wLoc(D_SOCK,m.so))||"–"}</td><td>${cap}</td><td class="pre">${escH(m.d)||"–"}${D_USE[m.id]?`<div class="note">${t("thUse")}: ${t(D_USE[m.id])}</div>`:""}</td></tr>`;}).join("")+"</table>"
+      :`<p class="note">${t("dNoTrans")}</p>`;
+  }else if(nell){
+    skills=`<table>${th}${nellSkillRows()}</table>`;
+    mods=`<table><tr><th>${t("thModule")}</th><th>${t("thEffect")}</th><th>${t("thUse")}</th></tr>
+      <tr><td><div class="mname">${namedIcon("Shattered Heart",icon("trans","#ff9f5f"))}<b class="trn">Shattered Heart</b></div></td><td>${t("shEff")}</td><td>${t("shUse")}</td></tr>
+      <tr><td><div class="mname">${namedIcon("Restored Heart",icon("trans","#5fe0a0"))}<b class="trn">Restored Heart</b></div></td><td>${t("rhEff")}</td><td>${t("rhUse")}</td></tr></table>`;
+  }else{
+    skills=`<p class="note">${t(D_BUSY[LANG]?"dLoading":"dNeedData")}</p>`;mods="";
+  }
+  $("dDetail").innerHTML=`<button type="button" class="btn sec back" data-back>← ${t("dBack")}</button>
+  <div class="card">
+    <h2${dUlt(d)?' class="t3"':""}>${escH(d.n)}</h2>
+    <div class="hero"><div class="portrait">${dPic(d).replace('alt=""',`alt="${escH(d.n)}"`)}</div><div>
+      ${nell?`<p>${t("nellIntro")}</p><h3>${t("comboH")}</h3><p>${t("combo")}</p>`:`<p class="note">${t("dOnlyNell")}</p>`}
+    </div></div>
+    <h3>${t("dSkillsH")}</h3><div class="tscroll">${skills}</div>
+  </div>
+  ${mods?`<div class="card"><h2>${t("transH")}</h2><div class="tscroll">${mods}</div></div>`:""}`;
+}
+function renderDescStatus(){
+  const el=$("dStatus");
+  if(D_BUSY[LANG]){el.className="status";el.textContent=t("dLoading");}
+  else if(D_LIVE[LANG]){el.className="status ok";el.textContent=t("dSrcLive",{n:D_LIVE[LANG].length});}
+  else if(D_ERR){el.className="status bad";el.textContent=t("dErr",{e:D_ERR});}
+  else{el.className="status";el.textContent=t("dSrcBase");}
+}
+function renderDesc(){
+  const d=DSEL&&dById(DSEL);if(!d)DSEL=null;
+  $("dList").style.display=d?"none":"";$("dDetail").style.display=d?"":"none";
+  renderDescGrid();renderDescStatus();
+  if(d)renderDescDetail(d);else $("dDetail").innerHTML="";
+}
+function openDesc(id){
+  DSEL=id;renderDesc();window.scrollTo(0,0);
+  const el=id?$("dDetail").querySelector("[data-back]"):null;if(el)el.focus({preventScroll:true});
+}
+async function loadDesc(lang){
+  if(D_BUSY[lang])return;
+  D_BUSY[lang]=true;renderDesc();
+  try{
+    const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(W_META+lang+"/"+f).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
+    const l=slimDescendants(d,m);
+    if(!l.length)throw new Error(LANG==="de"?"keine Descendants gefunden":"no descendants found");
+    D_LIVE[lang]=l;D_ERR="";
+    try{localStorage.setItem("tfdDesc_"+lang,JSON.stringify({t:Date.now(),l}));}catch(e){}
+  }catch(e){D_ERR=(e&&e.message)||String(e);}
+  D_BUSY[lang]=false;renderDesc();
+}
+// Zwischenspeicher nutzen; nachladen (max. alle 7 Tage) erst, wenn der Reiter geöffnet wird.
+function ensureDesc(mayFetch){
+  let age=Infinity;
+  if(!D_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdDesc_"+LANG)||"null");if(c&&Array.isArray(c.l)&&c.l.length){D_LIVE[LANG]=c.l;age=Date.now()-c.t;}}catch(e){}}
+  else age=0;
+  if(mayFetch&&age>7*864e5&&!D_ERR)loadDesc(LANG);
+}
+$("dSearch").oninput=e=>{DQ=e.target.value;renderDescGrid();};
+$("dGrid").onclick=e=>{const b=e.target.closest("[data-d]");if(b)openDesc(b.dataset.d);};
+$("dDetail").onclick=e=>{if(e.target.closest("[data-back]")){const id=DSEL;openDesc(null);const c=[...document.querySelectorAll("#dGrid [data-d]")].find(x=>x.dataset.d===id);if(c)c.focus();}};
+$("dReload").onclick=()=>{D_ERR="";loadDesc(LANG);};
 // ---------- ORIGINAL-ICONS LADEN ----------
 const META="https://open.api.nexon.com/static/tfd/meta/en/";
 let icErr="";
@@ -1138,7 +1312,6 @@ function applyMeta(desc,mods){
   if(Array.isArray(mods))mods.forEach(m=>{if(m&&m.module_name&&m.image_url)o.mods[String(m.module_name).toLowerCase()]=m.image_url;});
   if(Array.isArray(desc)){
     const nell=desc.find(d=>d&&/^nell$/i.test(String(d.descendant_name||"").trim()))||desc.find(d=>/nell/i.test(d&&d.descendant_name||""));
-    if(nell&&nell.descendant_image_url)o.portrait=nell.descendant_image_url;
     if(nell&&Array.isArray(nell.descendant_skill)){
       const keys=["suspicion","breach projection","ring of breach","gravitic","gaze of the abyss"];
       nell.descendant_skill.forEach((s,idx)=>{
@@ -1178,10 +1351,10 @@ $("metaFiles").onchange=async e=>{
     if(a.some(x=>x&&x.weapon_name))setWeapons(a.some(x=>x&&Object.values(W_TYPES).some(v=>v[1]===x.weapon_type))?"de":"en",a);
     else if(a.some(x=>x&&x.descendant_skill))desc=a;else if(a.some(x=>x&&x.module_name))mods=a;}catch(err){icErr=f.name+": "+err.message;}}
   const o=applyMeta(desc,mods);const old=OFFICIAL;
-  store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills,portrait:o.portrait||old.portrait});
+  store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills});
 };
 $("useOff").onchange=e=>{USE_OFFICIAL=e.target.checked;try{localStorage.setItem("tfdUseOff",USE_OFFICIAL?"1":"0");}catch(err){}rerender();};
-try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[],portrait:c.portrait};
+try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[]};
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
 ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
