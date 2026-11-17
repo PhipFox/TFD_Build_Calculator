@@ -236,6 +236,35 @@ td.pre{white-space:pre-line}
   color:var(--ec,#b9c4cf);border:1px solid color-mix(in srgb,var(--ec,#b9c4cf) 45%,transparent);background:color-mix(in srgb,var(--ec,#b9c4cf) 10%,transparent)}
 .el-fire{--ec:#ff8a5c}.el-chill{--ec:#6bc7ff}.el-elec{--ec:#b79bff}.el-toxic{--ec:#7fe07a}
 
+/* Optimierer: Descendant-Auswahl (Drop-down mit Bild) */
+.ddwrap{margin-bottom:14px}
+.dd-lbl{font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin-bottom:6px}
+.dd{position:relative;z-index:25}
+.dd-btn{display:flex;align-items:center;gap:10px;width:100%;padding:6px 12px 6px 6px;cursor:pointer;color:var(--txt);text-align:left;
+  font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:.6px;background:rgba(8,7,8,.9);border:1px solid var(--line2);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:border-color .15s,box-shadow .15s}
+.dd-btn:hover,.dd-btn[aria-expanded="true"]{border-color:var(--acc);box-shadow:inset 0 0 14px rgba(63,224,255,.15)}
+.dd-btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.dd-pic{flex:none;display:block;width:40px;height:40px;overflow:hidden;
+  background:radial-gradient(circle at 50% 30%,rgba(201,138,146,.25),rgba(10,9,10,.95) 75%);box-shadow:inset 0 0 0 1px var(--line2)}
+.dd-pic img,.dd-pic svg{display:block;width:100%;height:100%;object-fit:cover}
+.dd-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-n.t3{color:var(--t3)}
+.dd-chev{flex:none;width:12px;height:8px;color:var(--mut);transition:transform .15s}
+.dd-btn[aria-expanded="true"] .dd-chev{transform:rotate(180deg);color:var(--acc)}
+.dd-list{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:min(360px,60vh);overflow-y:auto;margin:0;padding:4px;list-style:none;
+  background:#0e0c0e;border:1px solid var(--acc);box-shadow:0 14px 34px rgba(0,0,0,.65)}
+.dd-list[hidden]{display:none}
+.dd-list:focus{outline:none}
+.dd-list li{display:flex;align-items:center;gap:10px;padding:3px 8px 3px 3px;cursor:pointer;font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.5px}
+.dd-list li .dd-pic{width:30px;height:30px}
+.dd-list li.act{background:rgba(63,224,255,.13)}
+.dd-list li[aria-selected="true"]{box-shadow:inset 3px 0 0 var(--acc)}
+.dd-list li[aria-selected="true"] .dd-n:not(.t3){color:var(--acc)}
+.card label select{min-width:0;max-width:62%}
+.grid>div{min-width:0}
+#transNote:empty{display:none}
+
 /* Item Finder */
 .fgrid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
 @media(max-width:900px){.fgrid{grid-template-columns:minmax(0,1fr)}}
@@ -369,13 +398,19 @@ td.pre{white-space:pre-line}
 <section id="opt" class="view on">
 <div class="grid">
 <div>
+  <div class="ddwrap">
+    <div class="dd-lbl" data-i="oDescH"></div>
+    <div class="dd" id="oDd">
+      <button type="button" class="dd-btn" id="oDdBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="oDdList"></button>
+      <ul class="dd-list" id="oDdList" role="listbox" tabindex="-1" hidden></ul>
+    </div>
+    <p class="note" id="oDescNote" style="margin:6px 0 0"></p>
+  </div>
   <div class="card">
     <h2 data-i="goal"></h2>
-    <label><span data-i="buildType"></span>
-      <select id="mode">
-        <option value="boss" data-i="optBoss"></option>
-        <option value="mob" data-i="optMob"></option>
-      </select></label>
+    <label><span data-i="tSkill"></span><select id="tSkill"></select></label>
+    <label><span data-i="transSel"></span><select id="trans"></select></label>
+    <div class="note" id="transNote"></div>
     <label><span data-i="wCd"></span><input type="number" id="wCd" value="0.5" step="0.1" min="0" max="2"></label>
     <label><span data-i="wRange"></span><input type="number" id="wRange" value="0" step="0.1" min="0" max="2"></label>
     <label class="chk"><input type="checkbox" id="needHp"> <span data-i="needHp"></span></label>
@@ -391,10 +426,7 @@ td.pre{white-space:pre-line}
     <div class="note" data-i="allMatchNote"></div>
     <h3 data-i="reactorH"></h3>
     <label><span data-i="reactorH"></span>
-      <select id="reactor">
-        <option value="mech">Materialized Mechanics (Tech)</option>
-        <option value="mix">Materialized Mixture (Fusion)</option>
-      </select></label>
+      <select id="reactor"></select></label>
     <h3 data-i="compsH"></h3>
     <label><span data-i="set"></span>
       <select id="comps">
@@ -511,6 +543,7 @@ td.pre{white-space:pre-line}
     <li data-i="r2"></li>
     <li data-i="r3"></li>
     <li data-i="r4"></li>
+    <li data-i="r7"></li>
     <li><span data-i="r5a"></span> <input type="number" id="baseCr" value="5" style="width:60px"> <span data-i="r5b"></span> <input type="number" id="baseCd" value="150" style="width:60px"> <span data-i="r5c"></span></li>
     <li><span data-i="r6"></span> <input type="number" id="shCap" value="8" style="width:60px"> <span class="warn" data-i="assumed"></span></li>
   </ul>
@@ -545,8 +578,8 @@ td.pre{white-space:pre-line}
 const I18N={
 de:{
  title:"TFD Database",subtitle:"Inoffizielles Fan-Tool · Spielstand Patch 1.4.8 (Nov. 2026) · Werte teils geschätzt, siehe Zahnrad oben rechts",
- navOpt:"Optimierer · Nell",navChar:"Descendants",navFarm:"Item Finder",navData:"Daten & Annahmen",
- goal:"Ziel",buildType:"Build-Typ",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
+ navOpt:"Optimierer",navChar:"Descendants",navFarm:"Item Finder",navData:"Daten & Annahmen",
+ goal:"Ziel",
  wCd:"Gewicht Cooldown",wRange:"Gewicht Reichweite",needHp:"mind. 1 HP/Überlebens-Modul",condH:"Bedingte Effekte einrechnen",
  condDec:"Decimator voll gestapelt (Mobbing)",condAmb:"Dangerous Ambush (Gegner festgesetzt)",
  yourState:"Dein Stand",capacity:"Modul-Kapazität",modLvl:"Modul-Level",lvl:"Level",max:"max",
@@ -568,18 +601,18 @@ de:{
  howH:"Wie gerechnet wird",
  fDmg:"<b>Schadensfaktor</b> = (1 + Skill Power) × (1 + Skill-Power-Modifier) × (1 + Critrate × (Critschaden − 1))",
  fScore:"<b>Score</b> = Schadensfaktor × (1 / (1 − Cooldown-Reduktion))<sup>Gewicht CD</sup> × (1 + Reichweite)<sup>Gewicht Reichweite</sup>",
- r1:"Nur Boni, die zum Ziel passen, zählen: bei Bossing Non-Attribute + Tech, bei Mobbing Non-Attribute + Fusion.",
+ r1:"Nur Boni, die zum Ziel-Skill passen, zählen: allgemeine Skill Power, die Skill Power seines Elements (z. B. Attributlos, Feuer) und der Modifier seines Arche-Typs (z. B. Tech, Fusion).",
  r2:"Module mit demselben Tag (z. B. „Battle“, „Arche Tech“) lassen sich nicht zusammen ausrüsten – der Rechner beachtet das.",
  r3:"Kapazität: Basis + Level; passender Sockel halbiert (aufgerundet).",
- r4:"Slot 1 (Shattered Heart) und Mid-Air Maneuvering sind fest gesetzt; optimiert werden die übrigen 10 Slots.",
- r5a:"Basis-Crit von Nell ist <span class='warn'>angenommen</span>:",r5b:"% Rate,",r5c:"% Schaden.",
- r6:"Kapazität Shattered Heart:",assumed:"(angenommen)",
- estWarn:"Wichtig: Die Level-0-Werte stammen aus Modul-Datenbanken. Werte über Level 0 sind <b>hochgerechnet</b> (Kurve von „Focus on Non-Attribute“). Das Ranking ist dadurch verlässlicher als die absoluten Zahlen.",
- dbH:"Modul-Datenbank",thSocket:"Sockel",thCap0:"Kap. L0",thTag:"Tag",thEff0:"Wirkung L0",cond:"bedingt",
+ r4:"Das transzendente Modul und Mid-Air Maneuvering sind fest gesetzt; optimiert werden die übrigen 10 Slots. Die Wirkung transzendenter Module wird nur bei Nells Shattered Heart eingerechnet (+20 % Skill-Critrate).",
+ r5a:"Basis-Crit ist für alle Descendants <span class='warn'>angenommen</span>:",r5b:"% Rate,",r5c:"% Schaden.",
+ r6:"Kapazität Shattered Heart (nur ohne NEXON-Daten):",assumed:"(angenommen)",
+ estWarn:"Mit NEXON-Daten nutzt der Optimierer die echten Modulwerte pro Level. Ohne Verbindung rechnet er nur für Nell, mit der eingebauten Liste unten (Level-0-Werte aus Modul-Datenbanken, höhere Level <b>hochgerechnet</b>). Reaktor-, Komponenten- und Basis-Crit-Werte bleiben Annahmen – das Ranking ist verlässlicher als die absoluten Zahlen.",
+ dbH:"Eingebaute Modul-Liste (nur ohne Verbindung)",thSocket:"Sockel",thCap0:"Kap. L0",thTag:"Tag",thEff0:"Wirkung L0",cond:"bedingt",
  best:"Bestes Build",score:"Score",dmgF:"Schadensfaktor",spSpm:"Skill Power / Modifier",crit:"Crit Rate / Schaden",cdr:"Cooldown −",capK:"Kapazität",
- vsGuide:"vs. Guide",overCr:"Critrate über 100 % – ein Crit-Modul ist verschwendet.",badReactor:"Reaktor passt nicht zum Build-Typ (Tech für Skill 1/4, Fusion für Skill 2/3).",
+ vsGuide:"vs. Guide",overCr:"Critrate über 100 % – ein Crit-Modul ist verschwendet.",badReactor:"Reaktor passt nicht zum Ziel-Skill (Element und Arche-Typ) – Schaden ×0,6.",
  thCap:"Kap.",effAt:"Wirkung (Level {l})",shRow:"Skill-Critrate +20 %, Skill 4 wird Angriff",shSrc:"Modul-Kombination / Axion Plains",
- transTag:"Transzendent",midAir:"Greifhaken in der Luft",calcMs:"{ms} ms gerechnet · Level-Werte über 0 sind Hochrechnungen.",
+ transTag:"Transzendent",midAir:"Greifhaken in der Luft",calcMs:"{ms} ms gerechnet · eingebaute Werte, Level über 0 hochgerechnet.",
  noBuild:"Kein gültiges Build mit dieser Kapazität.",altH:"Alternativen",diff:"Unterschied zum Besten",
  guideB:"Guide-Build (AlcastHQ, {m})",bossing:"Bossing",mobbing:"Mobbing",guideHint:"Zum Vergleich danach „Bestes Build berechnen“ klicken.",
 icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons beim Öffnen direkt von Nexons Servern (NEXON Open API). Gespeichert werden nur die Bild-Links in deinem Browser, keine Bilder. Fehlt ein Bild, erscheint das eigene Symbol.",
@@ -590,7 +623,7 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
  icoNote:"Symbole sind eigene Darstellungen (Farbe = Sockel, Motiv = Hauptwirkung), keine Original-Icons aus dem Spiel.",
  dAllH:"Alle Descendants",dSearch:"Descendant suchen …",dCount:"{n} von {m} Descendants",dHint:"Klick öffnet die Seite mit Skills und transzendenten Modulen",dNoHit:"Kein Descendant passt zur Suche.",
  dBack:"Alle Descendants",dSkillsH:"Skills",dPassive:"Passiv",thCapRange:"Kap. (Level 0 → max)",dNoTrans:"Für diesen Descendant sind keine transzendenten Module hinterlegt.",
- dOnlyNell:"Skills und transzendente Module laut NEXON Open API. Der Optimierer rechnet bisher nur für Nell.",
+ dOnlyNell:"Skills und transzendente Module laut NEXON Open API.",
  dNeedData:"Skills und Module werden von NEXON geladen – dafür ist eine Verbindung nötig.",
  dSrcBase:"Eingebaute Liste (nur Namen und Bilder). Skills und Module werden von NEXON geladen, sobald eine Verbindung besteht.",
  dSrcLive:"Descendant-Daten von NEXON aktiv: {n} Descendants.",dLoading:"Lade Descendant-Daten …",dErr:"Descendant-Daten konnten nicht geladen werden ({e}) – es wird die eingebaute Liste gezeigt.",
@@ -609,6 +642,14 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
  fc_EventCoin:"Event-Münze",fc_ShapeStabilizer:"Formstabilisator",fc_EnhancementMaterial:"Verbesserungsmaterial",fc_ResearchAcceleration:"Forschungsbeschleunigung",fc_OptionTierFixItem:"Options-Fixierung",
  fc_RotationShopCoin:"Rotationsshop-Münze",fc_CombinedSpectrumMaterials:"Spektrum-Material",fc_FellowExpItem:"Begleiter-EP",fc_CharacterExpItem:"Descendant-EP",fc_WeaponProficiencyItem:"Waffenfertigkeit",
  fc_EigenfactorExpItem:"Eigenfaktor-EP",fc_CollectibleShopCoin:"Sammelshop-Münze",fc_ContentCoin:"Inhalts-Münze",fc_RegionShopCoin:"Gebietsshop-Münze",
+ overCdr:"Cooldown-Reduktion über 75 % – der Rest wirkt nicht (Grenze angenommen).",oDescH:"Descendant",tSkill:"Ziel-Skill",transSel:"Transzendent",trNone:"keins",target:"Ziel",
+ trNoCalc:"Wirkung wird nicht eingerechnet – nur die Kapazität zählt.",reacMatch:"Passend: {t}",reacOther:"Anderer Typ (×0,6)",
+ oLive:"Echte Modulwerte pro Level aus der NEXON Open API.",oLoading:"Lade Moduldaten von NEXON …",
+ oLegacy:"Ohne NEXON-Daten: eingebaute Nell-Werte, Level über 0 geschätzt.",
+ oNeedData:"Für {n} braucht der Optimierer die Moduldaten von NEXON – dafür ist eine Verbindung nötig.",
+ bestFor:"Bestes Build · {n}",calcMsLive:"{ms} ms gerechnet · {k} passende Module geprüft · Werte: NEXON Open API.",
+ dToOpt:"Build im Optimierer berechnen",
+ r7:"Crit-Werte von Modulen (in NEXONs Daten mit [x] markiert) wirken multiplikativ: Critrate = Basis × (1 + Summe der Module). Skill Power, Modifier und Cooldown werden addiert.",
  navWeap:"Waffen",wSelH:"Deine Waffen",wSelNote:"Bis zu 3 Waffen wie im Spiel. Die Auswahl wird in diesem Browser gespeichert und beim Build angezeigt – in den Score fließt sie noch nicht ein (der Rechner bewertet bisher nur Skill-Schaden).",
  wAllH:"Alle Waffen",wSearch:"Waffe oder Fähigkeit suchen …",wAllTypes:"Alle Waffentypen",wAllRounds:"Alle Munitionsarten",wEmptySlot:"Slot {n} – frei",wRemove:"{n} entfernen",
  wMax:"Es sind schon {n} Waffen gewählt – entferne zuerst eine.",wNone:"Noch keine Waffe gewählt.",wNoHit:"Keine Waffe passt zu diesen Filtern.",wCount:"{n} von {m} Waffen",
@@ -625,8 +666,8 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
 },
 en:{
  title:"TFD Database",subtitle:"Unofficial fan tool · Game version patch 1.4.8 (Nov 2026) · some values estimated, see the gear icon at the top right",
- navOpt:"Optimizer · Nell",navChar:"Descendants",navFarm:"Item Finder",navData:"Data & Assumptions",
- goal:"Goal",buildType:"Build type",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
+ navOpt:"Optimizer",navChar:"Descendants",navFarm:"Item Finder",navData:"Data & Assumptions",
+ goal:"Goal",
  wCd:"Cooldown weight",wRange:"Range weight",needHp:"at least 1 HP/survival module",condH:"Include conditional effects",
  condDec:"Decimator fully stacked (mobbing)",condAmb:"Dangerous Ambush (enemy immobilized)",
  yourState:"Your setup",capacity:"Module capacity",modLvl:"Module level",lvl:"Level",max:"max",
@@ -648,18 +689,18 @@ en:{
  howH:"How it's calculated",
  fDmg:"<b>Damage factor</b> = (1 + Skill Power) × (1 + Skill Power Modifier) × (1 + Crit Rate × (Crit Damage − 1))",
  fScore:"<b>Score</b> = Damage factor × (1 / (1 − Cooldown reduction))<sup>CD weight</sup> × (1 + Range)<sup>Range weight</sup>",
- r1:"Only bonuses matching the goal count: Non-Attribute + Tech for bossing, Non-Attribute + Fusion for mobbing.",
+ r1:"Only bonuses matching the target skill count: general Skill Power, the Skill Power of its element (e.g. Non-Attribute, Fire) and the modifier of its arche type (e.g. Tech, Fusion).",
  r2:"Modules with the same tag (e.g. “Battle”, “Arche Tech”) can't be equipped together – the calculator respects that.",
  r3:"Capacity: base + level; a matching socket halves it (rounded up).",
- r4:"Slot 1 (Shattered Heart) and Mid-Air Maneuvering are fixed; the remaining 10 slots are optimized.",
- r5a:"Nell's base crit is <span class='warn'>assumed</span>:",r5b:"% rate,",r5c:"% damage.",
- r6:"Shattered Heart capacity:",assumed:"(assumed)",
- estWarn:"Important: Level 0 values come from module databases. Values above level 0 are <b>extrapolated</b> (curve of “Focus on Non-Attribute”). The ranking is therefore more reliable than the absolute numbers.",
- dbH:"Module database",thSocket:"Socket",thCap0:"Cap. L0",thTag:"Tag",thEff0:"Effect L0",cond:"conditional",
+ r4:"The transcendent module and Mid-Air Maneuvering are fixed; the remaining 10 slots are optimized. A transcendent module's effect is only calculated for Nell's Shattered Heart (+20% Skill Crit Rate).",
+ r5a:"Base crit is <span class='warn'>assumed</span> for all descendants:",r5b:"% rate,",r5c:"% damage.",
+ r6:"Shattered Heart capacity (only without NEXON data):",assumed:"(assumed)",
+ estWarn:"With NEXON data the optimizer uses the real module values per level. Without a connection it only calculates for Nell, using the built-in list below (level 0 values from module databases, higher levels <b>extrapolated</b>). Reactor, component and base crit values remain assumptions – the ranking is more reliable than the absolute numbers.",
+ dbH:"Built-in module list (only without a connection)",thSocket:"Socket",thCap0:"Cap. L0",thTag:"Tag",thEff0:"Effect L0",cond:"conditional",
  best:"Best build",score:"Score",dmgF:"Damage factor",spSpm:"Skill Power / Modifier",crit:"Crit Rate / Damage",cdr:"Cooldown −",capK:"Capacity",
- vsGuide:"vs. guide",overCr:"Crit rate above 100% – one crit module is wasted.",badReactor:"Reactor doesn't match the build type (Tech for Skill 1/4, Fusion for Skill 2/3).",
+ vsGuide:"vs. guide",overCr:"Crit rate above 100% – one crit module is wasted.",badReactor:"Reactor doesn't match the target skill (element and arche type) – damage ×0.6.",
  thCap:"Cap.",effAt:"Effect (level {l})",shRow:"Skill Crit Rate +20%, Skill 4 becomes an attack",shSrc:"Module combine / Axion Plains",
- transTag:"Transcendent",midAir:"Grappling hook in mid-air",calcMs:"Calculated in {ms} ms · level values above 0 are extrapolated.",
+ transTag:"Transcendent",midAir:"Grappling hook in mid-air",calcMs:"Calculated in {ms} ms · built-in values, levels above 0 extrapolated.",
  noBuild:"No valid build with this capacity.",altH:"Alternatives",diff:"Difference to best",
  guideB:"Guide build (AlcastHQ, {m})",bossing:"Bossing",mobbing:"Mobbing",guideHint:"Then click “Calculate best build” to compare.",
 icH:"Original icons (local)",icIntro:"This file loads the official icons straight from Nexon's servers (NEXON Open API) when opened. Only the image links are stored in your browser, no images. If an image is missing, the custom icon is shown.",
@@ -670,7 +711,7 @@ icH:"Original icons (local)",icIntro:"This file loads the official icons straigh
  icoNote:"Icons are custom drawings (color = socket, symbol = main effect), not the original in-game icons.",
  dAllH:"All Descendants",dSearch:"Search descendant …",dCount:"{n} of {m} descendants",dHint:"Click opens the page with skills and transcendent modules",dNoHit:"No descendant matches the search.",
  dBack:"All Descendants",dSkillsH:"Skills",dPassive:"Passive",thCapRange:"Cap. (level 0 → max)",dNoTrans:"No transcendent modules are listed for this descendant.",
- dOnlyNell:"Skills and transcendent modules as listed by the NEXON Open API. The optimizer only calculates for Nell so far.",
+ dOnlyNell:"Skills and transcendent modules as listed by the NEXON Open API.",
  dNeedData:"Skills and modules are loaded from NEXON – this needs a connection.",
  dSrcBase:"Built-in list (names and images only). Skills and modules are loaded from NEXON as soon as a connection is available.",
  dSrcLive:"Descendant data from NEXON active: {n} descendants.",dLoading:"Loading descendant data …",dErr:"Descendant data could not be loaded ({e}) – showing the built-in list.",
@@ -689,6 +730,14 @@ icH:"Original icons (local)",icIntro:"This file loads the official icons straigh
  fc_EventCoin:"Event coin",fc_ShapeStabilizer:"Shape stabilizer",fc_EnhancementMaterial:"Enhancement material",fc_ResearchAcceleration:"Research acceleration",fc_OptionTierFixItem:"Option tier fix item",
  fc_RotationShopCoin:"Rotation shop coin",fc_CombinedSpectrumMaterials:"Spectrum material",fc_FellowExpItem:"Fellow EXP",fc_CharacterExpItem:"Descendant EXP",fc_WeaponProficiencyItem:"Weapon proficiency",
  fc_EigenfactorExpItem:"Eigenfactor EXP",fc_CollectibleShopCoin:"Collectible shop coin",fc_ContentCoin:"Content coin",fc_RegionShopCoin:"Region shop coin",
+ overCdr:"Cooldown reduction above 75% – the rest has no effect (assumed cap).",oDescH:"Descendant",tSkill:"Target skill",transSel:"Transcendent",trNone:"none",target:"Target",
+ trNoCalc:"Effect is not calculated – only its capacity counts.",reacMatch:"Matching: {t}",reacOther:"Other type (×0.6)",
+ oLive:"Real module values per level from the NEXON Open API.",oLoading:"Loading module data from NEXON …",
+ oLegacy:"Without NEXON data: built-in Nell values, levels above 0 estimated.",
+ oNeedData:"For {n} the optimizer needs NEXON's module data – this needs a connection.",
+ bestFor:"Best build · {n}",calcMsLive:"Calculated in {ms} ms · {k} matching modules checked · values: NEXON Open API.",
+ dToOpt:"Calculate build in the optimizer",
+ r7:"Crit values of modules (marked [x] in NEXON's data) are multiplicative: crit rate = base × (1 + sum of modules). Skill Power, modifiers and cooldown are added up.",
  navWeap:"Weapons",wSelH:"Your weapons",wSelNote:"Up to 3 weapons, as in the game. Your selection is saved in this browser and shown with the build – it does not affect the score yet (the calculator only rates skill damage so far).",
  wAllH:"All weapons",wSearch:"Search weapon or ability …",wAllTypes:"All weapon types",wAllRounds:"All ammo types",wEmptySlot:"Slot {n} – empty",wRemove:"Remove {n}",
  wMax:"{n} weapons are already selected – remove one first.",wNone:"No weapon selected yet.",wNoHit:"No weapon matches these filters.",wCount:"{n} of {m} weapons",
@@ -850,7 +899,7 @@ function renderStatic(){
   $("gear").title=t("navData");$("gear").setAttribute("aria-label",t("navData"));
   renderIconStatus();
   ensureWeapons();renderWeapons();
-  ensureDesc($("char").classList.contains("on"));renderDesc();
+  ensureDesc(true,"en");if(LANG!=="en")ensureDesc(true,LANG);renderDesc();renderOptPanel();
   ensureItems($("farm").classList.contains("on"));renderFinder();
   const LG=I18N[LANG].LG;
   $("legend").innerHTML=Object.keys(LG).map(g=>`<span>${icon(g,"#c9d4e0")}${LG[g]}</span>`).join("")+
@@ -870,10 +919,6 @@ $("lDe").style.cursor=$("lEn").style.cursor="pointer";
 function renderEmpty(){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="note">${t("resHint")}</p>`;}
 
 // ---------- RECHENKERN ----------
-function cfg(){return{mode:$("mode").value,wCd:+$("wCd").value,wRange:+$("wRange").value,needHp:$("needHp").checked,
- condDecimator:$("condDecimator").checked,condAmbush:$("condAmbush").checked,cap:+$("cap").value,lvl:+$("lvl").value,
- allMatch:$("allMatch").checked,reactor:$("reactor").value,comps:$("comps").value,trigger:$("trigger").value,
- baseCr:+$("baseCr").value,baseCd:+$("baseCd").value,shCap:+$("shCap").value};}
 function modStats(m,c){
   const out={};const add=(o)=>{for(const k in o){const v=m.sc.includes(k)?o[k]*CURVE[c.lvl]:o[k];out[k]=(out[k]||0)+v;}};
   add(m.st);
@@ -882,92 +927,6 @@ function modStats(m,c){
   return out;
 }
 function modCost(m,c){const raw=m.c+c.lvl;return c.allMatch?Math.ceil(raw/2):raw;}
-function baseStats(c){
-  const b={sp:0,spm:0,cr:c.baseCr+20,cd:c.baseCd,cdr:0,cost:0,range:0,hp:0}; // +20 Critrate aus Shattered Heart
-  b.cdr+=7.4; b.cd+=33; // Reaktor-Substats (typischer Roll, angenommen)
-  if(c.comps==="hunter"){b.cdr+=4;b.cost-=6.5;} else {b.sp+=26.1;b.cost+=15;}
-  if(c.trigger==="pb")b.sp+=15;
-  b.reactorOk=(c.mode==="boss"&&c.reactor==="mech")||(c.mode==="mob"&&c.reactor==="mix");
-  return b;
-}
-function evaluate(list,c){
-  const s0=baseStats(c);
-  list.forEach(m=>{const s=modStats(m,c);for(const k in s)s0[k]=(s0[k]||0)+s[k];});
-  const attrSpm=c.mode==="boss"?(s0.spmTech||0):(s0.spmFus||0);
-  const SP=s0.sp+(s0.spNA||0), SPM=s0.spm+attrSpm;
-  const cr=Math.min(s0.cr,100)/100, cd=s0.cd/100;
-  let dmg=(1+SP/100)*(1+SPM/100)*(1+cr*(cd-1));
-  if(!s0.reactorOk)dmg*=0.6; // falscher Reaktor-Typ (grob)
-  const cdr=Math.min(s0.cdr,75)/100;
-  const score=dmg*Math.pow(1/(1-cdr),c.wCd)*Math.pow(1+s0.range/100,c.wRange);
-  return{score,dmg,SP,SPM,cr:s0.cr,cd:s0.cd,cdr:s0.cdr,cost:s0.cost,range:s0.range,hp:s0.hp,overCr:s0.cr>100,reactorOk:s0.reactorOk};
-}
-function optimize(c){
-  const pool=MODS, slots=10, budget=c.cap-c.shCap;
-  const best=[],keep=6,costs=pool.map(m=>modCost(m,c)),chosen=[];
-  function rec(i,used,tags){
-    if(chosen.length===slots||i===pool.length){
-      if(!chosen.length)return;
-      const list=chosen.map(j=>pool[j]);
-      if(c.needHp&&!list.some(m=>m.surv))return;
-      const r=evaluate(list,c);r.list=list;r.capUsed=used+c.shCap;
-      if(best.length<keep||r.score>best[best.length-1].score){best.push(r);best.sort((a,b)=>b.score-a.score);if(best.length>keep)best.pop();}
-      return;
-    }
-    const m=pool[i];
-    if(used+costs[i]<=budget&&!(m.t&&tags.has(m.t))){
-      chosen.push(i);if(m.t)tags.add(m.t);
-      rec(i+1,used+costs[i],tags);
-      chosen.pop();if(m.t)tags.delete(m.t);
-    }
-    rec(i+1,used,tags);
-  }
-  rec(0,0,new Set());
-  return best;
-}
-
-// ---------- AUSGABE ----------
-function renderBuild(r,c,title,ref){
-  const rows=r.list.slice().sort((a,b)=>a.s.localeCompare(b.s)).map(m=>`<tr><td><div class="mname">${modIcon(m)}<div><b>${m.n}</b>${m.t?`<br><span class="tag">${m.t}</span>`:""}</div></div></td><td class="s-${m.s}">${m.s}</td><td>${modCost(m,c)}</td><td>${statTxt(modStats(m,c))}</td><td class="src">${m.src||t("srcShort")}</td></tr>`).join("");
-  const rel=ref?` <small>(${r.score>=ref.score?"+":""}${fmt((r.score/ref.score-1)*100)} % ${t("vsGuide")})</small>`:"";
-  return `<h2>${title}</h2>
-  <div class="kpis">
-   <div class="kpi"><small>${t("score")}</small><b>${fmt(r.score,2)}</b>${rel}</div>
-   <div class="kpi"><small>${t("dmgF")}</small><b>×${fmt(r.dmg,2)}</b></div>
-   <div class="kpi"><small>${t("spSpm")}</small><b>${fmt(r.SP,0)} % / ${fmt(r.SPM,0)} %</b></div>
-   <div class="kpi"><small>${t("crit")}</small><b class="${r.overCr?"warn":""}">${fmt(r.cr,0)} % / ${fmt(r.cd,0)} %</b></div>
-   <div class="kpi"><small>${t("cdr")}</small><b>${fmt(r.cdr,1)} %</b></div>
-   <div class="kpi"><small>${t("capK")}</small><b>${r.capUsed} / ${c.cap}</b></div>
-  </div>
-  <div data-wline></div>
-  ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
-  ${!r.reactorOk?`<p class="warn">${t("badReactor")}</p>`:""}
-  <table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap")}</th><th>${t("effAt",{l:c.lvl})}</th><th>${t("thSrc")}</th></tr>
-  <tr><td><div class="mname">${namedIcon("Shattered Heart",icon("trans","#ff9f5f"))}<div><b class="trn">Shattered Heart</b><br><span class="tag trn">${t("transTag")}</span></div></div></td><td class="s-Rutile">Rutile</td><td>${c.shCap}</td><td>${t("shRow")}</td><td class="src">${t("shSrc")}</td></tr>
-  <tr><td><div class="mname">${namedIcon("Mid-Air Maneuvering",icon("glide",SOCK.Malachite))}<b>Mid-Air Maneuvering</b></div></td><td class="s-Malachite">Malachite</td><td>0</td><td>${t("midAir")}</td><td class="src">–</td></tr>
-  ${rows}</table>`;
-}
-let shown=null;
-$("run").onclick=()=>{
-  const c=cfg();const t0=performance.now();const best=optimize(c);shown="best";
-  if(!best.length){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="warn">${t("noBuild")}</p>`;$("alts").style.display="none";return;}
-  const guide=evaluate(GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n)),c);
-  $("result").innerHTML=renderBuild(best[0],c,t("best"),guide)+`<p class="note">${t("calcMs",{ms:fmt(performance.now()-t0,0)})}</p>`;
-  renderWeaponSel();
-  $("alts").style.display="block";
-  $("alts").innerHTML=`<h2>${t("altH")}</h2><table><tr><th>#</th><th>${t("score")}</th><th>${t("diff")}</th></tr>`+best.slice(1).map((r,i)=>{
-    const a=new Set(best[0].list.map(m=>m.n)),b=new Set(r.list.map(m=>m.n));
-    const plus=[...b].filter(x=>!a.has(x)),minus=[...a].filter(x=>!b.has(x));
-    const pi=x=>modIcon(MODS.find(m=>m.n===x));
-    return `<tr class="alt"><td>${i+2}</td><td>${fmt(r.score,2)}</td><td>${plus.map(x=>`<span class="pill" style="color:var(--ok)">${pi(x)}+ ${x}</span>`).join("")}${minus.map(x=>`<span class="pill" style="color:var(--bad)">${pi(x)}− ${x}</span>`).join("")}</td></tr>`;}).join("")+"</table>";
-};
-$("cmp").onclick=()=>{
-  const c=cfg();const list=GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n));shown="guide";
-  const r=evaluate(list,c);r.list=list;r.capUsed=list.reduce((s,m)=>s+modCost(m,c),0)+c.shCap;
-  $("result").innerHTML=renderBuild(r,c,t("guideB",{m:t(c.mode==="boss"?"bossing":"mobbing")}))+`<p class="note">${t("guideHint")}</p>`;
-  renderWeaponSel();
-  $("alts").style.display="none";
-};
 // ---------- WAFFEN ----------
 // Waffen-Metadaten (NEXON Open API) auf das Nötige kürzen. Typ/Munition werden sprachunabhängig als Schlüssel abgelegt.
 const W_TYPES={ar:["Assault Rifle","Sturmgewehr"],scout:["Scout Rifle","Spähergewehr"],hc:["Hand Cannon","Revolver"],beam:["Beam Rifle","Strahlengewehr"],
@@ -1249,6 +1208,7 @@ try{const s=JSON.parse(localStorage.getItem("tfdWeapons")||"[]");if(Array.isArra
 // (descendant.json + module.json in der gewählten Sprache); eingebaut ist nur die Liste mit Namen und Bild-Links.
 const D_ELEM={na:["Non-Attribute","Attributlos"],fire:["Fire","Feuer"],chill:["Chill","Kälte"],elec:["Electric","Elektro"],toxic:["Toxic","Gift"]};
 const D_SOCK={Almandine:["Almandine","Almandin"],Malachite:["Malachite","Malachit"],Rutile:["Rutile","Rutil"],Xantic:["Xantic","Xanthin"],Cerulean:["Cerulean","Coelin"]};
+const D_ARCH={fus:["Fusion","Fusion"],sing:["Singular","Singulär"],dim:["Dimension","Dimension"],tech:["Tech","Tech"]};
 const NELL_ID="101000029";
 const D_USE={"254029002":"shUse","254029001":"rhUse"}; // eigene Einsatz-Hinweise (Nell)
 const D_BASE=[
@@ -1290,22 +1250,32 @@ const D_BASE=[
 ["101000014","Kyle","101200014","2ae6db799a211e64aa6a0cd1494c1b0d"]
 ];
 const D_FALLBACK=D_BASE.map(r=>({id:r[0],n:r[1],g:r[2],img:W_IMG+r[3],sk:null,tm:null}));
-function slimDescendants(desc,mods){
-  const tm={};
+function slimDescendants(desc,mods,lang){
+  const tm={},pool=[];
   (Array.isArray(mods)?mods:[]).forEach(m=>{
     if(!m||m.module_tier_id!=="Tier4"||!Array.isArray(m.available_descendant_id))return;
-    const st=Array.isArray(m.module_stat)?m.module_stat:[],a=st[0]||{},z=st[st.length-1]||{};
+    const st=(Array.isArray(m.module_stat)?m.module_stat:[]).slice().sort((a,b)=>a.level-b.level),a=st[0]||{},z=st[st.length-1]||{};
     const o={id:String(m.module_id),n:String(m.module_name||""),img:m.image_url||"",so:wKey(D_SOCK,m.module_socket_type||""),
-      c0:a.module_capacity,c1:z.module_capacity,d:String(a.value||"").replace(/\[[+x]\]/g,"")};
+      c0:a.module_capacity,c1:z.module_capacity,c:st.map(x=>x.module_capacity),d:String(a.value||"").replace(/\[[+x]\]/g,"")};
     m.available_descendant_id.forEach(id=>(tm[id]=tm[id]||[]).push(o));
   });
-  return (Array.isArray(desc)?desc:[]).map(x=>{
+  // Allgemeine Descendant-Module für den Optimierer (ohne transzendente und Trigger-Module)
+  (Array.isArray(mods)?mods:[]).forEach(m=>{
+    if(!m||!["Descendant","Nachfahre"].includes(m.module_class)||m.module_tier_id==="Tier4"||(m.available_module_slot_type||[]).includes("Trigger"))return;
+    const st=(Array.isArray(m.module_stat)?m.module_stat:[]).slice().sort((a,b)=>a.level-b.level);if(!st.length)return;
+    const o={id:String(m.module_id),n:String(m.module_name||""),img:m.image_url||"",so:wKey(D_SOCK,m.module_socket_type||""),t:String(m.module_type||""),
+      c:st.map(x=>x.module_capacity),tx:st.map(x=>String(x.value||"").replace(/\[[+x]\]/g,""))};
+    if(lang==="en"){o.v=st.map(x=>parseModStats(x.value));if(!o.v.some(v=>Object.keys(v).length))return;}
+    pool.push(o);
+  });
+  const list=(Array.isArray(desc)?desc:[]).map(x=>{
     if(!x||!x.descendant_id||!x.descendant_name)return null;
     return{id:String(x.descendant_id),n:String(x.descendant_name),g:String(x.descendant_group_id||""),img:x.descendant_image_url||"",
       sk:(x.descendant_skill||[]).map(s=>({n:String(s.skill_name||""),p:/passiv/i.test(s.skill_type||""),el:s.element_type||"",ek:wKey(D_ELEM,s.element_type||""),
-        ar:s.arche_type||"",img:s.skill_image_url||"",d:s.skill_description||""})),
+        ar:s.arche_type||"",ak:wKey(D_ARCH,s.arche_type||""),img:s.skill_image_url||"",d:s.skill_description||""})),
       tm:tm[x.descendant_id]||[]};
   }).filter(Boolean);
+  return{l:list,pool};
 }
 let D_LIVE={},D_BUSY={},D_ERR="",DSEL=null,DQ="";
 const descendants=()=>D_LIVE[LANG]||D_FALLBACK;
@@ -1319,10 +1289,10 @@ function dPic(d){
   return okUrl(d.img)?`<img src="${escH(d.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${escH(D_SVG)}">`:D_SVG;
 }
 const D_SKILL_SVG='<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="#0f141c" stroke="#9fb3c8" stroke-opacity=".7" stroke-width="2"/><path d="M24 11 37 24 24 37 11 24Z" fill="none" stroke="#9fb3c8" stroke-width="2.5"/><circle cx="24" cy="24" r="3.5" fill="#9fb3c8"/></svg>';
+const dSorted=()=>descendants().slice().sort((a,b)=>dBase(a).n.localeCompare(dBase(b).n)||dUlt(a)-dUlt(b));
 function dFiltered(){
   const q=DQ.trim().toLowerCase();
-  return descendants().filter(d=>!q||d.n.toLowerCase().includes(q))
-    .sort((a,b)=>dBase(a).n.localeCompare(dBase(b).n)||dUlt(a)-dUlt(b));
+  return dSorted().filter(d=>!q||d.n.toLowerCase().includes(q));
 }
 function renderDescGrid(){
   const list=dFiltered();
@@ -1358,6 +1328,7 @@ function renderDescDetail(d){
     <h2${dUlt(d)?' class="t3"':""}>${escH(d.n)}</h2>
     <div class="hero"><div class="portrait">${dPic(d).replace('alt=""',`alt="${escH(d.n)}"`)}</div><div>
       ${nell?`<p>${t("nellIntro")}</p><h3>${t("comboH")}</h3><p>${t("combo")}</p>`:`<p class="note">${t("dOnlyNell")}</p>`}
+      <button type="button" class="btn sec back" data-opt="${escH(d.id)}">${t("dToOpt")} →</button>
     </div></div>
     <h3>${t("dSkillsH")}</h3><div class="tscroll">${skills}</div>
   </div>
@@ -1382,27 +1353,306 @@ function openDesc(id){
 }
 async function loadDesc(lang){
   if(D_BUSY[lang])return;
-  D_BUSY[lang]=true;renderDesc();
+  D_BUSY[lang]=true;renderDesc();renderOptPanel();
   try{
     const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(W_META+lang+"/"+f).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
-    const l=slimDescendants(d,m);
-    if(!l.length)throw new Error(LANG==="de"?"keine Descendants gefunden":"no descendants found");
-    D_LIVE[lang]=l;D_ERR="";
-    try{localStorage.setItem("tfdDesc_"+lang,JSON.stringify({t:Date.now(),l}));}catch(e){}
+    const r=slimDescendants(d,m,lang);
+    if(!r.l.length)throw new Error(LANG==="de"?"keine Descendants gefunden":"no descendants found");
+    D_LIVE[lang]=r.l;O_POOL[lang]=r.pool;D_ERR="";
+    try{localStorage.setItem("tfdDesc2_"+lang,JSON.stringify({t:Date.now(),l:r.l,pool:r.pool}));}catch(e){}
   }catch(e){D_ERR=(e&&e.message)||String(e);}
-  D_BUSY[lang]=false;renderDesc();
+  D_BUSY[lang]=false;renderDesc();renderOptPanel();
 }
-// Zwischenspeicher nutzen; nachladen (max. alle 7 Tage) erst, wenn der Reiter geöffnet wird.
-function ensureDesc(mayFetch){
+// Zwischenspeicher nutzen; älter als 7 Tage oder fehlend → neu von NEXON holen.
+// Der Optimierer braucht immer die englischen Daten (Werte werden aus den englischen Texten gelesen).
+function ensureDesc(mayFetch,lang=LANG){
   let age=Infinity;
-  if(!D_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdDesc_"+LANG)||"null");if(c&&Array.isArray(c.l)&&c.l.length){D_LIVE[LANG]=c.l;age=Date.now()-c.t;}}catch(e){}}
+  if(!D_LIVE[lang]){try{const c=JSON.parse(localStorage.getItem("tfdDesc2_"+lang)||"null");
+    if(c&&Array.isArray(c.l)&&c.l.length&&Array.isArray(c.pool)){D_LIVE[lang]=c.l;O_POOL[lang]=c.pool;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
-  if(mayFetch&&age>7*864e5&&!D_ERR)loadDesc(LANG);
+  if(mayFetch&&age>7*864e5&&!D_ERR)loadDesc(lang);
 }
 $("dSearch").oninput=e=>{DQ=e.target.value;renderDescGrid();};
 $("dGrid").onclick=e=>{const b=e.target.closest("[data-d]");if(b)openDesc(b.dataset.d);};
-$("dDetail").onclick=e=>{if(e.target.closest("[data-back]")){const id=DSEL;openDesc(null);const c=[...document.querySelectorAll("#dGrid [data-d]")].find(x=>x.dataset.d===id);if(c)c.focus();}};
+$("dDetail").onclick=e=>{const o=e.target.closest("[data-opt]");if(o){oSetDesc(o.dataset.opt);showView("opt");$("oDdBtn").focus({preventScroll:true});return;}
+  if(e.target.closest("[data-back]")){const id=DSEL;openDesc(null);const c=[...document.querySelectorAll("#dGrid [data-d]")].find(x=>x.dataset.d===id);if(c)c.focus();}};
 $("dReload").onclick=()=>{D_ERR="";loadDesc(LANG);};
+// ---------- OPTIMIERER: alle Descendants ----------
+// Mit NEXON-Daten: echte Modulwerte pro Level (englische Texte aus module.json werden geparst).
+// Ohne Daten: eingebaute Nell-Liste (MODS, Level-Kurve CURVE geschätzt).
+const O_LAB={"Base Skill Power boost ratio":"sp","Skill Power Modifier":"spm","Skill Critical Hit Rate":"cr","Skill Critical Hit Damage":"cd",
+  "Skill Cooldown":"cdr","Skill Cost":"cost","Skill Effect Range":"range","Max HP":"hp","Max Shield":"sh","DEF":"def"};
+[["Non-Attribute","na"],["Fire","fire"],["Chill","chill"],["Electric","elec"],["Toxic","toxic"]].forEach(([e,k])=>O_LAB[e+" Skill Power Boost Ratio"]="e_"+k);
+[["Fusion","fus"],["Singular","sing"],["Dimension","dim"],["Tech","tech"]].forEach(([a,k])=>O_LAB[a+" Skill Modifier"]="a_"+k);
+const O_RX=/^(.+?) ([+-]\d+(?:\.\d+)?)%(?:\[[+x]\])?$/;
+// Eine Stufe eines Moduls in Zahlen übersetzen. Nur Zeilen der Form „Name +x%“ zählen; bedingte Effekte nur bei Decimator/Dangerous Ambush.
+function parseModStats(txt){
+  const o={},s=String(txt||"");
+  s.split("\n").forEach(line=>{const m=O_RX.exec(line.trim());if(m&&O_LAB[m[1]]){const k=O_LAB[m[1]];o[k]=Math.round(((o[k]||0)+parseFloat(m[2]))*100)/100;}});
+  let m=/^When defeating an enemy inflicted with debuffs, Skill Power Modifier \+(\d+(?:\.\d+)?)%.*?Up to (\d+) stacks/im.exec(s);
+  if(m)o.cDec=Math.round(parseFloat(m[1])*parseInt(m[2])*100)/100;
+  m=/against an immobilized enemy, Skill Power \+(\d+(?:\.\d+)?)%/i.exec(s);
+  if(m)o.cAmb=parseFloat(m[1]);
+  return o;
+}
+const O_POOL={};
+const O_DIMS=["sp","spm","crA","crx","cdA","cdx","cdr","range"];
+const SH_ID="254029002";
+let OSEL=NELL_ID,OSK=null,OTR=null; // Descendant, Ziel-Skill (Index der aktiven Skills), transzendentes Modul (ID, "" = keins)
+try{const s=localStorage.getItem("tfdOptDesc");if(s)OSEL=s;}catch(e){}
+const oLive=()=>O_POOL.en&&O_POOL.en.length?O_POOL.en:null;
+const oDesc=()=>dById(OSEL)||dById(NELL_ID)||D_FALLBACK.find(d=>d.id===NELL_ID);
+function oSkills(d){
+  if(d.sk)return d.sk.filter(s=>!s.p).map(s=>({n:s.n,el:s.el,ek:s.ek,ar:s.ar,ak:s.ak||wKey(D_ARCH,s.ar)}));
+  if(d.id===NELL_ID)return NELL_SKILLS.slice(1).map(s=>{const fus=/Fusion/.test(s.ty);
+    return{n:tr(s.n).replace(/^\d · /,""),el:wLoc(D_ELEM,"na"),ek:"na",ar:fus?"Fusion":"Tech",ak:fus?"fus":"tech"};});
+  return[];
+}
+function oTrans(d){
+  if(d.tm)return d.tm;
+  if(d.id===NELL_ID)return[{id:SH_ID,n:"Shattered Heart",so:"Rutile",img:"",d:""},{id:"254029001",n:"Restored Heart",so:"Rutile",img:"",d:""}];
+  return[];
+}
+function oDefaults(){
+  const d=oDesc(),sk=oSkills(d),tm=oTrans(d);
+  if(OSK==null||OSK>=sk.length)OSK=d.id===NELL_ID&&sk.length>3?3:0;
+  if(OTR==null||(OTR&&!tm.some(m=>m.id===OTR)))OTR=d.id===NELL_ID?SH_ID:((tm.find(m=>m.d)||tm[0]||{}).id||"");
+}
+function cfg(){
+  oDefaults();
+  const d=oDesc(),sk=oSkills(d)[OSK]||{n:"",el:"",ek:"na",ar:"",ak:"tech"},trm=oTrans(d).find(m=>m.id===OTR)||null;
+  const c={d,sk,ek:sk.ek,ak:sk.ak,tr:trm,live:!!oLive(),wCd:+$("wCd").value,wRange:+$("wRange").value,needHp:$("needHp").checked,
+    condDecimator:$("condDecimator").checked,condAmbush:$("condAmbush").checked,cap:+$("cap").value,lvl:+$("lvl").value,
+    allMatch:$("allMatch").checked,reactor:$("reactor").value,comps:$("comps").value,trigger:$("trigger").value,
+    baseCr:+$("baseCr").value,baseCd:+$("baseCd").value,shCap:+$("shCap").value};
+  const half=r=>c.allMatch?Math.ceil(r/2):r;
+  c.trCost=!trm?0:Array.isArray(trm.c)&&trm.c.length?half(trm.c[Math.min(c.lvl,trm.c.length-1)]):c.shCap;
+  c.can=c.live||d.id===NELL_ID;
+  return c;
+}
+// Einheitliche Modul-Objekte: aus NEXON-Daten (Namen in der gewählten Sprache) oder aus der eingebauten Liste
+function legacySt(m,c){
+  const s=modStats(m,c);
+  return{sp:s.sp||0,e_na:s.spNA||0,spm:s.spm||0,a_tech:s.spmTech||0,a_fus:s.spmFus||0,crA:s.cr||0,cdA:s.cd||0,cdr:-(s.cdr||0),cost:s.cost||0,range:s.range||0,hp:s.hp||0};
+}
+function oMods(){
+  const P=oLive();
+  if(P){
+    const loc=Object.fromEntries((O_POOL[LANG]||P).map(m=>[m.id,m]));
+    return P.map(m=>{const l=loc[m.id]||m,at=(a,c)=>a[Math.min(c.lvl,a.length-1)];
+      return{key:m.id,n:l.n,en:m.n,s:m.so,t:m.t,tl:l.t||m.t,img:l.img||m.img,raw:c=>at(m.c,c),st:c=>at(m.v,c)||{},txt:c=>at(l.tx||m.tx,c)||""};});
+  }
+  return MODS.map(m=>({key:m.n,n:m.n,en:m.n,s:m.s,t:m.t,tl:m.t,img:"",legacy:m,raw:c=>m.c+c.lvl,st:c=>legacySt(m,c),txt:c=>statTxt(modStats(m,c))}));
+}
+const oCost=(o,c)=>{const r=o.raw(c);return c.allMatch?Math.ceil(r/2):r;};
+// Beitrag eines Moduls zum gewählten Ziel-Skill (Element + Arche-Typ)
+function oVec(o,c){
+  const s=o.st(c);
+  return{sp:(s.sp||0)+(s["e_"+c.ek]||0)+(c.condAmbush?s.cAmb||0:0),
+    spm:(s.spm||0)+(s["a_"+c.ak]||0)+(c.condDecimator?s.cDec||0:0),
+    crx:s.cr||0,cdx:s.cd||0,crA:s.crA||0,cdA:s.cdA||0,cdr:-(s.cdr||0),range:s.range||0,
+    surv:(s.hp||0)>0||(s.sh||0)>0||(s.def||0)>0};
+}
+function oBase(c){
+  const b={sp:0,spm:0,crA:c.baseCr,cdA:c.baseCd+33,crx:0,cdx:0,cdr:7.4,range:0}; // Reaktor-Substats: −7,4 % CD, +33 % Critschaden (angenommen)
+  if(c.tr&&c.tr.id===SH_ID)b.crA+=20; // Shattered Heart: +20 % Skill-Critrate
+  if(c.comps==="hunter")b.cdr+=4;else b.sp+=26.1;
+  if(c.trigger==="pb")b.sp+=15;
+  return b;
+}
+function oScore(s,c){
+  const crRaw=Math.max(0,s.crA*(1+s.crx/100)),cr=Math.min(100,crRaw),cd=Math.max(100,s.cdA*(1+s.cdx/100));
+  let dmg=Math.max(0,1+s.sp/100)*Math.max(0,1+s.spm/100)*(1+cr/100*(cd/100-1));
+  if(c.reactor!=="match")dmg*=0.6; // falscher Reaktor-Typ (grob)
+  const cdr=Math.min(s.cdr,75)/100;
+  return{score:dmg*Math.pow(1/(1-cdr),c.wCd)*Math.pow(1+Math.max(-90,s.range)/100,c.wRange),dmg,SP:s.sp,SPM:s.spm,cr:crRaw,cd,cdr:s.cdr};
+}
+function oEval(list,c){
+  const s=oBase(c);
+  list.forEach(o=>{const v=oVec(o,c);O_DIMS.forEach(k=>s[k]+=v[k]);});
+  const r=oScore(s,c);
+  r.list=list;r.capUsed=list.reduce((a,o)=>a+oCost(o,c),0)+c.trCost;r.overCr=r.cr>100;r.reactorOk=c.reactor==="match";
+  return r;
+}
+// Vollsuche mit Schranke: Module mit gleichem Tag bilden eine Gruppe (höchstens eins davon).
+// Äste, deren bestmögliches Ergebnis nicht unter die besten 6 kommt, werden übersprungen – das Ergebnis bleibt exakt.
+function oOptimize(c){
+  const budget=c.cap-c.trCost,slots=10,keep=6,base=oBase(c);
+  const useful=v=>v.sp>0||v.spm>0||v.crx>0||v.crA>0||v.cdx>0||v.cdA>0||(c.wCd>0&&v.cdr>0)||(c.wRange>0&&v.range>0);
+  const items=oMods().map(o=>({o,v:oVec(o,c),cost:oCost(o,c)})).filter(x=>x.cost<=budget&&(useful(x.v)||(c.needHp&&x.v.surv)));
+  const tagged={},groups=[];
+  items.forEach(x=>{if(x.o.t)(tagged[x.o.t]=tagged[x.o.t]||[]).push(x);else groups.push([x]);});
+  Object.values(tagged).forEach(g=>groups.push(g));
+  const solo=x=>{const s={...base};O_DIMS.forEach(k=>s[k]+=x.v[k]);return oScore(s,c).score;};
+  groups.forEach(g=>{g.forEach(x=>x.g=solo(x));g.sort((a,b)=>b.g-a.g);g.max=g[0].g;});
+  groups.sort((a,b)=>b.max-a.max);
+  const n=groups.length,top=[];
+  // top[i][dim][k] = Summe der k größten Gruppen-Maxima ab Gruppe i (höchstens k Module passen noch hinein)
+  for(let i=0;i<=n;i++){top[i]={};O_DIMS.forEach(k=>{
+    const v=groups.slice(i).map(g=>Math.max(0,...g.map(x=>x.v[k]))).sort((a,b)=>b-a),cs=[0];
+    for(let j=0;j<slots;j++)cs.push(cs[j]+(v[j]||0));top[i][k]=cs;});}
+  const best=[],cur=[],s={...base},u={};let surv=0,nodes=0;
+  function leaf(){
+    if(!cur.length||(c.needHp&&!surv))return;
+    const sc=oScore(s,c).score;
+    if(best.length<keep||sc>best[best.length-1].sc){best.push({sc,items:cur.slice()});best.sort((a,b)=>b.sc-a.sc);if(best.length>keep)best.pop();}
+  }
+  function rec(i,used){
+    nodes++;
+    if(i===n||cur.length===slots){leaf();return;}
+    if(best.length===keep){const f=slots-cur.length;O_DIMS.forEach(k=>u[k]=s[k]+top[i][k][f]);if(oScore(u,c).score<=best[keep-1].sc)return;}
+    for(const x of groups[i]){
+      if(used+x.cost>budget)continue;
+      O_DIMS.forEach(k=>s[k]+=x.v[k]);cur.push(x);if(x.v.surv)surv++;
+      rec(i+1,used+x.cost);
+      O_DIMS.forEach(k=>s[k]-=x.v[k]);cur.pop();if(x.v.surv)surv--;
+    }
+    rec(i+1,used);
+  }
+  rec(0,0);
+  const res=best.map(b=>oEval(b.items.map(x=>x.o),c));
+  res.checked=items.length;res.nodes=nodes;
+  return res;
+}
+function oGuide(c){ // AlcastHQ-Vergleich, nur für Nell
+  if(c.d.id!==NELL_ID)return null;
+  const all=oMods(),l=GUIDE[c.ak==="tech"?"boss":"mob"].map(n=>all.find(o=>o.en===n));
+  return l.every(Boolean)?l:null;
+}
+function oIcon(o,c){
+  if(o.legacy)return modIcon(o.legacy);
+  const v=oVec(o,c);let g="power";
+  if(o.t==="Arche Tech")g="arche";
+  else{const sc=[["power",Math.max(v.sp,v.spm)],["crit",v.crx/2],["critdmg",v.cdx/2],["cd",v.cdr],["range",v.range]].sort((a,b)=>b[1]-a[1]);g=sc[0][1]>0?sc[0][0]:v.surv?"hp":"cost";}
+  return withImg(o.img||OFFICIAL.mods[o.en.toLowerCase()],icon(g,SOCK[o.s]||"#9fb3c8"));
+}
+const oSrc=o=>{const m=MODS.find(x=>x.n===o.en);return m&&m.src||t("srcShort");};
+
+// ---------- OPTIMIERER: Auswahl (Drop-down mit Bild) ----------
+function renderOptPanel(){
+  oDefaults();
+  const d=oDesc(),live=!!oLive(),busy=D_BUSY.en||D_BUSY[LANG];
+  $("oDdBtn").innerHTML=`<span class="dd-pic">${dPic(d)}</span><span class="dd-n${dUlt(d)?" t3":""}">${escH(d.n)}</span><svg class="dd-chev" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  $("oDdBtn").setAttribute("aria-label",t("oDescH")+": "+d.n);
+  $("oDdList").setAttribute("aria-label",t("oDescH"));
+  if($("oDdList").hidden)renderOptList();
+  const note=$("oDescNote");
+  if(live){note.className="note";note.textContent=t("oLive");}
+  else if(busy){note.className="note";note.textContent=t("oLoading");}
+  else if(d.id===NELL_ID){note.className="note warn";note.textContent=t("oLegacy");}
+  else{note.className="note warn";note.textContent=t("oNeedData",{n:d.n});}
+  const sk=oSkills(d);
+  $("tSkill").innerHTML=sk.map((s,i)=>`<option value="${i}">${i+1} · ${escH(s.n)} (${escH(s.el)} · ${escH(s.ar)})</option>`).join("")||`<option value="0">–</option>`;
+  $("tSkill").value=String(OSK);
+  const tm=oTrans(d);
+  $("trans").innerHTML=`<option value="">${t("trNone")}</option>`+tm.map(m=>`<option value="${escH(m.id)}">${escH(m.n)}</option>`).join("");
+  $("trans").value=OTR;
+  $("transNote").textContent=OTR&&OTR!==SH_ID?t("trNoCalc"):"";
+  const s=sk[OSK],rv=$("reactor").value||"match";
+  $("reactor").innerHTML=`<option value="match">${escH(t("reacMatch",{t:s?s.el+" · "+s.ar:"–"}))}</option><option value="other">${t("reacOther")}</option>`;
+  $("reactor").value=rv;
+  $("cmp").style.display=d.id===NELL_ID?"":"none";
+}
+function renderOptList(){
+  const id=oDesc().id;
+  $("oDdList").innerHTML=dSorted().map(x=>`<li role="option" id="oo-${escH(x.id)}" data-id="${escH(x.id)}" aria-selected="${x.id===id}"><span class="dd-pic">${dPic(x)}</span><span class="dd-n${dUlt(x)?" t3":""}">${escH(x.n)}</span></li>`).join("");
+}
+function oSetDesc(id){
+  if(!id||id===OSEL)return;
+  OSEL=id;OSK=null;OTR=null;
+  try{localStorage.setItem("tfdOptDesc",id);}catch(e){}
+  shown=null;renderOptPanel();renderEmpty();$("alts").style.display="none";
+}
+let ddAct=null,ddType="",ddTimer=0;
+function ddMove(id,scroll=true){
+  const l=$("oDdList"),li=[...l.children].find(x=>x.dataset.id===id)||l.firstElementChild;if(!li)return;
+  l.querySelectorAll(".act").forEach(x=>x.classList.remove("act"));li.classList.add("act");
+  l.setAttribute("aria-activedescendant",li.id);ddAct=li.dataset.id;
+  if(scroll)li.scrollIntoView({block:"nearest"});
+}
+function ddOpen(){
+  const l=$("oDdList");renderOptList();l.hidden=false;
+  $("oDdBtn").setAttribute("aria-expanded","true");ddMove(oDesc().id);l.focus({preventScroll:true});
+}
+function ddClose(focusBtn){
+  const l=$("oDdList");if(l.hidden)return;
+  l.hidden=true;l.removeAttribute("aria-activedescendant");$("oDdBtn").setAttribute("aria-expanded","false");
+  if(focusBtn)$("oDdBtn").focus();
+}
+function ddPick(id){ddClose(true);oSetDesc(id);}
+$("oDdBtn").onclick=()=>$("oDdList").hidden?ddOpen():ddClose(true);
+$("oDdBtn").onkeydown=e=>{if(["ArrowDown","ArrowUp","Enter"," "].includes(e.key)){e.preventDefault();ddOpen();}};
+$("oDdList").onclick=e=>{const li=e.target.closest("[data-id]");if(li)ddPick(li.dataset.id);};
+$("oDdList").onmousemove=e=>{const li=e.target.closest("[data-id]");if(li&&li.dataset.id!==ddAct)ddMove(li.dataset.id,false);};
+$("oDdList").onkeydown=e=>{
+  const items=[...$("oDdList").children],i=items.findIndex(x=>x.dataset.id===ddAct);
+  const go=j=>{const x=items[Math.max(0,Math.min(items.length-1,j))];if(x)ddMove(x.dataset.id);};
+  if(e.key==="ArrowDown"){e.preventDefault();go(i+1);}
+  else if(e.key==="ArrowUp"){e.preventDefault();go(i-1);}
+  else if(e.key==="Home"){e.preventDefault();go(0);}
+  else if(e.key==="End"){e.preventDefault();go(items.length-1);}
+  else if(e.key==="PageDown"){e.preventDefault();go(i+8);}
+  else if(e.key==="PageUp"){e.preventDefault();go(i-8);}
+  else if(e.key==="Enter"||e.key===" "){e.preventDefault();ddPick(ddAct);}
+  else if(e.key==="Escape"){e.preventDefault();ddClose(true);}
+  else if(e.key==="Tab")ddClose(false);
+  else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){ // Tippen springt zum Namen
+    ddType+=e.key.toLowerCase();clearTimeout(ddTimer);ddTimer=setTimeout(()=>ddType="",700);
+    const x=items.find(x=>x.textContent.toLowerCase().startsWith(ddType));if(x)ddMove(x.dataset.id);
+  }
+};
+document.addEventListener("click",e=>{if(e.target.isConnected&&!$("oDd").contains(e.target))ddClose(false);});
+$("tSkill").onchange=e=>{OSK=+e.target.value;renderOptPanel();};
+$("trans").onchange=e=>{OTR=e.target.value;renderOptPanel();};
+
+// ---------- OPTIMIERER: Ausgabe ----------
+function renderBuild(r,c,title,ref){
+  const rows=r.list.slice().sort((a,b)=>a.s.localeCompare(b.s)).map(o=>`<tr><td><div class="mname">${oIcon(o,c)}<div><b>${escH(o.n)}</b>${o.tl?`<br><span class="tag">${escH(o.tl)}</span>`:""}</div></div></td><td class="s-${escH(o.s)}">${escH(wLoc(D_SOCK,o.s))}</td><td>${oCost(o,c)}</td><td class="pre">${escH(o.txt(c))}</td><td class="src">${escH(oSrc(o))}</td></tr>`).join("");
+  const rel=ref?` <small>(${r.score>=ref.score?"+":""}${fmt((r.score/ref.score-1)*100)} % ${t("vsGuide")})</small>`:"";
+  const trm=c.tr,sh=trm&&trm.id===SH_ID;
+  const trRow=trm?`<tr><td><div class="mname">${trm.img?withImg(trm.img,icon("trans","#ff9f5f")):namedIcon(trm.n,icon("trans","#ff9f5f"))}<div><b class="trn">${escH(trm.n)}</b><br><span class="tag trn">${t("transTag")}</span></div></div></td>
+    <td class="s-${escH(trm.so||"")}">${escH(wLoc(D_SOCK,trm.so||""))||"–"}</td><td>${c.trCost}</td>
+    <td class="pre">${sh?t("shRow"):`${escH(trm.d||"–")}<div class="note">${t("trNoCalc")}</div>`}</td><td class="src">${sh?t("shSrc"):"–"}</td></tr>`:"";
+  return `<h2>${title}</h2>
+  <p class="note">${t("target")}: <b>${escH(c.sk.n)}</b> · <span class="el el-${escH(c.ek)}">${escH(c.sk.el)}</span> · ${escH(c.sk.ar)}</p>
+  <div class="kpis">
+   <div class="kpi"><small>${t("score")}</small><b>${fmt(r.score,2)}</b>${rel}</div>
+   <div class="kpi"><small>${t("dmgF")}</small><b>×${fmt(r.dmg,2)}</b></div>
+   <div class="kpi"><small>${t("spSpm")}</small><b>${fmt(r.SP,0)} % / ${fmt(r.SPM,0)} %</b></div>
+   <div class="kpi"><small>${t("crit")}</small><b class="${r.overCr?"warn":""}">${fmt(r.cr,0)} % / ${fmt(r.cd,0)} %</b></div>
+   <div class="kpi"><small>${t("cdr")}</small><b>${fmt(r.cdr,1)} %</b></div>
+   <div class="kpi"><small>${t("capK")}</small><b>${r.capUsed} / ${c.cap}</b></div>
+  </div>
+  <div data-wline></div>
+  ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
+  ${r.cdr>75?`<p class="warn">${t("overCdr")}</p>`:""}
+  ${!r.reactorOk?`<p class="warn">${t("badReactor")}</p>`:""}
+  <div class="tscroll"><table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap")}</th><th>${t("effAt",{l:c.lvl})}</th><th>${t("thSrc")}</th></tr>
+  ${trRow}
+  <tr><td><div class="mname">${namedIcon("Mid-Air Maneuvering",icon("glide",SOCK.Malachite))}<b>Mid-Air Maneuvering</b></div></td><td class="s-Malachite">${escH(wLoc(D_SOCK,"Malachite"))}</td><td>0</td><td>${t("midAir")}</td><td class="src">–</td></tr>
+  ${rows}</table></div>`;
+}
+let shown=null;
+$("run").onclick=()=>{
+  const c=cfg();
+  if(!c.can){shown=null;$("result").innerHTML=`<h2>${t("resH")}</h2><p class="warn">${escH(t("oNeedData",{n:c.d.n}))}</p>`;$("alts").style.display="none";return;}
+  const t0=performance.now(),best=oOptimize(c);shown="best";
+  if(!best.length){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="warn">${t("noBuild")}</p>`;$("alts").style.display="none";return;}
+  const g=oGuide(c),ref=g?oEval(g,c):null,ms=fmt(performance.now()-t0,0);
+  $("result").innerHTML=renderBuild(best[0],c,t("bestFor",{n:escH(c.d.n)}),ref)+`<p class="note">${c.live?t("calcMsLive",{ms,k:best.checked}):t("calcMs",{ms})}</p>`;
+  renderWeaponSel();
+  $("alts").style.display=best.length>1?"block":"none";
+  $("alts").innerHTML=`<h2>${t("altH")}</h2><div class="tscroll"><table><tr><th>#</th><th>${t("score")}</th><th>${t("diff")}</th></tr>`+best.slice(1).map((r,i)=>{
+    const a=new Set(best[0].list.map(o=>o.key)),b=new Set(r.list.map(o=>o.key));
+    const plus=r.list.filter(o=>!a.has(o.key)),minus=best[0].list.filter(o=>!b.has(o.key));
+    return `<tr class="alt"><td>${i+2}</td><td>${fmt(r.score,2)}</td><td>${plus.map(o=>`<span class="pill" style="color:var(--ok)">${oIcon(o,c)}+ ${escH(o.n)}</span>`).join("")}${minus.map(o=>`<span class="pill" style="color:var(--bad)">${oIcon(o,c)}− ${escH(o.n)}</span>`).join("")}</td></tr>`;}).join("")+"</table></div>";
+};
+$("cmp").onclick=()=>{
+  const c=cfg(),l=oGuide(c);if(!l)return;shown="guide";
+  $("result").innerHTML=renderBuild(oEval(l,c),c,t("guideB",{m:t(c.ak==="tech"?"bossing":"mobbing")}))+`<p class="note">${t("guideHint")}</p>`;
+  renderWeaponSel();
+  $("alts").style.display="none";
+};
 // ---------- ITEM FINDER ----------
 // Items + Fundstellen aus der NEXON Open API (consumable-material, acquisition-detail, research), dazu Waffen und Descendants.
 // Die Karte ist eine eigene schematische Übersicht (keine Spielkarte): markiert wird das Gebiet bzw. die Einsatzart.
@@ -1628,6 +1878,7 @@ try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OF
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
 ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
+try{localStorage.removeItem("tfdDesc_de");localStorage.removeItem("tfdDesc_en");}catch(e){}
 renderStatic();renderEmpty();
 if(!Object.keys(OFFICIAL.mods).length)loadOnline($("apiKey").value.trim()||undefined);
 </script>
