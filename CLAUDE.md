@@ -1,6 +1,6 @@
-# TFD Build-Rechner – Projektnotizen für Claude
+# TFD Database – Projektnotizen für Claude
 
-Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build für einen Descendant und zeigt, wo man Items und Materialien bekommt. Gestartet mit **Nell**. Inoffiziell, nicht mit NEXON verbunden.
+Fan-Tool für **The First Descendant (TFD)**, Name der Website: **TFD Database** (früher „TFD Build-Rechner“): berechnet das beste Modul-Build für einen Descendant und zeigt, wo man Items und Materialien bekommt. Gestartet mit **Nell**. Inoffiziell, nicht mit NEXON verbunden.
 
 ## Arbeitsweise
 - Mit dem Nutzer auf **Deutsch** sprechen.
@@ -15,7 +15,7 @@ Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build f�
 - Vor einer Veröffentlichung: Hinweis „Inoffizielles Fan-Tool · Daten: NEXON Open API“ einbauen und die Nutzungsbedingungen der NEXON Open API beachten.
 
 ## Aufbau der Seite
-Reiter: **Optimierer** · **Waffen** · **Descendants** (Übersicht aller Descendants mit Bild und Name; Klick öffnet die Einzelseite mit Portrait, Skills und transzendenten Modulen) · **Wo bekomme ich was?**. Die Ansicht **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“) öffnet sich über das Zahnrad oben rechts (`#gear`); ein zweiter Klick führt zurück.
+Reiter: **Optimierer** · **Waffen** · **Descendants** (Übersicht aller Descendants mit Bild und Name; Klick öffnet die Einzelseite mit Portrait, Skills und transzendenten Modulen) · **Item Finder** (Suche über alle Items mit Fundstellen und schematischer Übersichtskarte; darunter die älteren Karten „Nell freischalten“ und „Module, Reaktor, Komponenten“). Die Ansicht **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“) öffnet sich über das Zahnrad oben rechts (`#gear`); ein zweiter Klick führt zurück.
 Sprach-Schalter oben links (DE/EN, gespeichert in `localStorage` "tfdLang").
 Design: Sci-Fi-Stil angelehnt an TFD. Hintergrund in den Farben des Charakters (Nell: Anthrazit-Schwarz, Taupe, gedecktes Rosé – CSS-Variablen `--bg`, `--bg-glow1/2`, `--bg-grid`, `--hdr`, `--bar`, `--panel`), Akzente Cyan `--acc`, Bernstein `--acc2`, abgeschrägte Ecken, Schriften Rajdhani + Exo 2 von Google Fonts).
 
@@ -30,6 +30,7 @@ Design: Sci-Fi-Stil angelehnt an TFD. Hintergrund in den Farben des Charakters (
 - `OFFICIAL`, `applyMeta()`, `loadOnline()` – Original-Icons laden (automatisch / mit API-Key / JSON-Dateien manuell).
 - Waffen-Reiter: `W_BASE` (eingebaute Fallback-Liste, englische Namen, nur Zahlen + Bild-Links), `slimWeapon()` kürzt NEXONs `weapon.json`, `loadWeapons()`/`ensureWeapons()` laden die aktuellen Daten in der gewählten Sprache (`meta/de/` bzw. `meta/en/`, Cache in `localStorage` "tfdWeap_de"/"tfdWeap_en", 7 Tage). Auswahl (max. 3) in `WSEL`, gespeichert in `localStorage` "tfdWeapons". Seltenheitsfarben über CSS-Klassen `.t1`–`.t4` (Normal blau, Selten violett, Ultimate gold, Transzendent rot). Tooltip: `wTip()`/`showTip()`.
 - Descendants-Reiter: `D_BASE` (eingebaute Fallback-Liste: ID, Name, Gruppe, Bild-Link), `slimDescendants()` kürzt NEXONs `descendant.json` + `module.json` (transzendente Module = `module_tier_id` "Tier4", Zuordnung über `available_descendant_id`), `loadDesc()`/`ensureDesc()` laden erst beim Öffnen des Reiters (Cache `localStorage` "tfdDesc_de"/"tfdDesc_en", 7 Tage). `DSEL` = geöffneter Descendant, `renderDescGrid()`/`renderDescDetail()`. Nell hat zusätzlich eigene Texte (Intro, Kern-Kombo, Einsatz-Hinweise `D_USE`) und ohne Verbindung die eigenen Kurztexte aus `NELL_SKILLS`. Der Optimierer rechnet weiterhin nur für Nell.
+- Item Finder: `slimItems()` kürzt NEXONs `consumable-material.json`, `acquisition-detail.json` und `research.json`; `loadItems()`/`ensureItems()` laden erst beim Öffnen des Reiters (Cache `localStorage` "tfdItems_de"/"tfdItems_en", 7 Tage, kein eingebauter Fallback). `fBuild()` baut den Suchindex aus Items, Waffen und Descendants; `fSrc()` ordnet jede Fundstelle über das ID-Präfix (`MS`, `VB`, `FO` …) und den Gebietsnamen einem Knoten in `F_REG` und einer Art (Mission, Boss, Gebiet, NPC) zu. `fMap()` zeichnet die Karte als **eigenes Schema** (keine Spielkarte, keine echten Koordinaten – die liefert NEXON nicht). Für Module liefert NEXON keine Fundstellen.
 - Die Waffenauswahl wird beim Build nur angezeigt und fließt **nicht** in den Score ein.
 
 ## Rechenmodell (vereinfacht)
