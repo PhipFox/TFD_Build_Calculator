@@ -15,9 +15,9 @@ Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build f�
 - Vor einer Veröffentlichung: Hinweis „Inoffizielles Fan-Tool · Daten: NEXON Open API“ einbauen und die Nutzungsbedingungen der NEXON Open API beachten.
 
 ## Aufbau der Seite
-Reiter: **Optimierer** · **Waffen** · **Nell & Skills** · **Wo bekomme ich was?** · **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“).
+Reiter: **Optimierer** · **Waffen** · **Nell & Skills** (mit Nells Portrait, nur per Link von NEXON) · **Wo bekomme ich was?**. Die Ansicht **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“) öffnet sich über das Zahnrad oben rechts (`#gear`); ein zweiter Klick führt zurück.
 Sprach-Schalter oben links (DE/EN, gespeichert in `localStorage` "tfdLang").
-Design: Sci-Fi-Stil angelehnt an TFD (dunkles Blauschwarz, Cyan `--acc`, Bernstein `--acc2`, abgeschrägte Ecken, Schriften Rajdhani + Exo 2 von Google Fonts).
+Design: Sci-Fi-Stil angelehnt an TFD. Hintergrund in den Farben des Charakters (Nell: Anthrazit-Schwarz, Taupe, gedecktes Rosé – CSS-Variablen `--bg`, `--bg-glow1/2`, `--bg-grid`, `--hdr`, `--bar`, `--panel`), Akzente Cyan `--acc`, Bernstein `--acc2`, abgeschrägte Ecken, Schriften Rajdhani + Exo 2 von Google Fonts).
 
 ### Wichtige JS-Teile
 - `I18N` – alle Texte, `t(key)` holt sie.
