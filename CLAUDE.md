@@ -4,6 +4,7 @@ Fan-Tool für **The First Descendant (TFD)**, Name der Website: **TFD Database**
 
 ## Arbeitsweise
 - Mit dem Nutzer auf **Deutsch** sprechen.
+- Wunsch des Nutzers (Nov. 2026): Bei jedem Auftrag zuerst einen sichtbaren **Plan** (Aufgabenliste) anlegen und abhaken; am Ende einen **Screenshot** des Ergebnisses schicken, **bevor** ein Pull Request angelegt wird.
 - Die Website ist **zweisprachig (DE/EN)**: jeder neue Text braucht einen Eintrag in `I18N.de` **und** `I18N.en`.
 - Hauptdatei: `index.html` – eine einzelne, eigenständige HTML-Datei (HTML + CSS + JS inline). Beim Wachsen des Projekts darf sie aufgeteilt werden (z. B. `data/`, `css/`, `js/`).
 - Nach Änderungen die Seite im Browser prüfen (alle fünf Reiter, DE und EN).
@@ -26,7 +27,7 @@ Design: Sci-Fi-Stil angelehnt an TFD. Inhalt zentriert (`--wrap` 1280 px, `--gut
 - `CURVE` – Level-Kurve L0–L10 (**geschätzt**, aus „Focus on Non-Attribute“ abgeleitet).
 - `GUIDE` – Vergleichs-Builds (AlcastHQ) für Bossing und Mobbing.
 - Optimierer (alle Descendants): `parseModStats()` liest die **englischen** Modultexte aus `module.json` (Zeilen „Name +x%“, Schlüssel in `O_LAB`) → echte Werte pro Level. Der Modul-Pool `O_POOL[lang]` entsteht in `slimDescendants()` (allgemeine Descendant-Module ohne Transzendent/Trigger; Klasse heißt im Deutschen „Nachfahre“) und liegt mit im Cache `tfdDesc2_*`. Werte immer aus `O_POOL.en`, Namen/Texte aus `O_POOL[LANG]`. Startet beim Öffnen der Seite (Optimierer ist der Start-Reiter).
-- `OSEL` (gewählter Descendant, `localStorage` "tfdOptDesc"), `OSK` (Ziel-Skill), `OTR` (transzendentes Modul); `oSkills()`, `oTrans()`, `cfg()`, `oMods()` (NEXON-Pool oder eingebaute `MODS` als Fallback), `oVec()` (Beitrag zum Ziel-Skill), `oBase()`, `oScore()`, `oEval()`.
+- `OSEL` (gewählter Descendant, `localStorage` "tfdOptDesc"), `OSK` (Ziel-Skill), `OTR` (transzendentes Modul, Auswahl als Icon-Kacheln `#trPick` mit roten Namen und Tooltip `trTip()` über den gemeinsamen Tooltip `#wtip`); `oSkills()`, `oTrans()`, `cfg()`, `oMods()` (NEXON-Pool oder eingebaute `MODS` als Fallback), `oVec()` (Beitrag zum Ziel-Skill), `oBase()`, `oScore()`, `oEval()`.
 - `oOptimize()` – exakte Suche mit Schranke über die 10 freien Slots: Module mit gleichem Tag bilden eine Gruppe; Äste, die selbst mit den besten noch möglichen Werten nicht unter die Top 6 kommen, werden übersprungen. Typisch < 50 ms, mit extremen Gewichten bis ca. 0,3 s.
 - Ausrüstung: `EQ_REACTOR` (Element_Arche → Reaktor), `EQ_COMP` (Sets Hunter/Ascending Armory/Slayer), `EQ_TRIGGER` (Power Beyond) – je [Name EN, Name DE, Bild-Hash], einmalig aus NEXONs `reactor.json`, `external-component.json`, `module.json` erzeugt (nur Links). Auswahl als Kachel-Radios (`renderEqPick()`, Zustand `EQ`), im Ergebnis `eqLine()`.
 - Drop-down: `renderOptPanel()`, `renderOptList()` (erst normale Descendants, darunter Gruppe „Ultimate“), `ddOpen()/ddClose()/ddMove()/ddPick()` (Listbox mit Tastatur, Tippen springt zum Namen). Liegt bewusst **außerhalb** einer `.card`, weil `clip-path` die Liste sonst abschneidet.
