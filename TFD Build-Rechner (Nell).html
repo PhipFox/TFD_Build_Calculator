@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFD Build-Rechner – Nell</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#2b3445;--txt:#e6edf3;--mut:#8b98a9;--acc:#5fd4ff;--acc2:#b48cff;--ok:#5fe0a0;--warn:#ffc35f;--bad:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.45}
+header{padding:14px 22px 18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#111a26,#1a1430)}
+header h1{margin:0;font-size:20px;letter-spacing:.3px}
+header p{margin:4px 0 0;color:var(--mut);font-size:13px}
+/* Sprach-Schalter */
+.lang{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--mut);user-select:none}
+.lang .on{color:var(--txt)}
+.switch{position:relative;width:46px;height:24px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;cursor:pointer;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--acc);transition:transform .2s}
+.switch[aria-checked="true"]::after{transform:translateX(22px);background:var(--acc2)}
+.switch:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+nav{display:flex;gap:4px;padding:10px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav button{background:none;border:1px solid transparent;color:var(--mut);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:14px}
+nav button.on{color:var(--txt);border-color:var(--line);background:var(--panel)}
+main{padding:18px 22px;max-width:1250px}
+.view{display:none}.view.on{display:block}
+.grid{display:grid;grid-template-columns:330px 1fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:15px;color:var(--acc)}
+.card h3{margin:12px 0 6px;font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0}
+label span{color:var(--mut)}
+select,input[type=number]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:5px 7px;font-size:13px}
+input[type=number]{width:80px}
+.chk{justify-content:flex-start}
+.btn{background:var(--acc);color:#04121a;border:0;border-radius:7px;padding:9px 16px;font-weight:600;cursor:pointer;font-size:14px;width:100%;margin-top:8px}
+.btn.sec{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+.kpi b{display:block;font-size:20px}
+.kpi small{color:var(--mut)}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:#243044;color:var(--mut);margin-right:4px}
+.s-Almandine{color:#ff8a8a}.s-Malachite{color:#6be3a0}.s-Rutile{color:#ffd36b}.s-Xantic{color:#c59bff}.s-Cerulean{color:#6bc7ff}
+.note{color:var(--mut);font-size:12px}
+.warn{color:var(--warn)}
+.alt{opacity:.85}
+.pill{display:inline-block;padding:2px 8px;border-radius:5px;background:#1f2a3a;margin:2px 4px 2px 0;font-size:12px}
+.src{color:var(--mut);font-size:12px}
+a{color:var(--acc)}
+.ico{display:inline-block;vertical-align:middle;flex:none}
+.mname{display:flex;align-items:center;gap:8px}
+.mname .ico{width:30px;height:30px}
+.sname{display:flex;align-items:center;gap:10px}
+.sname .ico{width:40px;height:40px}
+.pill .ico{width:16px;height:16px;margin-right:4px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.legend span{display:flex;align-items:center;gap:5px;color:var(--mut);font-size:12px}
+.legend .ico{width:20px;height:20px}
+img.ico{object-fit:contain;border-radius:8px;background:#0f141c}
+.sname img.ico{border-radius:50%}
+.status{padding:8px 10px;border-radius:6px;background:var(--panel2);margin:8px 0;font-size:13px}
+.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}
+input[type=text],input[type=password]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px;width:100%}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0}
+.row .btn{width:auto;margin:0;white-space:nowrap}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Sci-Fi-Theme im Stil des Spiels ===== */
+:root{
+  --bg:#05080d;--panel:rgba(12,20,30,.86);--panel2:rgba(18,30,44,.9);--line:rgba(120,190,220,.18);--line2:rgba(120,210,240,.42);
+  --txt:#dbe7ef;--mut:#7f95a6;--acc:#3fe0ff;--acc2:#ffb347;--ok:#59f2b0;--warn:#ffb347;--bad:#ff5c6c;
+  --cut:12px;--head:"Rajdhani","Bahnschrift","Segoe UI",sans-serif;
+}
+html{background:var(--bg)}
+body{
+  font-family:"Exo 2","Segoe UI",system-ui,sans-serif;letter-spacing:.15px;
+  background:
+    radial-gradient(1200px 600px at 85% -10%,rgba(63,224,255,.10),transparent 60%),
+    radial-gradient(900px 500px at -10% 110%,rgba(255,179,71,.07),transparent 60%),
+    linear-gradient(rgba(63,224,255,.035) 1px,transparent 1px) 0 0/100% 32px,
+    linear-gradient(90deg,rgba(63,224,255,.035) 1px,transparent 1px) 0 0/32px 100%,
+    var(--bg);
+  background-attachment:fixed;min-height:100vh;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px)}
+::selection{background:rgba(63,224,255,.35)}
+
+/* Kopfbereich */
+header{position:relative;overflow:hidden;padding:16px 28px 22px;border-bottom:1px solid var(--line2);
+  background:linear-gradient(100deg,rgba(8,16,26,.95) 0%,rgba(10,26,40,.92) 55%,rgba(40,24,6,.55) 100%)}
+header::before{content:"";position:absolute;right:-40px;top:0;bottom:0;width:420px;opacity:.5;
+  background:repeating-linear-gradient(-60deg,transparent 0 14px,rgba(63,224,255,.08) 14px 16px);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
+header::after{content:"";position:absolute;left:0;bottom:-1px;width:260px;height:3px;
+  background:linear-gradient(90deg,var(--acc),transparent)}
+header h1{font-family:var(--head);font-weight:700;font-size:30px;text-transform:uppercase;letter-spacing:2.5px;line-height:1.1;
+  text-shadow:0 0 18px rgba(63,224,255,.25)}
+header h1 span[style]{color:var(--acc2)!important;text-shadow:0 0 18px rgba(255,179,71,.35)}
+header p{font-family:var(--head);font-size:13px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
+.lang{font-family:var(--head);letter-spacing:1.5px}
+.switch{border-radius:0;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);border-color:var(--line2);background:rgba(10,20,30,.9)}
+.switch::after{border-radius:0;clip-path:polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px);box-shadow:0 0 10px var(--acc)}
+.switch[aria-checked="true"]::after{box-shadow:0 0 10px var(--acc2)}
+
+/* Navigation */
+nav{gap:2px;padding:0 28px;background:rgba(6,12,20,.9);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+nav button{font-family:var(--head);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:1.8px;
+  border:0;border-radius:0;padding:14px 18px 12px;color:var(--mut);position:relative;transition:color .15s,background .15s}
+nav button:hover{color:var(--txt);background:rgba(63,224,255,.05)}
+nav button.on{background:linear-gradient(180deg,rgba(63,224,255,.0),rgba(63,224,255,.12));color:var(--acc);border:0}
+nav button.on::after{content:"";position:absolute;left:10%;right:10%;bottom:0;height:2px;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+
+main{padding:22px 28px}
+
+/* Panels mit abgeschrägten Ecken */
+.card{position:relative;border:0;border-radius:0;background:
+    linear-gradient(var(--panel),var(--panel)) padding-box;
+  clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
+  box-shadow:inset 0 0 0 1px var(--line);padding:16px 18px 18px}
+.card::before{content:"";position:absolute;left:0;top:0;width:var(--cut);height:var(--cut);
+  background:linear-gradient(135deg,transparent 48%,var(--line2) 50%,transparent 54%)}
+.card::after{content:"";position:absolute;right:0;top:0;width:46px;height:2px;background:var(--acc);opacity:.75}
+.card h2{font-family:var(--head);font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:2px;color:var(--acc);
+  display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.card h2::before{content:"";width:8px;height:8px;background:var(--acc);transform:rotate(45deg);box-shadow:0 0 8px var(--acc);flex:none}
+.card h3{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:2px;color:var(--acc2);
+  border-top:1px solid var(--line);padding-top:10px;margin-top:14px}
+
+/* Formulare */
+label span{color:var(--mut)}
+select,input[type=number],input[type=text],input[type=password]{border-radius:0;border:1px solid var(--line2);background:rgba(4,10,16,.85);
+  color:var(--txt);font-family:"Exo 2",sans-serif;padding:6px 8px;transition:border-color .15s,box-shadow .15s}
+select:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 12px rgba(63,224,255,.25)}
+input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px}
+input[type=file]{color:var(--mut);font-family:"Exo 2",sans-serif}
+input[type=file]::file-selector-button{background:rgba(18,30,44,.9);color:var(--txt);border:1px solid var(--line2);padding:6px 12px;margin-right:10px;cursor:pointer;font-family:var(--head);letter-spacing:1px;text-transform:uppercase}
+
+/* Buttons */
+.btn{border-radius:0;font-family:var(--head);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:2px;padding:11px 16px;
+  background:linear-gradient(180deg,#5ae8ff,#18b8dc);color:#02131b;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  box-shadow:0 0 18px rgba(63,224,255,.35);transition:filter .15s,transform .05s}
+.btn:hover{filter:brightness(1.12)}
+.btn:active{transform:translateY(1px)}
+.btn.sec{background:linear-gradient(180deg,rgba(255,179,71,.16),rgba(255,179,71,.06));color:var(--acc2);border:0;
+  box-shadow:inset 0 0 0 1px rgba(255,179,71,.55)}
+
+/* Tabellen */
+table{border-collapse:separate;border-spacing:0}
+th{font-family:var(--head);font-weight:600;text-transform:uppercase;letter-spacing:1.5px;font-size:12px;color:var(--mut);
+  border-bottom:1px solid var(--line2);background:rgba(63,224,255,.04)}
+td{border-bottom:1px solid var(--line)}
+tr:not(:first-child):hover td{background:rgba(63,224,255,.045)}
+td b{font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:.6px}
+
+/* KPI-Kacheln */
+.kpis{gap:10px}
+.kpi{position:relative;border:0;border-radius:0;background:linear-gradient(180deg,rgba(63,224,255,.08),rgba(63,224,255,.02));
+  box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--acc)}
+.kpi small{font-family:var(--head);text-transform:uppercase;letter-spacing:1.5px;font-size:11px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kpi b{white-space:nowrap;font-family:var(--head);font-size:21px;font-weight:700;letter-spacing:.5px;color:#fff}
+.kpi:first-child{background:linear-gradient(180deg,rgba(255,179,71,.16),rgba(255,179,71,.03))}
+.kpi:first-child::before{background:var(--acc2)}
+.kpi:first-child b{color:var(--acc2);text-shadow:0 0 14px rgba(255,179,71,.4)}
+
+/* Tags, Pills, Hinweise */
+.tag{border-radius:0;background:rgba(63,224,255,.08);color:#9fdcec;border:1px solid rgba(63,224,255,.25);
+  font-family:var(--head);font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:10.5px;padding:0 6px}
+.pill{border-radius:0;background:rgba(10,20,30,.9);border:1px solid var(--line);display:inline-flex;align-items:center}
+.status{border-radius:0;border-left:3px solid var(--mut);background:rgba(4,10,16,.7)}
+.status.ok{border-left-color:var(--ok)}.status.bad{border-left-color:var(--bad)}
+p.warn{border-left:3px solid var(--warn);padding:6px 10px;background:rgba(255,179,71,.06)}
+.note{color:var(--mut)}
+img.ico{border-radius:0;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+  background:radial-gradient(circle at 50% 35%,rgba(63,224,255,.18),rgba(4,10,16,.95))}
+.sname img.ico{clip-path:none;border-radius:50%;box-shadow:0 0 0 1px var(--line2),0 0 12px rgba(63,224,255,.25)}
+.s-Almandine{color:#ff7d7d}.s-Malachite{color:#5ff0a8}.s-Rutile{color:#ffd166}.s-Xantic{color:#c39bff}.s-Cerulean{color:#5cc8ff}
+td[class^="s-"]{font-family:var(--head);font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:12.5px}
+ul{padding-left:18px}li::marker{color:var(--acc)}
+a{color:var(--acc)}
+.grid{grid-template-columns:340px 1fr}
+@media(max-width:900px){.grid{grid-template-columns:1fr}nav{padding:0 10px}main,header{padding-left:14px;padding-right:14px}}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#05080d}
+::-webkit-scrollbar-thumb{background:rgba(63,224,255,.25);border:2px solid #05080d}
+</style>
+</head>
+<body>
+<header>
+  <div class="lang">
+    <span id="lDe" class="on">DE</span>
+    <button class="switch" id="langSwitch" role="switch" aria-checked="false" aria-label="Sprache / Language"></button>
+    <span id="lEn">EN</span>
+  </div>
+  <h1><span data-i="title">TFD Build-Rechner</span> · <span style="color:var(--acc2)">Nell</span></h1>
+  <p data-i="subtitle"></p>
+</header>
+<nav>
+  <button data-v="opt" class="on" data-i="navOpt"></button>
+  <button data-v="char" data-i="navChar"></button>
+  <button data-v="farm" data-i="navFarm"></button>
+  <button data-v="data" data-i="navData"></button>
+</nav>
+<main>
+
+<!-- OPTIMIERER -->
+<section id="opt" class="view on">
+<div class="grid">
+<div>
+  <div class="card">
+    <h2 data-i="goal"></h2>
+    <label><span data-i="buildType"></span>
+      <select id="mode">
+        <option value="boss" data-i="optBoss"></option>
+        <option value="mob" data-i="optMob"></option>
+      </select></label>
+    <label><span data-i="wCd"></span><input type="number" id="wCd" value="0.5" step="0.1" min="0" max="2"></label>
+    <label><span data-i="wRange"></span><input type="number" id="wRange" value="0" step="0.1" min="0" max="2"></label>
+    <label class="chk"><input type="checkbox" id="needHp"> <span data-i="needHp"></span></label>
+    <h3 data-i="condH"></h3>
+    <label class="chk"><input type="checkbox" id="condDecimator"> <span data-i="condDec"></span></label>
+    <label class="chk"><input type="checkbox" id="condAmbush" checked> <span data-i="condAmb"></span></label>
+  </div>
+  <div class="card">
+    <h2 data-i="yourState"></h2>
+    <label><span data-i="capacity"></span><input type="number" id="cap" value="85" min="40" max="85"></label>
+    <label><span data-i="modLvl"></span><select id="lvl"></select></label>
+    <label class="chk"><input type="checkbox" id="allMatch" checked> <span data-i="allMatch"></span></label>
+    <div class="note" data-i="allMatchNote"></div>
+    <h3 data-i="reactorH"></h3>
+    <label><span data-i="reactorH"></span>
+      <select id="reactor">
+        <option value="mech">Materialized Mechanics (Tech)</option>
+        <option value="mix">Materialized Mixture (Fusion)</option>
+      </select></label>
+    <h3 data-i="compsH"></h3>
+    <label><span data-i="set"></span>
+      <select id="comps">
+        <option value="hunter">2× Hunter + 2× Ascending</option>
+        <option value="slayer">4× Slayer</option>
+      </select></label>
+    <h3 data-i="triggerH"></h3>
+    <label><span>Trigger</span>
+      <select id="trigger">
+        <option value="pb">Power Beyond (+15 % Skill Power)</option>
+        <option value="none" data-i="none"></option>
+      </select></label>
+    <button class="btn" id="run" data-i="run"></button>
+    <button class="btn sec" id="cmp" data-i="cmp"></button>
+  </div>
+</div>
+<div>
+  <div class="card" id="result"></div>
+  <div class="card" id="alts" style="display:none"></div>
+</div>
+</div>
+</section>
+
+<!-- CHARAKTER -->
+<section id="char" class="view">
+<div class="card">
+  <h2>Nell</h2>
+  <p data-i="nellIntro"></p>
+  <table id="skillTbl"></table>
+  <h3 data-i="comboH"></h3>
+  <p data-i="combo"></p>
+</div>
+<div class="card">
+  <h2 data-i="transH"></h2>
+  <table>
+    <tr><th data-i="thModule"></th><th data-i="thEffect"></th><th data-i="thUse"></th></tr>
+    <tr><td><div class="mname" id="icoSH"><b>Shattered Heart</b></div></td><td data-i="shEff"></td><td data-i="shUse"></td></tr>
+    <tr><td><div class="mname" id="icoRH"><b>Restored Heart</b></div></td><td data-i="rhEff"></td><td data-i="rhUse"></td></tr>
+  </table>
+</div>
+</section>
+
+<!-- FARMING -->
+<section id="farm" class="view">
+<div class="card">
+  <h2 data-i="unlockH"></h2>
+  <p data-i="prereq"></p>
+  <h3 data-i="bpH"></h3>
+  <ul data-i="bpList"></ul>
+  <h3 data-i="matH"></h3>
+  <table id="matTbl"></table>
+  <p class="note" data-i="shop"></p>
+</div>
+<div class="card">
+  <h2 data-i="srcH"></h2>
+  <table id="srcTbl"></table>
+  <p class="note" data-i="srcTip"></p>
+</div>
+</section>
+
+<!-- DATEN -->
+<section id="data" class="view">
+<div class="card">
+  <h2 data-i="howH"></h2>
+  <p data-i="fDmg"></p>
+  <p data-i="fScore"></p>
+  <ul>
+    <li data-i="r1"></li>
+    <li data-i="r2"></li>
+    <li data-i="r3"></li>
+    <li data-i="r4"></li>
+    <li><span data-i="r5a"></span> <input type="number" id="baseCr" value="5" style="width:60px"> <span data-i="r5b"></span> <input type="number" id="baseCd" value="150" style="width:60px"> <span data-i="r5c"></span></li>
+    <li><span data-i="r6"></span> <input type="number" id="shCap" value="8" style="width:60px"> <span class="warn" data-i="assumed"></span></li>
+  </ul>
+  <p class="warn" data-i="estWarn"></p>
+</div>
+<div class="card" id="iconCard">
+  <h2 data-i="icH"></h2>
+  <p class="note" data-i="icIntro"></p>
+  <div id="icStatus" class="status"></div>
+  <label class="chk"><input type="checkbox" id="useOff" checked> <span data-i="icUse"></span></label>
+  <h3 data-i="icAuto"></h3>
+  <div class="row"><button class="btn" id="icLoad" data-i="icLoadBtn"></button></div>
+  <h3 data-i="icKeyH"></h3>
+  <p class="note" data-i="icKeyNote"></p>
+  <div class="row"><input type="password" id="apiKey" placeholder="API-Key"><button class="btn sec" id="icKeyBtn" data-i="icKeyBtn"></button></div>
+  <h3 data-i="icFileH"></h3>
+  <p class="note" data-i="icFileNote"></p>
+  <div class="row"><input type="file" id="metaFiles" accept=".json,application/json" multiple></div>
+</div>
+<div class="card">
+  <h2 data-i="dbH"></h2>
+  <div class="legend" id="legend"></div>
+  <p class="note" data-i="icoNote"></p>
+  <table id="modTbl"></table>
+</div>
+</section>
+</main>
+
+<script>
+// ---------- ÜBERSETZUNGEN ----------
+const I18N={
+de:{
+ title:"TFD Build-Rechner",subtitle:"Lokale Version v0.2 · Spielstand Patch 1.4.8 (Nov. 2026) · Werte teils geschätzt, siehe „Daten“",
+ navOpt:"Optimierer",navChar:"Nell & Skills",navFarm:"Wo bekomme ich was?",navData:"Daten & Annahmen",
+ goal:"Ziel",buildType:"Build-Typ",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
+ wCd:"Gewicht Cooldown",wRange:"Gewicht Reichweite",needHp:"mind. 1 HP/Überlebens-Modul",condH:"Bedingte Effekte einrechnen",
+ condDec:"Decimator voll gestapelt (Mobbing)",condAmb:"Dangerous Ambush (Gegner festgesetzt)",
+ yourState:"Dein Stand",capacity:"Modul-Kapazität",modLvl:"Modul-Level",lvl:"Level",max:"max",
+ allMatch:"alle Sockel passend (kristallisiert)",allMatchNote:"Aus = jedes Modul kostet volle Kapazität. Sockel-Planung pro Slot kommt später.",
+ reactorH:"Reaktor",compsH:"Externe Komponenten",set:"Set",triggerH:"Trigger-Modul",none:"keins",
+ run:"Bestes Build berechnen",cmp:"Mit Guide-Build vergleichen",resH:"Ergebnis",resHint:"Klick auf „Bestes Build berechnen“.",
+ nellIntro:"Non-Attribute · Skill 1 & 4 = <b>Tech</b>, Skill 2 & 3 = <b>Fusion</b>. Deshalb hängt der Reaktor davon ab, welche Skills du spielst.",
+ thSkill:"Skill",thType:"Typ",thEffect:"Wirkung",thModule:"Modul",thUse:"Einsatz",
+ comboH:"Kern-Kombo",combo:"Skill 2 (Breach setzen) → Skill 3 (zusammenziehen) → Ecive-Scan → Skill 1 zum Abschluss. Für Bosse: Schwachstelle scannen, mit Skill 1 Suspicion aufbauen, dann Skill 4 (mit Shattered Heart) auf die markierte Stelle.",
+ transH:"Transzendente Module",
+ shEff:"Macht Skill 4 zum Angriffsskill (Breach Spikes, Suspicion-Stacks), +20 % Skill-Crit-Rate auf die Passive, eigene Ressourcenleiste.",shUse:"Best in Slot für alle Builds",
+ rhEff:"Macht Skill 2 und 3 zu Buff-Skills für Verbündete.",rhUse:"Support-Nische",
+ unlockH:"Nell freischalten",prereq:"Voraussetzung: Meisterschaftsrang 15 und die Sigma-Sector-Hauptquest, damit du in die Axion Plains kommst.",
+ bpH:"Baupläne",bpList:"<li><b>Blueprint Loot Cache</b> (Nell-Bauplan je 6,5 %) – im Journal als Ziel setzen, bei 100 % Fortschritt garantiert.</li><li><b>Arche Loot Cache</b> (nur Nell-Baupläne, je 25 %).</li><li>Missionen in den Axion Plains: Sealed Residential District, First Crater, AX Refinery, Technical Research Institute, Liquefied AX Vault, Emergency Deployment Zone, AX Power Converter Station.</li><li>Der Nell-Code kommt fertig aus den Caches.</li>",
+ matH:"Forschungsmaterialien",thPart:"Teil",thMat:"Material",thQty:"Menge",thWhere:"Fundort",shop:"Alternativ im Shop: 900 Caliber (nur Nell).",
+ srcH:"Module, Reaktor, Komponenten",thItem:"Item",thSrc:"Quelle",
+ srcTip:"Tipp: Im Spiel auf der Karte unter <i>Zugangsinfo → Module</i> steht für jedes Modul die aktuelle Quelle. Reaktor-Drops rotieren täglich (Belohnungen nach Schwierigkeitsgrad auf der Karte).",
+ noSrc:"noch nicht erfasst – im Spiel: Zugangsinfo → Module",srcShort:"Zugangsinfo im Spiel",
+ howH:"Wie gerechnet wird",
+ fDmg:"<b>Schadensfaktor</b> = (1 + Skill Power) × (1 + Skill-Power-Modifier) × (1 + Critrate × (Critschaden − 1))",
+ fScore:"<b>Score</b> = Schadensfaktor × (1 / (1 − Cooldown-Reduktion))<sup>Gewicht CD</sup> × (1 + Reichweite)<sup>Gewicht Reichweite</sup>",
+ r1:"Nur Boni, die zum Ziel passen, zählen: bei Bossing Non-Attribute + Tech, bei Mobbing Non-Attribute + Fusion.",
+ r2:"Module mit demselben Tag (z. B. „Battle“, „Arche Tech“) lassen sich nicht zusammen ausrüsten – der Rechner beachtet das.",
+ r3:"Kapazität: Basis + Level; passender Sockel halbiert (aufgerundet).",
+ r4:"Slot 1 (Shattered Heart) und Mid-Air Maneuvering sind fest gesetzt; optimiert werden die übrigen 10 Slots.",
+ r5a:"Basis-Crit von Nell ist <span class='warn'>angenommen</span>:",r5b:"% Rate,",r5c:"% Schaden.",
+ r6:"Kapazität Shattered Heart:",assumed:"(angenommen)",
+ estWarn:"Wichtig: Die Level-0-Werte stammen aus Modul-Datenbanken. Werte über Level 0 sind <b>hochgerechnet</b> (Kurve von „Focus on Non-Attribute“). Das Ranking ist dadurch verlässlicher als die absoluten Zahlen.",
+ dbH:"Modul-Datenbank",thSocket:"Sockel",thCap0:"Kap. L0",thTag:"Tag",thEff0:"Wirkung L0",cond:"bedingt",
+ best:"Bestes Build",score:"Score",dmgF:"Schadensfaktor",spSpm:"Skill Power / Modifier",crit:"Crit Rate / Schaden",cdr:"Cooldown −",capK:"Kapazität",
+ vsGuide:"vs. Guide",overCr:"Critrate über 100 % – ein Crit-Modul ist verschwendet.",badReactor:"Reaktor passt nicht zum Build-Typ (Tech für Skill 1/4, Fusion für Skill 2/3).",
+ thCap:"Kap.",effAt:"Wirkung (Level {l})",shRow:"Skill-Critrate +20 %, Skill 4 wird Angriff",shSrc:"Modul-Kombination / Axion Plains",
+ transTag:"Transzendent",midAir:"Greifhaken in der Luft",calcMs:"{ms} ms gerechnet · Level-Werte über 0 sind Hochrechnungen.",
+ noBuild:"Kein gültiges Build mit dieser Kapazität.",altH:"Alternativen",diff:"Unterschied zum Besten",
+ guideB:"Guide-Build (AlcastHQ, {m})",bossing:"Bossing",mobbing:"Mobbing",guideHint:"Zum Vergleich danach „Bestes Build berechnen“ klicken.",
+icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons beim Öffnen direkt von Nexons Servern (NEXON Open API). Gespeichert werden nur die Bild-Links in deinem Browser, keine Bilder. Fehlt ein Bild, erscheint das eigene Symbol.",
+ icUse:"Original-Icons verwenden",icAuto:"1 · Automatisch laden",icLoadBtn:"Icons von Nexon laden",
+ icKeyH:"2 · Mit API-Key",icKeyNote:"Falls Schritt 1 nicht klappt: kostenlosen Key auf openapi.nexon.com erstellen (Anmeldung mit Nexon-Konto → Application anlegen) und hier einfügen. Der Key bleibt nur in diesem Browser.",icKeyBtn:"Mit Key laden",
+ icFileH:"3 · JSON-Dateien manuell",icFileNote:"Falls dein Browser die Abfrage blockiert: lade descendant.json und module.json (englisch) aus der Nexon-Open-API-Doku herunter und wähle sie hier aus.",
+ icNone:"Noch keine Original-Icons geladen – es werden die eigenen Symbole gezeigt.",icOk:"Original-Icons aktiv: {m} Module, {s}/5 Nell-Skills.",icErr:"Laden fehlgeschlagen: {e}",icLoading:"Lade …",
+ icoNote:"Symbole sind eigene Darstellungen (Farbe = Sockel, Motiv = Hauptwirkung), keine Original-Icons aus dem Spiel.",
+ LG:{power:"Skill Power",crit:"Critrate",critdmg:"Critschaden",cd:"Cooldown",range:"Reichweite",cost:"Skill-Kosten",hp:"Überleben",arche:"Arche Tech (bedingt)"},
+ L:{sp:"Skill Power",spNA:"Non-Attr. Skill Power",spm:"Skill-Power-Mod.",spmTech:"Tech-Modifier",spmFus:"Fusion-Modifier",cr:"Skill-Critrate",cd:"Skill-Critschaden",cdr:"Cooldown −",cost:"Skill-Kosten",range:"Reichweite",hp:"Max HP"}
+},
+en:{
+ title:"TFD Build Calculator",subtitle:"Local version v0.2 · Game version patch 1.4.8 (Nov 2026) · some values estimated, see “Data”",
+ navOpt:"Optimizer",navChar:"Nell & Skills",navFarm:"Where to get what?",navData:"Data & Assumptions",
+ goal:"Goal",buildType:"Build type",optBoss:"Bossing – Skill 1/4 (Tech)",optMob:"Mobbing – Skill 2/3 (Fusion)",
+ wCd:"Cooldown weight",wRange:"Range weight",needHp:"at least 1 HP/survival module",condH:"Include conditional effects",
+ condDec:"Decimator fully stacked (mobbing)",condAmb:"Dangerous Ambush (enemy immobilized)",
+ yourState:"Your setup",capacity:"Module capacity",modLvl:"Module level",lvl:"Level",max:"max",
+ allMatch:"all sockets matching (crystallized)",allMatchNote:"Off = every module costs full capacity. Per-slot socket planning comes later.",
+ reactorH:"Reactor",compsH:"External components",set:"Set",triggerH:"Trigger module",none:"none",
+ run:"Calculate best build",cmp:"Compare with guide build",resH:"Result",resHint:"Click “Calculate best build”.",
+ nellIntro:"Non-Attribute · Skills 1 & 4 = <b>Tech</b>, Skills 2 & 3 = <b>Fusion</b>. That's why your reactor depends on which skills you play.",
+ thSkill:"Skill",thType:"Type",thEffect:"Effect",thModule:"Module",thUse:"Use",
+ comboH:"Core combo",combo:"Skill 2 (place Breach) → Skill 3 (pull together) → Ecive scan → Skill 1 to finish. For bosses: scan the weak point, build Suspicion with Skill 1, then Skill 4 (with Shattered Heart) on the marked spot.",
+ transH:"Transcendent modules",
+ shEff:"Turns Skill 4 into an attack skill (Breach Spikes, Suspicion stacks), +20% Skill Crit Rate on the passive, own resource bar.",shUse:"Best in slot for all builds",
+ rhEff:"Turns Skills 2 and 3 into ally buff skills.",rhUse:"Support niche",
+ unlockH:"Unlocking Nell",prereq:"Requirement: Mastery Rank 15 and the Sigma Sector main quest to access Axion Plains.",
+ bpH:"Blueprints",bpList:"<li><b>Blueprint Loot Cache</b> (6.5% per Nell blueprint) – set it as a target reward in the journal, guaranteed at 100% progress.</li><li><b>Arche Loot Cache</b> (Nell blueprints only, 25% each).</li><li>Axion Plains missions: Sealed Residential District, First Crater, AX Refinery, Technical Research Institute, Liquefied AX Vault, Emergency Deployment Zone, AX Power Converter Station.</li><li>The Nell Code comes fully built from the caches.</li>",
+ matH:"Research materials",thPart:"Part",thMat:"Material",thQty:"Amount",thWhere:"Location",shop:"Alternatively in the shop: 900 Caliber (Nell only).",
+ srcH:"Modules, reactor, components",thItem:"Item",thSrc:"Source",
+ srcTip:"Tip: In game, the map's <i>Access Info → Modules</i> shows the current source of every module. Reactor drops rotate daily (Difficulty Level Rewards on the map).",
+ noSrc:"not recorded yet – in game: Access Info → Modules",srcShort:"Access Info in game",
+ howH:"How it's calculated",
+ fDmg:"<b>Damage factor</b> = (1 + Skill Power) × (1 + Skill Power Modifier) × (1 + Crit Rate × (Crit Damage − 1))",
+ fScore:"<b>Score</b> = Damage factor × (1 / (1 − Cooldown reduction))<sup>CD weight</sup> × (1 + Range)<sup>Range weight</sup>",
+ r1:"Only bonuses matching the goal count: Non-Attribute + Tech for bossing, Non-Attribute + Fusion for mobbing.",
+ r2:"Modules with the same tag (e.g. “Battle”, “Arche Tech”) can't be equipped together – the calculator respects that.",
+ r3:"Capacity: base + level; a matching socket halves it (rounded up).",
+ r4:"Slot 1 (Shattered Heart) and Mid-Air Maneuvering are fixed; the remaining 10 slots are optimized.",
+ r5a:"Nell's base crit is <span class='warn'>assumed</span>:",r5b:"% rate,",r5c:"% damage.",
+ r6:"Shattered Heart capacity:",assumed:"(assumed)",
+ estWarn:"Important: Level 0 values come from module databases. Values above level 0 are <b>extrapolated</b> (curve of “Focus on Non-Attribute”). The ranking is therefore more reliable than the absolute numbers.",
+ dbH:"Module database",thSocket:"Socket",thCap0:"Cap. L0",thTag:"Tag",thEff0:"Effect L0",cond:"conditional",
+ best:"Best build",score:"Score",dmgF:"Damage factor",spSpm:"Skill Power / Modifier",crit:"Crit Rate / Damage",cdr:"Cooldown −",capK:"Capacity",
+ vsGuide:"vs. guide",overCr:"Crit rate above 100% – one crit module is wasted.",badReactor:"Reactor doesn't match the build type (Tech for Skill 1/4, Fusion for Skill 2/3).",
+ thCap:"Cap.",effAt:"Effect (level {l})",shRow:"Skill Crit Rate +20%, Skill 4 becomes an attack",shSrc:"Module combine / Axion Plains",
+ transTag:"Transcendent",midAir:"Grappling hook in mid-air",calcMs:"Calculated in {ms} ms · level values above 0 are extrapolated.",
+ noBuild:"No valid build with this capacity.",altH:"Alternatives",diff:"Difference to best",
+ guideB:"Guide build (AlcastHQ, {m})",bossing:"Bossing",mobbing:"Mobbing",guideHint:"Then click “Calculate best build” to compare.",
+icH:"Original icons (local)",icIntro:"This file loads the official icons straight from Nexon's servers (NEXON Open API) when opened. Only the image links are stored in your browser, no images. If an image is missing, the custom icon is shown.",
+ icUse:"Use original icons",icAuto:"1 · Load automatically",icLoadBtn:"Load icons from Nexon",
+ icKeyH:"2 · With API key",icKeyNote:"If step 1 fails: create a free key at openapi.nexon.com (sign in with your Nexon account → create an application) and paste it here. The key stays in this browser only.",icKeyBtn:"Load with key",
+ icFileH:"3 · JSON files manually",icFileNote:"If your browser blocks the request: download descendant.json and module.json (English) from the Nexon Open API docs and select them here.",
+ icNone:"No original icons loaded yet – showing custom icons.",icOk:"Original icons active: {m} modules, {s}/5 Nell skills.",icErr:"Loading failed: {e}",icLoading:"Loading …",
+ icoNote:"Icons are custom drawings (color = socket, symbol = main effect), not the original in-game icons.",
+ LG:{power:"Skill Power",crit:"Crit rate",critdmg:"Crit damage",cd:"Cooldown",range:"Range",cost:"Skill cost",hp:"Survival",arche:"Arche Tech (conditional)"},
+ L:{sp:"Skill Power",spNA:"Non-Attr. Skill Power",spm:"Skill Power Mod.",spmTech:"Tech Modifier",spmFus:"Fusion Modifier",cr:"Skill Crit Rate",cd:"Skill Crit Damage",cdr:"Cooldown −",cost:"Skill Cost",range:"Range",hp:"Max HP"}
+}};
+let LANG="de";
+try{const s=localStorage.getItem("tfdLang");if(s==="en"||s==="de")LANG=s;}catch(e){}
+const t=(k,v={})=>(I18N[LANG][k]??k).replace(/\{(\w+)\}/g,(_,x)=>v[x]);
+
+// ---------- DATEN ----------
+const NELL_SKILLS=[
+ {n:{de:"Passiv: Suspicion & Insight",en:"Passive: Suspicion & Insight"},ty:"–",
+  e:{de:"Ecive scannt Gegner vor Nell; gescannte Gegner nehmen mehr Schaden, Scan springt beim Tod über. Colossus-Schwachstellen scannbar.",en:"Ecive scans enemies in front of Nell; scanned enemies take extra damage and the scan spreads on death. Colossus weak points can be scanned."}},
+ {n:{de:"1 · Breach Projection",en:"1 · Breach Projection"},ty:"Non-Attr · Tech",
+  e:{de:"Salve aus Breach-Splittern, kleine Explosion auf gescannten Zielen.",en:"Barrage of Breach Shards, small explosion on scanned targets."}},
+ {n:{de:"2 · Ring of Breach",en:"2 · Ring of Breach"},ty:"Non-Attr · Fusion",
+  e:{de:"Arche Breach an Zielort: verlangsamt, mehr Schwachstellenschaden, wird mit der Zeit stärker. Erneut nutzen = Detonation + CD-Rückgabe.",en:"Arche Breach at a chosen spot: slows, increases weak point damage, grows stronger over time. Recast = detonation + partial cooldown refund."}},
+ {n:{de:"3 · Gravitic Reversal",en:"3 · Gravitic Reversal"},ty:"Non-Attr · Fusion",
+  e:{de:"Kehrt die Gravitation im Breach um, zieht Gegner zusammen und schadet.",en:"Reverses gravity inside the Breach, pulling enemies together and damaging them."}},
+ {n:{de:"4 · Gaze of the Abyss",en:"4 · Gaze of the Abyss"},ty:"Non-Attr · Tech",
+  e:{de:"Waffen treffen Schwachstellen (auch für Verbündete). Treffer auf gescannte Gegner verlängern die Dauer.",en:"Firearms target weak points (also for allies). Hits on scanned enemies extend the duration."}}
+];
+const LOC={
+ fort:{de:"Fortress – Ressourcenkisten/Munition (Hard)",en:"Fortress – resource boxes/munitions (Hard)"},
+ hag:{de:"Hagios – Ressourcenkisten/Munition (Hard)",en:"Hagios – resource boxes/munitions (Hard)"},
+ axi:{de:"Axion Plains – Kommandanten",en:"Axion Plains – commanders"},
+ ste:{de:"Sterile Land – Ressourcenkisten/Munition (Hard)",en:"Sterile Land – resource boxes/munitions (Hard)"},
+ ves:{de:"Vespers – Ressourcenkisten/Munition (Hard)",en:"Vespers – resource boxes/munitions (Hard)"},
+ agn:{de:"Agna Desert – Ressourcenkisten/Munition (Hard)",en:"Agna Desert – resource boxes/munitions (Hard)"}
+};
+const MATS=[
+ ["Enhanced Cell","Hellion",279,"fort"],["Enhanced Cell","Shape Memory Alloy",496,"hag"],["Enhanced Cell","Entropium",100,"axi"],
+ ["Stabilizer","Metal Accelerant",515,"ste"],["Stabilizer","Hardener",330,"ves"],["Stabilizer","Entropium",100,"axi"],
+ ["Spiral Catalyst","Monomolecular Extractor",544,"agn"],["Spiral Catalyst","Reverse Charging Coil",437,"fort"],["Spiral Catalyst","Entropium",100,"axi"]
+];
+const SRC_EXTRA=[
+ ["Shattered Heart / Restored Heart",{de:"Modul-Kombination oder Missionen in den Axion Plains",en:"Module combine or Axion Plains missions"}],
+ [{de:"Materialized Mechanics / Mixture (Reaktor)",en:"Materialized Mechanics / Mixture (reactor)"},{de:"Täglich wechselnde Drop-Orte – Karte → Belohnungen nach Schwierigkeitsgrad",en:"Drop locations rotate daily – map → Difficulty Level Rewards"}],
+ [{de:"Hunter / Ascending / Slayer (Komponenten)",en:"Hunter / Ascending / Slayer (components)"},{de:"Je nach Set Void Intercept / Missionsbelohnungen – im Spiel unter Zugangsinfo prüfen",en:"Depending on set, Void Intercept / mission rewards – check Access Info in game"}],
+ ["Mutant Cell (Arche Tuning)",{de:"Sigma Sector Dropoff Operation (geringe Chance)",en:"Sigma Sector Dropoff Operation (low chance)"}]
+];
+const tr=x=>typeof x==="string"?x:x[LANG];
+// stats: sp=Skill Power, spNA=Non-Attr. Skill Power, spm=Modifier, spmTech/spmFus, cr=Critrate, cd=Critschaden, cdr=Cooldown-Red., cost, range, hp
+// sc = Werte, die mit dem Level skalieren (Rest fix)
+const MODS=[
+ {n:"Focus on Non-Attribute",s:"Malachite",c:6,t:"Battle",st:{spNA:19,cdr:6.1},sc:["spNA"],src:"Intercept Battle (Hard): Executioner"},
+ {n:"Non-Attribute Specialist",s:"Malachite",c:6,t:"Battle",st:{spNA:20},sc:["spNA"]},
+ {n:"Power Increase",s:"Malachite",c:6,t:"Battle",st:{sp:13},sc:["sp"]},
+ {n:"Focus on Tech",s:"Almandine",c:6,t:"Attack Tech",st:{spmTech:17,cdr:6.1},sc:["spmTech"]},
+ {n:"Tech Specialist",s:"Almandine",c:6,t:"Attack Tech",st:{spmTech:19},sc:["spmTech"]},
+ {n:"Focus on Fusion",s:"Xantic",c:6,t:"Attack Fusion",st:{spmFus:17,cdr:6.1},sc:["spmFus"]},
+ {n:"Fusion Specialist",s:"Xantic",c:6,t:"Attack Fusion",st:{spmFus:19},sc:["spmFus"]},
+ {n:"Skill Concentration",s:"Almandine",c:6,t:"",st:{cd:14},sc:["cd"],src:"Hagios (Hard) – Old Mystery; Void Intercept Battle"},
+ {n:"Skill Insight",s:"Almandine",c:6,t:"",st:{cr:14},sc:["cr"]},
+ {n:"Front Lines",s:"Almandine",c:6,t:"Strike",st:{cd:16,cr:7},sc:["cd"]},
+ {n:"Emergency Measures",s:"Almandine",c:6,t:"Luck",st:{cr:16,cd:7},sc:["cr"]},
+ {n:"MP Conversion",s:"Malachite",c:5,t:"Control",st:{cdr:9},sc:["cdr"]},
+ {n:"Nimble Fingers",s:"Malachite",c:5,t:"",st:{cdr:6},sc:["cdr"]},
+ {n:"Skill Expansion",s:"Rutile",c:5,t:"",st:{range:12},sc:["range"]},
+ {n:"Amplification Control",s:"Rutile",c:5,t:"Range",st:{range:13},sc:["range"]},
+ {n:"Maximize Range",s:"Rutile",c:5,t:"Range",st:{range:24,spm:-5},sc:["range"]},
+ {n:"Decimator",s:"Xantic",c:6,t:"Arche Tech",st:{},cond:"Decimator",condSt:{spm:20},sc:["spm"]},
+ {n:"Dangerous Ambush",s:"Xantic",c:6,t:"Arche Tech",st:{},cond:"Ambush",condSt:{sp:12},sc:["sp"]},
+ {n:"Maximize Conservation",s:"Malachite",c:5,t:"Resource",st:{cost:-9,spm:-5},sc:["cost"]},
+ {n:"Strong Mentality",s:"Malachite",c:5,t:"",st:{cost:-4},sc:["cost"]},
+ {n:"Increased HP",s:"Cerulean",c:6,t:"",st:{hp:22},sc:["hp"],surv:true}
+];
+// Level-Kurve (L0..L10), hergeleitet aus Focus on Non-Attribute (19 → 21,7 → 24,8 → 28,6 …) – ab L4 geschätzt
+const CURVE=[1,1.142,1.305,1.505,1.74,2.0,2.29,2.6,2.93,3.25,3.59];
+const GUIDE={
+ boss:["Focus on Tech","Front Lines","MP Conversion","Skill Insight","Skill Concentration","Maximize Conservation","Focus on Non-Attribute","Dangerous Ambush","Nimble Fingers","Emergency Measures"],
+ mob:["Amplification Control","Front Lines","MP Conversion","Skill Insight","Skill Concentration","Skill Expansion","Focus on Non-Attribute","Focus on Fusion","Nimble Fingers","Emergency Measures"]
+};
+
+// ---------- ICONS (eigene SVG-Symbole) ----------
+const SOCK={Almandine:"#ff8a8a",Malachite:"#6be3a0",Rutile:"#ffd36b",Xantic:"#c59bff",Cerulean:"#6bc7ff"};
+const GLYPH={
+ power:'<path d="M27 6 L13 26 H22 L19 42 L35 20 H25 Z" fill="C"/>',
+ crit:'<circle cx="24" cy="24" r="11" fill="none" stroke="C" stroke-width="3"/><circle cx="24" cy="24" r="3" fill="C"/><path d="M24 6v8M24 34v8M6 24h8M34 24h8" stroke="C" stroke-width="3" stroke-linecap="round"/>',
+ critdmg:'<path d="M24 6 L28 18 L41 18 L30 26 L34 39 L24 31 L14 39 L18 26 L7 18 L20 18 Z" fill="C"/><path d="M24 14 L22 24 L27 26 L23 36" stroke="#0d1117" stroke-width="2" fill="none"/>',
+ cd:'<circle cx="24" cy="25" r="15" fill="none" stroke="C" stroke-width="3"/><path d="M24 16v10l7 4" stroke="C" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M19 6h10" stroke="C" stroke-width="3" stroke-linecap="round"/>',
+ range:'<circle cx="24" cy="24" r="4" fill="C"/><circle cx="24" cy="24" r="10" fill="none" stroke="C" stroke-width="2.5" opacity=".8"/><circle cx="24" cy="24" r="16" fill="none" stroke="C" stroke-width="2" opacity=".5" stroke-dasharray="4 3"/>',
+ cost:'<path d="M24 7 C24 7 12 22 12 29 a12 12 0 0 0 24 0 C36 22 24 7 24 7 Z" fill="C"/><path d="M19 30 a5 5 0 0 0 5 5" stroke="#0d1117" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+ hp:'<path d="M24 39 C10 29 8 22 8 17 a8 8 0 0 1 16 -3 a8 8 0 0 1 16 3 C40 22 38 29 24 39 Z" fill="C"/><path d="M24 17v12M18 23h12" stroke="#0d1117" stroke-width="3" stroke-linecap="round"/>',
+ arche:'<path d="M24 6 L40 24 L24 42 L8 24 Z" fill="none" stroke="C" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="5" fill="C"/><circle cx="24" cy="24" r="2.3" fill="#0d1117"/>',
+ trans:'<path d="M24 5 L28 20 L43 24 L28 28 L24 43 L20 28 L5 24 L20 20 Z" fill="C"/><circle cx="24" cy="24" r="5" fill="#0d1117"/><circle cx="24" cy="24" r="2.5" fill="C"/>',
+ glide:'<path d="M8 32 Q24 8 40 32" stroke="C" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M24 20 L24 40 M18 34 L24 40 L30 34" stroke="C" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+function icon(g,color,cls="ico"){
+  return `<svg class="${cls}" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 1.5H46.5V39L39 46.5H1.5V9Z" fill="#08111a" stroke="${color}" stroke-opacity=".55" stroke-width="2"/><g transform="translate(4.8 4.8) scale(.8)">${GLYPH[g].replace(/"C"/g,'"'+color+'"')}</g></svg>`;
+}
+function modGlyph(m){
+  if(m.t==="Arche Tech")return "arche";
+  const k=m.sc[0];
+  return {sp:"power",spNA:"power",spm:"power",spmTech:"power",spmFus:"power",cr:"crit",cd:"critdmg",cdr:"cd",range:"range",cost:"cost",hp:"hp"}[k]||"power";
+}
+// Original-Icons (werden zur Laufzeit von Nexons Servern geladen, nicht in der Datei gespeichert)
+let OFFICIAL={mods:{},skills:[]};let USE_OFFICIAL=true;
+const esc=s=>String(s).replace(/"/g,"&quot;");
+function withImg(url,fallback,round){
+  if(!url||!USE_OFFICIAL)return fallback;
+  const fb=fallback.replace(/"/g,"&quot;");
+  return `<img class="ico" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${fb}">`;
+}
+const namedIcon=(name,svg)=>withImg(OFFICIAL.mods[name.toLowerCase()],svg);
+const modIcon=m=>namedIcon(m.n,icon(modGlyph(m),SOCK[m.s]));
+// Skill-Symbole: Tech = Cyan, Fusion = Violett, Passiv = Grau-Blau
+const SKILL_SVG=[
+ c=>`<circle cx="24" cy="24" r="14" fill="none" stroke="${c}" stroke-width="2.5"/><ellipse cx="24" cy="24" rx="9" ry="5.5" fill="${c}"/><circle cx="24" cy="24" r="2.6" fill="#0d1117"/><path d="M4 24h6M38 24h6" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>`,
+ c=>`<path d="M8 38 L20 30 M8 38 L14 26 M8 38 L22 36" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M26 22 L36 10 L33 24 Z M30 30 L42 22 L37 34 Z M18 18 L24 6 L25 20 Z" fill="${c}"/>`,
+ c=>`<circle cx="24" cy="24" r="15" fill="none" stroke="${c}" stroke-width="3"/><circle cx="24" cy="24" r="9" fill="none" stroke="${c}" stroke-width="2" stroke-dasharray="3 3"/><circle cx="24" cy="24" r="3.5" fill="${c}"/>`,
+ c=>`<circle cx="24" cy="24" r="5" fill="${c}"/><path d="M24 4v10M24 44V34M4 24h10M44 24H34" stroke="${c}" stroke-width="3" stroke-linecap="round"/><path d="M20 10l4 4 4-4M20 38l4-4 4 4M10 20l4 4-4 4M38 20l-4 4 4 4" stroke="${c}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+ c=>`<path d="M5 24 Q24 6 43 24 Q24 42 5 24 Z" fill="none" stroke="${c}" stroke-width="3"/><circle cx="24" cy="24" r="8" fill="${c}"/><path d="M24 17v14M17 24h14" stroke="#0d1117" stroke-width="2"/><circle cx="24" cy="24" r="2.5" fill="#0d1117"/>`
+];
+const SKILL_COL=["#9fb3c8","#5fd4ff","#b48cff","#b48cff","#5fd4ff"];
+function skillIcon(i){const c=SKILL_COL[i];
+  return withImg(OFFICIAL.skills[i],`<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="sg${i}"><stop offset="0" stop-color="${c}" stop-opacity=".22"/><stop offset="1" stop-color="#0f141c"/></radialGradient></defs><circle cx="24" cy="24" r="22.5" fill="url(#sg${i})" stroke="${c}" stroke-opacity=".7" stroke-width="2"/><g transform="translate(4.8 4.8) scale(.8)">${SKILL_SVG[i](c)}</g></svg>`);}
+
+// ---------- UI ----------
+const $=id=>document.getElementById(id);
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===b.dataset.v));
+});
+for(let i=0;i<=10;i++){const o=document.createElement("option");o.value=i;if(i==10)o.selected=true;$("lvl").appendChild(o);}
+function statTxt(o){const L=I18N[LANG].L;return Object.entries(o).map(([k,v])=>`${L[k]} ${v>0&&k!="cdr"?"+":""}${fmt(v,1).replace(/[,.]0$/,"")} %`).join(", ");}
+function fmt(x,d=1){return x.toLocaleString(LANG==="de"?"de-DE":"en-US",{maximumFractionDigits:d,minimumFractionDigits:d});}
+
+function renderStatic(){
+  document.documentElement.lang=LANG;
+  document.title=t("title")+" – Nell";
+  document.querySelectorAll("[data-i]").forEach(el=>el.innerHTML=t(el.dataset.i));
+  [...$("lvl").options].forEach((o,i)=>o.textContent=t("lvl")+" "+i+(i==10?` (${t("max")})`:""));
+  $("skillTbl").innerHTML=`<tr><th>${t("thSkill")}</th><th>${t("thType")}</th><th>${t("thEffect")}</th></tr>`+
+    NELL_SKILLS.map((s,i)=>`<tr><td><div class="sname">${skillIcon(i)}<b>${tr(s.n)}</b></div></td><td>${s.ty}</td><td>${tr(s.e)}</td></tr>`).join("");
+  $("matTbl").innerHTML=`<tr><th>${t("thPart")}</th><th>${t("thMat")}</th><th>${t("thQty")}</th><th>${t("thWhere")}</th></tr>`+
+    MATS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${tr(LOC[r[3]])}</td></tr>`).join("");
+  $("srcTbl").innerHTML=`<tr><th>${t("thItem")}</th><th>${t("thSrc")}</th></tr>`+
+    MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="src">${m.src||t("noSrc")}</td></tr>`).join("")+
+    SRC_EXTRA.map(r=>`<tr><td>${tr(r[0])}</td><td class="src">${tr(r[1])}</td></tr>`).join("");
+  $("modTbl").innerHTML=`<tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap0")}</th><th>${t("thTag")}</th><th>${t("thEff0")}</th></tr>`+
+    MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="s-${m.s}">${m.s}</td><td>${m.c}</td><td>${m.t||"–"}</td><td>${statTxt(m.st)}${m.condSt?(Object.keys(m.st).length?" · ":"")+t("cond")+": "+statTxt(m.condSt):""}</td></tr>`).join("");
+  $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b>Shattered Heart</b>";
+  $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b>Restored Heart</b>";
+  renderIconStatus();
+  const LG=I18N[LANG].LG;
+  $("legend").innerHTML=Object.keys(LG).map(g=>`<span>${icon(g,"#c9d4e0")}${LG[g]}</span>`).join("")+
+    Object.keys(SOCK).map(s=>`<span><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${SOCK[s]}"/></svg>${s}</span>`).join("");
+  const en=LANG==="en";
+  $("langSwitch").setAttribute("aria-checked",en);
+  $("lDe").classList.toggle("on",!en);$("lEn").classList.toggle("on",en);
+}
+function setLang(l){
+  LANG=l;try{localStorage.setItem("tfdLang",l);}catch(e){}
+  renderStatic();
+  if(shown==="best")$("run").onclick();else if(shown==="guide")$("cmp").onclick();else renderEmpty();
+}
+$("langSwitch").onclick=()=>setLang(LANG==="de"?"en":"de");
+$("lDe").onclick=()=>setLang("de");$("lEn").onclick=()=>setLang("en");
+$("lDe").style.cursor=$("lEn").style.cursor="pointer";
+function renderEmpty(){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="note">${t("resHint")}</p>`;}
+
+// ---------- RECHENKERN ----------
+function cfg(){return{mode:$("mode").value,wCd:+$("wCd").value,wRange:+$("wRange").value,needHp:$("needHp").checked,
+ condDecimator:$("condDecimator").checked,condAmbush:$("condAmbush").checked,cap:+$("cap").value,lvl:+$("lvl").value,
+ allMatch:$("allMatch").checked,reactor:$("reactor").value,comps:$("comps").value,trigger:$("trigger").value,
+ baseCr:+$("baseCr").value,baseCd:+$("baseCd").value,shCap:+$("shCap").value};}
+function modStats(m,c){
+  const out={};const add=(o)=>{for(const k in o){const v=m.sc.includes(k)?o[k]*CURVE[c.lvl]:o[k];out[k]=(out[k]||0)+v;}};
+  add(m.st);
+  if(m.cond==="Decimator"&&c.condDecimator)add(m.condSt);
+  if(m.cond==="Ambush"&&c.condAmbush)add(m.condSt);
+  return out;
+}
+function modCost(m,c){const raw=m.c+c.lvl;return c.allMatch?Math.ceil(raw/2):raw;}
+function baseStats(c){
+  const b={sp:0,spm:0,cr:c.baseCr+20,cd:c.baseCd,cdr:0,cost:0,range:0,hp:0}; // +20 Critrate aus Shattered Heart
+  b.cdr+=7.4; b.cd+=33; // Reaktor-Substats (typischer Roll, angenommen)
+  if(c.comps==="hunter"){b.cdr+=4;b.cost-=6.5;} else {b.sp+=26.1;b.cost+=15;}
+  if(c.trigger==="pb")b.sp+=15;
+  b.reactorOk=(c.mode==="boss"&&c.reactor==="mech")||(c.mode==="mob"&&c.reactor==="mix");
+  return b;
+}
+function evaluate(list,c){
+  const s0=baseStats(c);
+  list.forEach(m=>{const s=modStats(m,c);for(const k in s)s0[k]=(s0[k]||0)+s[k];});
+  const attrSpm=c.mode==="boss"?(s0.spmTech||0):(s0.spmFus||0);
+  const SP=s0.sp+(s0.spNA||0), SPM=s0.spm+attrSpm;
+  const cr=Math.min(s0.cr,100)/100, cd=s0.cd/100;
+  let dmg=(1+SP/100)*(1+SPM/100)*(1+cr*(cd-1));
+  if(!s0.reactorOk)dmg*=0.6; // falscher Reaktor-Typ (grob)
+  const cdr=Math.min(s0.cdr,75)/100;
+  const score=dmg*Math.pow(1/(1-cdr),c.wCd)*Math.pow(1+s0.range/100,c.wRange);
+  return{score,dmg,SP,SPM,cr:s0.cr,cd:s0.cd,cdr:s0.cdr,cost:s0.cost,range:s0.range,hp:s0.hp,overCr:s0.cr>100,reactorOk:s0.reactorOk};
+}
+function optimize(c){
+  const pool=MODS, slots=10, budget=c.cap-c.shCap;
+  const best=[],keep=6,costs=pool.map(m=>modCost(m,c)),chosen=[];
+  function rec(i,used,tags){
+    if(chosen.length===slots||i===pool.length){
+      if(!chosen.length)return;
+      const list=chosen.map(j=>pool[j]);
+      if(c.needHp&&!list.some(m=>m.surv))return;
+      const r=evaluate(list,c);r.list=list;r.capUsed=used+c.shCap;
+      if(best.length<keep||r.score>best[best.length-1].score){best.push(r);best.sort((a,b)=>b.score-a.score);if(best.length>keep)best.pop();}
+      return;
+    }
+    const m=pool[i];
+    if(used+costs[i]<=budget&&!(m.t&&tags.has(m.t))){
+      chosen.push(i);if(m.t)tags.add(m.t);
+      rec(i+1,used+costs[i],tags);
+      chosen.pop();if(m.t)tags.delete(m.t);
+    }
+    rec(i+1,used,tags);
+  }
+  rec(0,0,new Set());
+  return best;
+}
+
+// ---------- AUSGABE ----------
+function renderBuild(r,c,title,ref){
+  const rows=r.list.slice().sort((a,b)=>a.s.localeCompare(b.s)).map(m=>`<tr><td><div class="mname">${modIcon(m)}<div><b>${m.n}</b>${m.t?`<br><span class="tag">${m.t}</span>`:""}</div></div></td><td class="s-${m.s}">${m.s}</td><td>${modCost(m,c)}</td><td>${statTxt(modStats(m,c))}</td><td class="src">${m.src||t("srcShort")}</td></tr>`).join("");
+  const rel=ref?` <small>(${r.score>=ref.score?"+":""}${fmt((r.score/ref.score-1)*100)} % ${t("vsGuide")})</small>`:"";
+  return `<h2>${title}</h2>
+  <div class="kpis">
+   <div class="kpi"><small>${t("score")}</small><b>${fmt(r.score,2)}</b>${rel}</div>
+   <div class="kpi"><small>${t("dmgF")}</small><b>×${fmt(r.dmg,2)}</b></div>
+   <div class="kpi"><small>${t("spSpm")}</small><b>${fmt(r.SP,0)} % / ${fmt(r.SPM,0)} %</b></div>
+   <div class="kpi"><small>${t("crit")}</small><b class="${r.overCr?"warn":""}">${fmt(r.cr,0)} % / ${fmt(r.cd,0)} %</b></div>
+   <div class="kpi"><small>${t("cdr")}</small><b>${fmt(r.cdr,1)} %</b></div>
+   <div class="kpi"><small>${t("capK")}</small><b>${r.capUsed} / ${c.cap}</b></div>
+  </div>
+  ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
+  ${!r.reactorOk?`<p class="warn">${t("badReactor")}</p>`:""}
+  <table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap")}</th><th>${t("effAt",{l:c.lvl})}</th><th>${t("thSrc")}</th></tr>
+  <tr><td><div class="mname">${namedIcon("Shattered Heart",icon("trans","#ff9f5f"))}<div><b>Shattered Heart</b><br><span class="tag">${t("transTag")}</span></div></div></td><td class="s-Rutile">Rutile</td><td>${c.shCap}</td><td>${t("shRow")}</td><td class="src">${t("shSrc")}</td></tr>
+  <tr><td><div class="mname">${namedIcon("Mid-Air Maneuvering",icon("glide",SOCK.Malachite))}<b>Mid-Air Maneuvering</b></div></td><td class="s-Malachite">Malachite</td><td>0</td><td>${t("midAir")}</td><td class="src">–</td></tr>
+  ${rows}</table>`;
+}
+let shown=null;
+$("run").onclick=()=>{
+  const c=cfg();const t0=performance.now();const best=optimize(c);shown="best";
+  if(!best.length){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="warn">${t("noBuild")}</p>`;$("alts").style.display="none";return;}
+  const guide=evaluate(GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n)),c);
+  $("result").innerHTML=renderBuild(best[0],c,t("best"),guide)+`<p class="note">${t("calcMs",{ms:fmt(performance.now()-t0,0)})}</p>`;
+  $("alts").style.display="block";
+  $("alts").innerHTML=`<h2>${t("altH")}</h2><table><tr><th>#</th><th>${t("score")}</th><th>${t("diff")}</th></tr>`+best.slice(1).map((r,i)=>{
+    const a=new Set(best[0].list.map(m=>m.n)),b=new Set(r.list.map(m=>m.n));
+    const plus=[...b].filter(x=>!a.has(x)),minus=[...a].filter(x=>!b.has(x));
+    const pi=x=>modIcon(MODS.find(m=>m.n===x));
+    return `<tr class="alt"><td>${i+2}</td><td>${fmt(r.score,2)}</td><td>${plus.map(x=>`<span class="pill" style="color:var(--ok)">${pi(x)}+ ${x}</span>`).join("")}${minus.map(x=>`<span class="pill" style="color:var(--bad)">${pi(x)}− ${x}</span>`).join("")}</td></tr>`;}).join("")+"</table>";
+};
+$("cmp").onclick=()=>{
+  const c=cfg();const list=GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n));shown="guide";
+  const r=evaluate(list,c);r.list=list;r.capUsed=list.reduce((s,m)=>s+modCost(m,c),0)+c.shCap;
+  $("result").innerHTML=renderBuild(r,c,t("guideB",{m:t(c.mode==="boss"?"bossing":"mobbing")}))+`<p class="note">${t("guideHint")}</p>`;
+  $("alts").style.display="none";
+};
+// ---------- ORIGINAL-ICONS LADEN ----------
+const META="https://open.api.nexon.com/static/tfd/meta/en/";
+let icErr="";
+function applyMeta(desc,mods){
+  const o={mods:{},skills:[]};
+  if(Array.isArray(mods))mods.forEach(m=>{if(m&&m.module_name&&m.image_url)o.mods[String(m.module_name).toLowerCase()]=m.image_url;});
+  if(Array.isArray(desc)){
+    const nell=desc.find(d=>d&&/^nell$/i.test(String(d.descendant_name||"").trim()))||desc.find(d=>/nell/i.test(d&&d.descendant_name||""));
+    if(nell&&Array.isArray(nell.descendant_skill)){
+      const keys=["suspicion","breach projection","ring of breach","gravitic","gaze of the abyss"];
+      nell.descendant_skill.forEach((s,idx)=>{
+        const n=String(s.skill_name||"").toLowerCase();
+        let i=keys.findIndex(k=>n.includes(k));
+        if(i<0){const ty=String(s.skill_type||"").toLowerCase();const d=ty.match(/(\d)/);i=ty.includes("passive")?0:d?+d[1]:-1;}
+        if(i>=0&&i<5&&s.skill_image_url)o.skills[i]=s.skill_image_url;
+      });
+    }
+  }
+  return o;
+}
+function store(o){OFFICIAL=o;icErr="";try{localStorage.setItem("tfdIcons",JSON.stringify(o));}catch(e){}rerender();}
+function rerender(){renderStatic();if(shown==="best")$("run").onclick();else if(shown==="guide")$("cmp").onclick();else renderEmpty();}
+function renderIconStatus(){
+  const m=Object.keys(OFFICIAL.mods).length,s=OFFICIAL.skills.filter(Boolean).length;
+  const el=$("icStatus");
+  if(icErr){el.className="status bad";el.textContent=t("icErr",{e:icErr});}
+  else if(m||s){el.className="status ok";el.textContent=t("icOk",{m,s});}
+  else{el.className="status";el.textContent=t("icNone");}
+}
+async function loadOnline(key){
+  const st=$("icStatus");st.className="status";st.textContent=t("icLoading");
+  const opt=key?{headers:{"x-nxopen-api-key":key}}:{};
+  try{
+    const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(META+f,opt).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
+    const o=applyMeta(d,m);
+    if(!Object.keys(o.mods).length&&!o.skills.length)throw new Error(LANG==="de"?"keine Bild-Links gefunden":"no image links found");
+    store(o);
+  }catch(e){icErr=(e&&e.message)||String(e);if(/fetch/i.test(icErr))icErr+=(LANG==="de"?" (CORS/Netzwerk – Schritt 2 oder 3 probieren)":" (CORS/network – try step 2 or 3)");renderIconStatus();}
+}
+$("icLoad").onclick=()=>loadOnline();
+$("icKeyBtn").onclick=()=>{const k=$("apiKey").value.trim();try{localStorage.setItem("tfdKey",k);}catch(e){}loadOnline(k);};
+$("metaFiles").onchange=async e=>{
+  let desc=null,mods=null;
+  for(const f of e.target.files){try{const j=JSON.parse(await f.text());const a=Array.isArray(j)?j:Object.values(j).find(Array.isArray)||[];
+    if(a.some(x=>x&&x.descendant_skill))desc=a;else if(a.some(x=>x&&x.module_name))mods=a;}catch(err){icErr=f.name+": "+err.message;}}
+  const o=applyMeta(desc,mods);const old=OFFICIAL;
+  store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills});
+};
+$("useOff").onchange=e=>{USE_OFFICIAL=e.target.checked;try{localStorage.setItem("tfdUseOff",USE_OFFICIAL?"1":"0");}catch(err){}rerender();};
+try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[]};
+  const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
+  if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
+renderStatic();renderEmpty();
+if(!Object.keys(OFFICIAL.mods).length)loadOnline($("apiKey").value.trim()||undefined);
+</script>
+</body>
+</html>
