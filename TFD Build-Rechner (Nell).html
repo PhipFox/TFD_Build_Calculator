@@ -174,6 +174,8 @@ td b{font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:.6px}
 /* Tags, Pills, Hinweise */
 .tag{border-radius:0;background:rgba(63,224,255,.08);color:#9fdcec;border:1px solid rgba(63,224,255,.25);
   font-family:var(--head);font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:10.5px;padding:0 6px}
+.trn{color:#ff4d5e;text-shadow:0 0 8px rgba(255,77,94,.35)}
+.tag.trn{color:#ff4d5e;border-color:rgba(255,77,94,.45);background:rgba(255,77,94,.1);text-shadow:none}
 .pill{border-radius:0;background:rgba(10,20,30,.9);border:1px solid var(--line);display:inline-flex;align-items:center}
 .status{border-radius:0;border-left:3px solid var(--mut);background:rgba(4,10,16,.7)}
 .status.ok{border-left-color:var(--ok)}.status.bad{border-left-color:var(--bad)}
@@ -276,8 +278,8 @@ a{color:var(--acc)}
   <h2 data-i="transH"></h2>
   <table>
     <tr><th data-i="thModule"></th><th data-i="thEffect"></th><th data-i="thUse"></th></tr>
-    <tr><td><div class="mname" id="icoSH"><b>Shattered Heart</b></div></td><td data-i="shEff"></td><td data-i="shUse"></td></tr>
-    <tr><td><div class="mname" id="icoRH"><b>Restored Heart</b></div></td><td data-i="rhEff"></td><td data-i="rhUse"></td></tr>
+    <tr><td><div class="mname" id="icoSH"><b class="trn">Shattered Heart</b></div></td><td data-i="shEff"></td><td data-i="shUse"></td></tr>
+    <tr><td><div class="mname" id="icoRH"><b class="trn">Restored Heart</b></div></td><td data-i="rhEff"></td><td data-i="rhUse"></td></tr>
   </table>
 </div>
 </section>
@@ -575,8 +577,8 @@ function renderStatic(){
     SRC_EXTRA.map(r=>`<tr><td>${tr(r[0])}</td><td class="src">${tr(r[1])}</td></tr>`).join("");
   $("modTbl").innerHTML=`<tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap0")}</th><th>${t("thTag")}</th><th>${t("thEff0")}</th></tr>`+
     MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="s-${m.s}">${m.s}</td><td>${m.c}</td><td>${m.t||"–"}</td><td>${statTxt(m.st)}${m.condSt?(Object.keys(m.st).length?" · ":"")+t("cond")+": "+statTxt(m.condSt):""}</td></tr>`).join("");
-  $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b>Shattered Heart</b>";
-  $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b>Restored Heart</b>";
+  $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b class=\"trn\">Shattered Heart</b>";
+  $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b class=\"trn\">Restored Heart</b>";
   renderIconStatus();
   const LG=I18N[LANG].LG;
   $("legend").innerHTML=Object.keys(LG).map(g=>`<span>${icon(g,"#c9d4e0")}${LG[g]}</span>`).join("")+
@@ -668,7 +670,7 @@ function renderBuild(r,c,title,ref){
   ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
   ${!r.reactorOk?`<p class="warn">${t("badReactor")}</p>`:""}
   <table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap")}</th><th>${t("effAt",{l:c.lvl})}</th><th>${t("thSrc")}</th></tr>
-  <tr><td><div class="mname">${namedIcon("Shattered Heart",icon("trans","#ff9f5f"))}<div><b>Shattered Heart</b><br><span class="tag">${t("transTag")}</span></div></div></td><td class="s-Rutile">Rutile</td><td>${c.shCap}</td><td>${t("shRow")}</td><td class="src">${t("shSrc")}</td></tr>
+  <tr><td><div class="mname">${namedIcon("Shattered Heart",icon("trans","#ff9f5f"))}<div><b class="trn">Shattered Heart</b><br><span class="tag trn">${t("transTag")}</span></div></div></td><td class="s-Rutile">Rutile</td><td>${c.shCap}</td><td>${t("shRow")}</td><td class="src">${t("shSrc")}</td></tr>
   <tr><td><div class="mname">${namedIcon("Mid-Air Maneuvering",icon("glide",SOCK.Malachite))}<b>Mid-Air Maneuvering</b></div></td><td class="s-Malachite">Malachite</td><td>0</td><td>${t("midAir")}</td><td class="src">–</td></tr>
   ${rows}</table>`;
 }
