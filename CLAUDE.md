@@ -6,7 +6,7 @@ Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build f�
 - Mit dem Nutzer auf **Deutsch** sprechen.
 - Die Website ist **zweisprachig (DE/EN)**: jeder neue Text braucht einen Eintrag in `I18N.de` **und** `I18N.en`.
 - Hauptdatei: `index.html` – eine einzelne, eigenständige HTML-Datei (HTML + CSS + JS inline). Beim Wachsen des Projekts darf sie aufgeteilt werden (z. B. `data/`, `css/`, `js/`).
-- Nach Änderungen die Seite im Browser prüfen (alle vier Reiter, DE und EN).
+- Nach Änderungen die Seite im Browser prüfen (alle fünf Reiter, DE und EN).
 
 ## Regeln (wichtig)
 - **Original-Icons nur per Link** von NEXONs Servern laden (Bild-URLs aus der NEXON Open API, Metadaten `https://open.api.nexon.com/static/tfd/meta/en/descendant.json` und `module.json`). Bilder **niemals** herunterladen und ins Projekt kopieren. Fehlt ein Bild → eigenes SVG-Symbol als Fallback (ist eingebaut).
@@ -15,7 +15,7 @@ Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build f�
 - Vor einer Veröffentlichung: Hinweis „Inoffizielles Fan-Tool · Daten: NEXON Open API“ einbauen und die Nutzungsbedingungen der NEXON Open API beachten.
 
 ## Aufbau der Seite
-Reiter: **Optimierer** · **Nell & Skills** · **Wo bekomme ich was?** · **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“).
+Reiter: **Optimierer** · **Waffen** · **Nell & Skills** · **Wo bekomme ich was?** · **Daten & Annahmen** (inkl. Karte „Original-Icons (lokal)“).
 Sprach-Schalter oben links (DE/EN, gespeichert in `localStorage` "tfdLang").
 Design: Sci-Fi-Stil angelehnt an TFD (dunkles Blauschwarz, Cyan `--acc`, Bernstein `--acc2`, abgeschrägte Ecken, Schriften Rajdhani + Exo 2 von Google Fonts).
 
@@ -28,6 +28,8 @@ Design: Sci-Fi-Stil angelehnt an TFD (dunkles Blauschwarz, Cyan `--acc`, Bernste
 - `optimize()` – probiert alle erlaubten Kombinationen für die 10 freien Slots (Slot 1 = Shattered Heart, Mid-Air Maneuvering fest).
 - `evaluate()` – Rechenformel (siehe unten).
 - `OFFICIAL`, `applyMeta()`, `loadOnline()` – Original-Icons laden (automatisch / mit API-Key / JSON-Dateien manuell).
+- Waffen-Reiter: `W_BASE` (eingebaute Fallback-Liste, englische Namen, nur Zahlen + Bild-Links), `slimWeapon()` kürzt NEXONs `weapon.json`, `loadWeapons()`/`ensureWeapons()` laden die aktuellen Daten in der gewählten Sprache (`meta/de/` bzw. `meta/en/`, Cache in `localStorage` "tfdWeap_de"/"tfdWeap_en", 7 Tage). Auswahl (max. 3) in `WSEL`, gespeichert in `localStorage` "tfdWeapons". Seltenheitsfarben über CSS-Klassen `.t1`–`.t4` (Normal blau, Selten violett, Ultimate gold, Transzendent rot). Tooltip: `wTip()`/`showTip()`.
+- Die Waffenauswahl wird beim Build nur angezeigt und fließt **nicht** in den Score ein.
 
 ## Rechenmodell (vereinfacht)
 - Schadensfaktor = (1 + Skill Power) × (1 + Skill-Power-Modifier) × (1 + Critrate × (Critschaden − 1))
@@ -47,7 +49,7 @@ Design: Sci-Fi-Stil angelehnt an TFD (dunkles Blauschwarz, Cyan `--acc`, Bernste
 2. Sockel-Planung pro Slot (12 Slots wie im Spiel).
 3. „Meine Module“: vorhandene Module + Level abhaken, nur baubare Builds vorschlagen, Fehlendes mit Fundort zeigen.
 4. Builds speichern und als Code teilen.
-5. Waffen + Waffenmodule, danach weitere Descendants.
+5. Waffen in die Rechnung einbeziehen + Waffenmodule (Auswahl-Reiter ist da), danach weitere Descendants.
 6. Fundorte für alle Module ergänzen (viele stehen noch auf „Zugangsinfo im Spiel“).
 
 ## Veröffentlichung (geplant)
