@@ -5,7 +5,7 @@ Fan-Tool für **The First Descendant (TFD)**: berechnet das beste Modul-Build f�
 ## Arbeitsweise
 - Mit dem Nutzer auf **Deutsch** sprechen.
 - Die Website ist **zweisprachig (DE/EN)**: jeder neue Text braucht einen Eintrag in `I18N.de` **und** `I18N.en`.
-- Hauptdatei: `TFD Build-Rechner (Nell).html` – eine einzelne, eigenständige HTML-Datei (HTML + CSS + JS inline). Beim Wachsen des Projekts darf sie aufgeteilt werden (z. B. `index.html`, `data/`, `css/`, `js/`).
+- Hauptdatei: `index.html` – eine einzelne, eigenständige HTML-Datei (HTML + CSS + JS inline). Beim Wachsen des Projekts darf sie aufgeteilt werden (z. B. `data/`, `css/`, `js/`).
 - Nach Änderungen die Seite im Browser prüfen (alle vier Reiter, DE und EN).
 
 ## Regeln (wichtig)
@@ -51,7 +51,7 @@ Design: Sci-Fi-Stil angelehnt an TFD (dunkles Blauschwarz, Cyan `--acc`, Bernste
 6. Fundorte für alle Module ergänzen (viele stehen noch auf „Zugangsinfo im Spiel“).
 
 ## Veröffentlichung (geplant)
-GitHub-Repository (öffentlich) + **GitHub Pages**, damit Updates automatisch bei allen ankommen. Datei dann als `index.html`. Noch nicht eingerichtet – der Nutzer muss GitHub-Konto/Repo anlegen und GitHub mit Claude verbinden.
+GitHub-Repository (öffentlich) + **GitHub Pages**, damit Updates automatisch bei allen ankommen. Die Hauptdatei heißt dafür bereits `index.html`. Noch nicht eingerichtet – der Nutzer muss GitHub-Konto/Repo anlegen und GitHub mit Claude verbinden.
 
 ## Weitere Version
 Es gibt zusätzlich eine Online-Version als Claude-Artifact (ohne Original-Icons, noch altes Design). Hauptversion ist die lokale Datei in diesem Ordner.
