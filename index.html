@@ -192,6 +192,64 @@ a{color:var(--acc)}
 @media(max-width:900px){.grid{grid-template-columns:1fr}nav{padding:0 10px}main,header{padding-left:14px;padding-right:14px}}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#05080d}
 ::-webkit-scrollbar-thumb{background:rgba(63,224,255,.25);border:2px solid #05080d}
+
+/* ===== Waffen: Seltenheitsfarben, Karten, Tooltip ===== */
+:root{--t1:#5cc8ff;--t2:#c39bff;--t3:#ffcf5c;--t4:#ff4d5e}
+.t1{--tc:var(--t1)}.t2{--tc:var(--t2)}.t3{--tc:var(--t3)}.t4{--tc:var(--t4)}
+.wn{color:var(--tc);font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.6px;line-height:1.15;
+  text-shadow:0 0 9px color-mix(in srgb,var(--tc) 40%,transparent);overflow-wrap:anywhere}
+.wtier{display:inline-block;font-family:var(--head);font-weight:600;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;padding:0 6px;
+  color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 50%,transparent);background:color-mix(in srgb,var(--tc) 10%,transparent)}
+.wsub{color:var(--mut);font-size:12px}
+.wimg{display:block;width:100%;height:100%;object-fit:contain}
+.wfilter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.wfilter input[type=text]{width:auto;flex:1 1 180px;min-width:0}
+.wfilter select{flex:0 1 auto;min-width:0;max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--head);font-weight:600;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:5px 10px;
+  color:var(--tc);background:transparent;border:1px solid color-mix(in srgb,var(--tc) 45%,transparent);opacity:.6}
+.chip[aria-pressed="true"]{opacity:1;background:color-mix(in srgb,var(--tc) 16%,transparent);box-shadow:0 0 10px color-mix(in srgb,var(--tc) 30%,transparent)}
+.chip:hover{opacity:1}
+.chip:focus-visible,.wcard:focus-visible,.wrm:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.wcard{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;padding:8px 10px 10px;min-width:0;
+  font-family:"Exo 2",sans-serif;color:var(--txt);border:0;border-top:2px solid var(--tc);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 13%,transparent),rgba(4,10,16,.85) 60%);
+  box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .15s,filter .15s}
+.wcard:hover{filter:brightness(1.15);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 55%,transparent)}
+.wcard .wpic{height:64px;margin-bottom:2px}
+.wcard[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--tc),0 0 16px color-mix(in srgb,var(--tc) 35%,transparent)}
+.wcard[aria-pressed="true"]::after{content:"✓";position:absolute;right:6px;top:4px;width:20px;height:20px;line-height:20px;text-align:center;
+  font-weight:700;font-size:13px;color:#04121a;background:var(--tc)}
+.wslots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:700px){.wslots{grid-template-columns:1fr}}
+.wslot{position:relative;display:flex;align-items:center;gap:10px;min-height:76px;padding:8px 34px 8px 10px;min-width:0;
+  border-left:3px solid var(--tc,var(--line2));background:rgba(4,10,16,.7);box-shadow:inset 0 0 0 1px var(--line)}
+.wslot .wpic{flex:none;width:96px;height:54px}
+.wslot.empty{color:var(--mut);justify-content:center;padding:8px 10px;border-left:0;box-shadow:inset 0 0 0 1px var(--line);
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(120,190,220,.04) 10px 12px)}
+.wrm{position:absolute;right:6px;top:6px;width:24px;height:24px;cursor:pointer;color:var(--mut);background:rgba(18,30,44,.9);border:1px solid var(--line2);
+  font-size:14px;line-height:1;padding:0}
+.wrm:hover{color:var(--bad);border-color:var(--bad)}
+.wmini{display:flex;align-items:center;gap:8px;margin:6px 0;min-width:0}
+.wmini .wpic{flex:none;width:58px;height:32px}
+.wline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px}
+.wline .wl-h{font-family:var(--head);text-transform:uppercase;letter-spacing:1.5px;font-size:12px;color:var(--mut);margin-right:4px}
+.wline .pill{gap:6px;padding:3px 8px;cursor:default}
+.wline .pill .wpic{width:44px;height:24px}
+.wline .pill .wn{font-size:13.5px}
+#wtip{position:fixed;z-index:60;width:320px;max-width:calc(100vw - 16px);padding:12px 14px;pointer-events:none;display:none;
+  background:#060c14;border-top:2px solid var(--tc);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 45%,transparent),0 10px 30px rgba(0,0,0,.6);font-size:12.5px}
+#wtip.on{display:block}
+#wtip .wn{font-size:18px}
+#wtip .wt-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+#wtip table{margin:8px 0 2px;font-size:12.5px}
+#wtip td{padding:2px 0;border:0}
+#wtip td:last-child{text-align:right;color:#fff;font-family:var(--head);font-weight:600;font-size:14px}
+#wtip td:first-child{color:var(--mut)}
+#wtip .wt-p{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+#wtip .wt-p b{color:var(--acc2);font-family:var(--head);font-size:14px;letter-spacing:.6px}
+#wtip .wt-p p{margin:4px 0 0;white-space:pre-line}
 </style>
 </head>
 <body>
@@ -206,6 +264,7 @@ a{color:var(--acc)}
 </header>
 <nav>
   <button data-v="opt" class="on" data-i="navOpt"></button>
+  <button data-v="weap" data-i="navWeap"></button>
   <button data-v="char" data-i="navChar"></button>
   <button data-v="farm" data-i="navFarm"></button>
   <button data-v="data" data-i="navData"></button>
@@ -257,11 +316,41 @@ a{color:var(--acc)}
     <button class="btn" id="run" data-i="run"></button>
     <button class="btn sec" id="cmp" data-i="cmp"></button>
   </div>
+  <div class="card">
+    <h2 data-i="wOptH"></h2>
+    <div id="wOpt"></div>
+    <button class="btn sec" id="wGo" data-i="wGo"></button>
+    <div class="note" data-i="wOptNote" style="margin-top:8px"></div>
+  </div>
 </div>
 <div>
   <div class="card" id="result"></div>
   <div class="card" id="alts" style="display:none"></div>
 </div>
+</div>
+</section>
+
+<!-- WAFFEN -->
+<section id="weap" class="view">
+<div class="card">
+  <h2 data-i="wSelH"></h2>
+  <div class="wslots" id="wSlots"></div>
+  <p class="warn" id="wMsg" role="status" style="border:0;background:none;padding:0;margin:8px 0 0;min-height:1.4em"></p>
+  <p class="note" data-i="wSelNote" style="margin:0"></p>
+</div>
+<div class="card">
+  <h2 data-i="wAllH"></h2>
+  <div class="wfilter">
+    <input type="text" id="wSearch" autocomplete="off">
+    <select id="wType"></select>
+    <select id="wRounds"></select>
+    <div class="chips" id="wTiers"></div>
+  </div>
+  <p class="note"><span id="wCount"></span> · <span data-i="wHint"></span></p>
+  <div class="wgrid" id="wGrid"></div>
+  <div id="wStatus" class="status" style="margin-top:14px"></div>
+  <div class="row"><button class="btn sec" id="wReload" data-i="wReload"></button></div>
+  <p class="note" data-i="wSrcNote"></p>
 </div>
 </section>
 
@@ -340,6 +429,7 @@ a{color:var(--acc)}
 </div>
 </section>
 </main>
+<div id="wtip" role="tooltip"></div>
 
 <script>
 // ---------- ÜBERSETZUNGEN ----------
@@ -386,9 +476,20 @@ de:{
 icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons beim Öffnen direkt von Nexons Servern (NEXON Open API). Gespeichert werden nur die Bild-Links in deinem Browser, keine Bilder. Fehlt ein Bild, erscheint das eigene Symbol.",
  icUse:"Original-Icons verwenden",icAuto:"1 · Automatisch laden",icLoadBtn:"Icons von Nexon laden",
  icKeyH:"2 · Mit API-Key",icKeyNote:"Falls Schritt 1 nicht klappt: kostenlosen Key auf openapi.nexon.com erstellen (Anmeldung mit Nexon-Konto → Application anlegen) und hier einfügen. Der Key bleibt nur in diesem Browser.",icKeyBtn:"Mit Key laden",
- icFileH:"3 · JSON-Dateien manuell",icFileNote:"Falls dein Browser die Abfrage blockiert: lade descendant.json und module.json (englisch) aus der Nexon-Open-API-Doku herunter und wähle sie hier aus.",
+ icFileH:"3 · JSON-Dateien manuell",icFileNote:"Falls dein Browser die Abfrage blockiert: lade descendant.json, module.json (englisch) und für die Waffen weapon.json aus der Nexon-Open-API-Doku herunter und wähle sie hier aus.",
  icNone:"Noch keine Original-Icons geladen – es werden die eigenen Symbole gezeigt.",icOk:"Original-Icons aktiv: {m} Module, {s}/5 Nell-Skills.",icErr:"Laden fehlgeschlagen: {e}",icLoading:"Lade …",
  icoNote:"Symbole sind eigene Darstellungen (Farbe = Sockel, Motiv = Hauptwirkung), keine Original-Icons aus dem Spiel.",
+ navWeap:"Waffen",wSelH:"Deine Waffen",wSelNote:"Bis zu 3 Waffen wie im Spiel. Die Auswahl wird in diesem Browser gespeichert und beim Build angezeigt – in den Score fließt sie noch nicht ein (der Rechner bewertet bisher nur Skill-Schaden).",
+ wAllH:"Alle Waffen",wSearch:"Waffe oder Fähigkeit suchen …",wAllTypes:"Alle Waffentypen",wAllRounds:"Alle Munitionsarten",wEmptySlot:"Slot {n} – frei",wRemove:"{n} entfernen",
+ wMax:"Es sind schon {n} Waffen gewählt – entferne zuerst eine.",wNone:"Noch keine Waffe gewählt.",wNoHit:"Keine Waffe passt zu diesen Filtern.",wCount:"{n} von {m} Waffen",
+ wHint:"Klick wählt aus oder ab · Maus oder Tab-Taste zeigt die Details",wOptH:"Waffen",wGo:"Waffen auswählen",wOptNote:"Nur zur Anzeige – ohne Einfluss auf den Score.",wLine:"Waffen",
+ wSrcBase:"Eingebaute Waffenliste (englische Namen, ohne Fähigkeitstexte). Aktuelle Daten werden von NEXON geladen, sobald eine Verbindung besteht.",
+ wSrcLive:"Waffendaten von NEXON aktiv: {n} Waffen.",wLoading:"Lade Waffendaten …",wErr:"Waffendaten konnten nicht geladen werden ({e}) – es wird die eingebaute Liste gezeigt.",
+ wReload:"Waffendaten neu laden",wSrcNote:"Namen, Werte, Fähigkeitstexte und Bilder: NEXON Open API. Bilder werden nur verlinkt, nicht gespeichert.",
+ wNoDesc:"Beschreibung noch nicht geladen.",wLv:"Angriffswerte auf Waffenlevel 100",
+ tier1:"Normal",tier2:"Selten",tier3:"Ultimate",tier4:"Transzendent",
+ wa_fa:"Schusswaffen-ANG",wa_expl:"Explosions-ANG",wa_fire:"Feuer-ANG",wa_chill:"Kälte-ANG",wa_elec:"Elektro-ANG",wa_toxic:"Gift-ANG",wa_melee:"Nahkampfwaffen-ANG",
+ ws_fr:"Feuerrate",ws_as:"Angriffstempo",ws_cr:"Krit-Trefferrate",ws_cd:"Krit-Schaden",ws_wp:"Schwachpunktschaden",ws_mag:"Munition pro Magazin",ws_rl:"Nachladezeit",
  LG:{power:"Skill Power",crit:"Critrate",critdmg:"Critschaden",cd:"Cooldown",range:"Reichweite",cost:"Skill-Kosten",hp:"Überleben",arche:"Arche Tech (bedingt)"},
  L:{sp:"Skill Power",spNA:"Non-Attr. Skill Power",spm:"Skill-Power-Mod.",spmTech:"Tech-Modifier",spmFus:"Fusion-Modifier",cr:"Skill-Critrate",cd:"Skill-Critschaden",cdr:"Cooldown −",cost:"Skill-Kosten",range:"Reichweite",hp:"Max HP"}
 },
@@ -434,9 +535,20 @@ en:{
 icH:"Original icons (local)",icIntro:"This file loads the official icons straight from Nexon's servers (NEXON Open API) when opened. Only the image links are stored in your browser, no images. If an image is missing, the custom icon is shown.",
  icUse:"Use original icons",icAuto:"1 · Load automatically",icLoadBtn:"Load icons from Nexon",
  icKeyH:"2 · With API key",icKeyNote:"If step 1 fails: create a free key at openapi.nexon.com (sign in with your Nexon account → create an application) and paste it here. The key stays in this browser only.",icKeyBtn:"Load with key",
- icFileH:"3 · JSON files manually",icFileNote:"If your browser blocks the request: download descendant.json and module.json (English) from the Nexon Open API docs and select them here.",
+ icFileH:"3 · JSON files manually",icFileNote:"If your browser blocks the request: download descendant.json, module.json (English) and, for weapons, weapon.json from the Nexon Open API docs and select them here.",
  icNone:"No original icons loaded yet – showing custom icons.",icOk:"Original icons active: {m} modules, {s}/5 Nell skills.",icErr:"Loading failed: {e}",icLoading:"Loading …",
  icoNote:"Icons are custom drawings (color = socket, symbol = main effect), not the original in-game icons.",
+ navWeap:"Weapons",wSelH:"Your weapons",wSelNote:"Up to 3 weapons, as in the game. Your selection is saved in this browser and shown with the build – it does not affect the score yet (the calculator only rates skill damage so far).",
+ wAllH:"All weapons",wSearch:"Search weapon or ability …",wAllTypes:"All weapon types",wAllRounds:"All ammo types",wEmptySlot:"Slot {n} – empty",wRemove:"Remove {n}",
+ wMax:"{n} weapons are already selected – remove one first.",wNone:"No weapon selected yet.",wNoHit:"No weapon matches these filters.",wCount:"{n} of {m} weapons",
+ wHint:"Click to select or deselect · hover or Tab key shows details",wOptH:"Weapons",wGo:"Choose weapons",wOptNote:"Display only – no effect on the score.",wLine:"Weapons",
+ wSrcBase:"Built-in weapon list (without ability texts). Current data is loaded from NEXON as soon as a connection is available.",
+ wSrcLive:"Weapon data from NEXON active: {n} weapons.",wLoading:"Loading weapon data …",wErr:"Weapon data could not be loaded ({e}) – showing the built-in list.",
+ wReload:"Reload weapon data",wSrcNote:"Names, values, ability texts and images: NEXON Open API. Images are only linked, never stored.",
+ wNoDesc:"Description not loaded yet.",wLv:"Attack values at weapon level 100",
+ tier1:"Normal",tier2:"Rare",tier3:"Ultimate",tier4:"Transcendent",
+ wa_fa:"Firearm ATK",wa_expl:"Explosive ATK",wa_fire:"Fire ATK",wa_chill:"Chill ATK",wa_elec:"Electric ATK",wa_toxic:"Toxic ATK",wa_melee:"Melee Weapon ATK",
+ ws_fr:"Fire Rate",ws_as:"Attack Speed",ws_cr:"Critical Hit Rate",ws_cd:"Critical Hit Damage",ws_wp:"Weak Point Damage",ws_mag:"Rounds per Magazine",ws_rl:"Reload Time",
  LG:{power:"Skill Power",crit:"Crit rate",critdmg:"Crit damage",cd:"Cooldown",range:"Range",cost:"Skill cost",hp:"Survival",arche:"Arche Tech (conditional)"},
  L:{sp:"Skill Power",spNA:"Non-Attr. Skill Power",spm:"Skill Power Mod.",spmTech:"Tech Modifier",spmFus:"Fusion Modifier",cr:"Skill Crit Rate",cd:"Skill Crit Damage",cdr:"Cooldown −",cost:"Skill Cost",range:"Range",hp:"Max HP"}
 }};
@@ -555,10 +667,12 @@ function skillIcon(i){const c=SKILL_COL[i];
 
 // ---------- UI ----------
 const $=id=>document.getElementById(id);
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
-  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
-  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===b.dataset.v));
-});
+function showView(id){
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.v===id));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showView(b.dataset.v));
 for(let i=0;i<=10;i++){const o=document.createElement("option");o.value=i;if(i==10)o.selected=true;$("lvl").appendChild(o);}
 function statTxt(o){const L=I18N[LANG].L;return Object.entries(o).map(([k,v])=>`${L[k]} ${v>0&&k!="cdr"?"+":""}${fmt(v,1).replace(/[,.]0$/,"")} %`).join(", ");}
 function fmt(x,d=1){return x.toLocaleString(LANG==="de"?"de-DE":"en-US",{maximumFractionDigits:d,minimumFractionDigits:d});}
@@ -580,6 +694,7 @@ function renderStatic(){
   $("icoSH").innerHTML=namedIcon("Shattered Heart",icon("trans","#ff9f5f"))+"<b class=\"trn\">Shattered Heart</b>";
   $("icoRH").innerHTML=namedIcon("Restored Heart",icon("trans","#5fe0a0"))+"<b class=\"trn\">Restored Heart</b>";
   renderIconStatus();
+  ensureWeapons();renderWeapons();
   const LG=I18N[LANG].LG;
   $("legend").innerHTML=Object.keys(LG).map(g=>`<span>${icon(g,"#c9d4e0")}${LG[g]}</span>`).join("")+
     Object.keys(SOCK).map(s=>`<span><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${SOCK[s]}"/></svg>${s}</span>`).join("");
@@ -667,6 +782,7 @@ function renderBuild(r,c,title,ref){
    <div class="kpi"><small>${t("cdr")}</small><b>${fmt(r.cdr,1)} %</b></div>
    <div class="kpi"><small>${t("capK")}</small><b>${r.capUsed} / ${c.cap}</b></div>
   </div>
+  <div data-wline></div>
   ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
   ${!r.reactorOk?`<p class="warn">${t("badReactor")}</p>`:""}
   <table><tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap")}</th><th>${t("effAt",{l:c.lvl})}</th><th>${t("thSrc")}</th></tr>
@@ -680,6 +796,7 @@ $("run").onclick=()=>{
   if(!best.length){$("result").innerHTML=`<h2>${t("resH")}</h2><p class="warn">${t("noBuild")}</p>`;$("alts").style.display="none";return;}
   const guide=evaluate(GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n)),c);
   $("result").innerHTML=renderBuild(best[0],c,t("best"),guide)+`<p class="note">${t("calcMs",{ms:fmt(performance.now()-t0,0)})}</p>`;
+  renderWeaponSel();
   $("alts").style.display="block";
   $("alts").innerHTML=`<h2>${t("altH")}</h2><table><tr><th>#</th><th>${t("score")}</th><th>${t("diff")}</th></tr>`+best.slice(1).map((r,i)=>{
     const a=new Set(best[0].list.map(m=>m.n)),b=new Set(r.list.map(m=>m.n));
@@ -691,8 +808,285 @@ $("cmp").onclick=()=>{
   const c=cfg();const list=GUIDE[c.mode].map(n=>MODS.find(m=>m.n===n));shown="guide";
   const r=evaluate(list,c);r.list=list;r.capUsed=list.reduce((s,m)=>s+modCost(m,c),0)+c.shCap;
   $("result").innerHTML=renderBuild(r,c,t("guideB",{m:t(c.mode==="boss"?"bossing":"mobbing")}))+`<p class="note">${t("guideHint")}</p>`;
+  renderWeaponSel();
   $("alts").style.display="none";
 };
+// ---------- WAFFEN ----------
+// Waffen-Metadaten (NEXON Open API) auf das Nötige kürzen. Typ/Munition werden sprachunabhängig als Schlüssel abgelegt.
+const W_TYPES={ar:["Assault Rifle","Sturmgewehr"],scout:["Scout Rifle","Spähergewehr"],hc:["Hand Cannon","Revolver"],beam:["Beam Rifle","Strahlengewehr"],
+ tac:["Tactical Rifle","Taktisches Gewehr"],sniper:["Sniper Rifle","Scharfschützengewehr"],launcher:["Launcher","Werfer/Kanone"],shotgun:["Shotgun","Schrotflinte"],
+ smg:["Submachine Gun","Maschinenpistole"],mg:["Machine Gun","Maschinengewehr"],handgun:["Handgun","Pistole"],
+ mbal:["Balanced Melee Weapon","Ausgeglichene Nahkampfwaffe"],mpow:["Power Melee Weapon","Mächtige Nahkampfwaffe"],mspd:["Speed Melee Weapon","Schnelle Nahkampfwaffe"]};
+const W_ROUNDS={gen:["General Rounds","Standardmunition"],imp:["Impact Rounds","Einschlagmunition"],high:["High-Power Rounds","Hochleistungsmunition"],enh:["Enhanced Ammo","Verbesserte Munition"]};
+const W_ATK={"105000026":"fa","105000057":"expl","105000058":"fire","105000059":"chill","105000060":"elec","105000061":"toxic","105000244":"melee","105000246":"fire","105000247":"chill","105000248":"toxic"};
+const W_STAT={"105000023":"fr","105000030":"cr","105000031":"cd","105000035":"wp","105000021":"mag","105000095":"rl","105000245":"as","105000250":"cr","105000251":"cd"};
+const wKey=(map,name)=>Object.keys(map).find(k=>map[k].includes(name))||name;
+function slimWeapon(a){
+  if(!a||!a.weapon_id||!a.weapon_name)return null;
+  const w={id:String(a.weapon_id),n:String(a.weapon_name),ty:wKey(W_TYPES,a.weapon_type),tier:+String(a.weapon_tier_id||"").replace(/\D/g,"")||1,
+    rd:wKey(W_ROUNDS,a.weapon_rounds_type),img:a.image_url||"",atk:[],st:{},pn:a.weapon_perk_ability_name||"",pd:a.weapon_perk_ability_description||""};
+  const lv=Array.isArray(a.firearm_atk)&&a.firearm_atk.length?a.firearm_atk[a.firearm_atk.length-1]:null;
+  if(lv&&Array.isArray(lv.firearm))lv.firearm.forEach(f=>{w.atk.push([W_ATK[f.firearm_atk_type]||"fa",Math.round(f.firearm_atk_value)]);});
+  (a.base_stat||[]).forEach(s=>{const k=W_STAT[s.stat_id];if(k)w.st[k]=s.stat_value;});
+  return w;
+}
+const W_BASE=[
+["211081001","Nightmare Hound","scout",1,"imp","7a4c3e81ac44c7e936f4f969a591f577",["fa",39963],[180,5,1.2,1.5,18,2.2399999999999998],""],
+["211082002","Silly Weeper","scout",2,"imp","0a2e467f5952ae972253e5381164e7b3",["fa",97131],[78,20,1.5,1.5,8,2.0999999999999996],""],
+["211082003","The Age Of Innovation","scout",2,"imp","dfa65e4d651e94a473da2dccb640dc64",["fa",33103],[250,7,1.5,1.5,15,2.0999999999999996],""],
+["211082004","Sonic Co-op","scout",2,"imp","aeff480200a1c7c5174d60d05281ffa1",["fa",24917],[300,20,1.5,1.5,25,2],""],
+["211083001","Wave of Light","scout",3,"imp","8cb6e3effc73a7a6a77d80478c0f51ed",["fa",36141,"fire",28913],[250,10,1.8,2.32,12,2.2],"Splendor"],
+["211083002","Blue Beetle","scout",3,"imp","bc212983d14ce78e73c0de0371768fac",["fa",29468,"elec",26816],[200,25,1.8,3.93,16,2],"Arcane Wave"],
+["211083004","FrostWatcher","scout",3,"imp","95dd69d2bb516b9e12b03176d453aea0",["fa",45777,"chill",22889],[230,6,1.8,2.81,21,2.15],"Subzero Watcher"],
+["211083005","ERASER","scout",3,"imp","268acbe6d23714dc6d3e8c244b592875",["fa",29303,"toxic",16117],[240,18,1.3,3.55,18,2.2],"Erase"],
+["211084001","Volcanic Heart","scout",4,"imp","b51003489ce1ed62c477f499128ee9e4",["fa",24974,"fire",54943],[166,50,1.55,1.85,30,2.7],"Pulsating Ember"],
+["211091001","Recipient Unknown","sniper",1,"high","a93622c81e64a228dc05c22ec98dc728",["fa",132590],[72,45,1.8,1.5,6,2.0999999999999996],""],
+["211092001","Forest Gaze","sniper",2,"high","1c6ca7ab2ac58d577513e81930393ab9",["fa",133703],[50,50,2,1.5,7,2.52],""],
+["211092002","Supermoon Z-15","sniper",2,"high","db0ee5f11b975d0c69d4f5b30af92fa5",["fa",101392],[65,50,2,1.5,9,2.2399999999999998],""],
+["211092003","Belief","sniper",2,"high","d10d37df0a839dc7af02d243d0e3fd47",["fa",92167],[80,45,1.8,1.7,9,2.3099999999999996],""],
+["211092004","Different Dream","sniper",2,"high","323dd3820b294253e7e1b08c0b49518d",["fa",110259],[63,55,1.8,1.5,12,2.15],""],
+["211093001","Afterglow Sword","sniper",3,"high","5f00ef5b8da91875ab988190e0bd74f6",["fa",114206],[66,50,2,2.76,12,2.5],"Nightmare Reaper"],
+["211093002","Piercing Light","sniper",3,"high","bec18398d891552051338ffea609d79c",["fa",193437,"chill",81244],[48,40,1.2,2.75,11,2.6],"Purification of Light"],
+["211093003","A-TAMS","sniper",3,"high","cd38fb5a5d8ff02a52aadc09cfc5ef73",["fa",228622],[52,50,1.5,1.65,3,2],"Electronic Arche Infusion"],
+["211094001","Raging Light","sniper",4,"high","8ec810bf7f9ffb1c921e53c0517b1d67",["fa",93021,"chill",204646],[50,40,1.2,2.1,12,2.3],"Brand of Light"],
+["211101001","Tamed Beast","launcher",1,"high","35fec495b03f8eb4f91da19eb802baf7",["expl",72897],[80,35,1.5,1,12,2.8],""],
+["211102001","Death Roar","launcher",2,"high","72f35ad37054e8f076bed21615e0cf32",["expl",124966],[60,35,1.5,1,7,2.8],""],
+["211102002","Guardian R4","launcher",2,"high","d3a92c27923d2790b52c301ec5937ee0",["expl",228410],[50,50,2,1,1,1.47],""],
+["211011001","Hungry Hound","handgun",1,"gen","5121f653612028a206f3131f81495b2f",["fa",12712],[451,10,1.7,1.5,15,1.19],""],
+["211102003","Lightspeed Barrel","launcher",2,"high","1ac4315a74daf23d0711d3f952cfbdb6",["expl",99654],[66,35,1.5,1,9,2.8],""],
+["211012001","Red Wolf","handgun",2,"gen","64e7cd6ee5a9ce572f89a510ab446be4",["fa",14105],[545,12,1.8,1.5,12,1.0499999999999998],""],
+["211102004","Vestigial Organ","launcher",2,"high","db3d37bdafe5113d9b34880e74a9e7bc",["expl",128353],[200,1,1.1,1,4,4.2],""],
+["211012002","Millennium Frost","handgun",2,"gen","5541aa5bc69828750230c0e21de0008f",["fa",13596],[600,1,1.8,1.5,15,1.26],""],
+["211103001","Sigvore's Proof","launcher",3,"high","838ad93ddbeb457322e97651f2dfbb81",["expl",87476,"toxic",27993],[80,35,1.5,1,10,2.8],"Mad Bomber"],
+["211012003","Rose of Aisha","handgun",2,"gen","ca57f8fe70ec7d43f7e9e3f784e3df5e",["fa",11453],[666,20,1.8,1.7,14,1.1199999999999999],""],
+["211012004","New Beginning","handgun",2,"gen","eafdde9d0fef5a994cb91fda065fe4e1",["fa",11164],[750,10,1.8,1.5,15,1.15],""],
+["211103002","Restored Relic","launcher",3,"high","6b0ac789fe68f8012f0e577e39a8297c",["expl",109813,"fire",87851],[60,20,1.2,1,12,2.5],"Ancient Technique"],
+["211013001","The Last Dagger","handgun",3,"gen","65d6b887291750d901b10e148f5f1119",["fa",14095],[600,12,2,1.6,12,1.2],"Ultimatum"],
+["211103005","Exterminator","launcher",3,"high","65ada89e1084adba67a5872382c07c9a",["expl",168776,"fire",138397],[50,10,1.15,1,12,3.2],"Exterminate!"],
+["211013002","The Final Masterpiece","handgun",3,"gen","d17041713d4b151398a0860d816b6d66",["fa",11164,"chill",9936],[500,20,2,2.11,20,1.1],"Masterpiece"],
+["211014001","Sparky","handgun",4,"gen","a9e6b764ba29afc5a589536f58ddda45",["fa",12396,"elec",22310],[705,3,1.2,1.75,16,1.1],"Zap"],
+["211104001","Nightmare Launcher","launcher",4,"high","0d5f8e43ba0d4086bcb4b88e7a842d57",["expl",103627,"toxic",238342],[57,52,1.58,1,8,2.7],"Dreadful Dream"],
+["211021001","Burning Hound","hc",1,"imp","0b064a49b5e559903919858e2af4a81b",["fa",41726],[139,32,1.5,1.7,12,1.75],""],
+["211022001","Assassin's Edge","hc",2,"imp","71fd2b29accbb607a561d8f2b58e9f00",["fa",44604],[120,40,2,2,9,1.4],""],
+["211121003","Moon Fragment","beam",1,"enh","7b8c230d8c415a412b87d4ea3c8aadef",["fa",10589],[600,5,1.2,1,27,1.8199999999999998],""],
+["211022002","Explorer's Path","hc",2,"imp","a29019f04b21cc10a17cf578f881964a",["fa",63596],[109,27,1.3,2,9,1.4],""],
+["211122001","Dogma 21","beam",2,"enh","e386f1953bc51608e13e50dad6d79a34",["fa",22042],[300,1,1.5,1,40,2.3099999999999996],""],
+["211022006","Immediate Execution","hc",2,"imp","18ce03c6d161524683366fd9deb4c80e",["fa",39206],[171,32,1.5,2,12,1.7],""],
+["211023001","Nazeistra's Devotion","hc",3,"imp","b315aea02228beee420b80f7bcd7097b",["fa",38461,"toxic",19231],[150,45,2.25,5.19,8,1.5],"Fanaticism"],
+["211122003","Burning 44","beam",2,"enh","6a39c6748a0f0ba9d695407925ffb98d",["fa",16204],[500,10,1.5,1,50,2.0999999999999996],""],
+["211122004","Dimensional Bridge","beam",2,"enh","6bd1dab4c7cc6b839a602a486266c3ca",["fa",14839],[500,1,1.2,1,30,1.95],""],
+["211023002","Perforator","hc",3,"imp","313eb5005e4c6d70ac41b4a9f4d8c7f0",["fa",67092],[100,20,2,5.5,6,1.6],"Detect"],
+["211123001","King's Guard Lance","beam",3,"enh","1b2c6549e87addec20642f852b0afcf4",["fa",7839,"chill",2587],[645,11,1.7,1.25,45,2.0999999999999996],"Protector"],
+["211023003","Peace Maker","hc",3,"imp","d78fa4d509434b6a21a95f6cc87638fe",["fa",32471],[133,50,2.5,4.86,8,1.35],"Surging Peace"],
+["211023005","Malevolent","hc",3,"imp","31991b249c933d07fce52c6d40a2a2c8",["fa",46349,"toxic",19467],[176,1,1,2.5,9,1.65],"Malicious Pain"],
+["211123002","Clairvoyance","beam",3,"enh","a3a8c7bacaa70f994559ddf58bbf2d2d",["fa",13362,"chill",13362],[400,20,2,1.45,40,2.2],"The Thing Beyond"],
+["211023006","Shackles of Mortality","hc",3,"imp","66ee54c96322df7df50ad1dfda7a0e9d",["fa",51048,"toxic",17414],[109,44,2.25,2,8,1.4],"Circulation Ring"],
+["211123003","Voltia","beam",3,"enh","49b07e700bb12d8176510eaf5576bea4",["fa",8499,"elec",7650],[666,15,1.5,1.19,42,2.5],"Chain Current"],
+["211024001","Malicious Dominator","hc",4,"imp","f9453100239e8c2e8f6d1d2f7fb796d0",["fa",51232,"toxic",92217],[187,5,1,2.7,9,1.6],"Atrocious"],
+["211123004","Truly Deadly Arson","beam",3,"enh","388a7b03a593d715f18d7b2ecf7947f7",["fa",9533,"fire",3432],[545,25,1.6,1,35,2],"Double Tap, Double Check"],
+["211031001","Gangster","shotgun",1,"high","b0c9584713f7c367cf707296bd0f055e",["fa",19888],[55,1,1.1,1,9,1.68],""],
+["211032001","The Last Knight","shotgun",2,"high","62053e4cb0af9ce530278d42888aa235",["fa",10320],[120,3,1.2,1,11,1.89],""],
+["211032002","In a Blink","shotgun",2,"high","d19602b85c2fe0ba6fc1b8987fc30912",["fa",20475],[75,2,1.2,1,8,1.54],""],
+["211032003","Fireworks","shotgun",2,"high","8246e467dcf652b513a0412c6c750e4e",["fa",22570],[67,1,1.15,1,12,1.6099999999999999],""],
+["211032004","Subconsciousness","shotgun",2,"high","1361013566ffcd9ab0de2a937f39a0dd",["fa",17063],[120,2,1.2,1,10,1.45],""],
+["211033001","Smithereens","shotgun",3,"high","b77a6cf7276677e7a72b08a3c39ed860",["fa",14562],[150,1,1.1,1,15,1.6],"Fearlessness"],
+["211033002","Executor","shotgun",3,"high","725adaf584254b433f2b4f00cb53d44a",["fa",7722],[109,1,1.1,1,14,1.85],"Impending Judgement"],
+["211033003","Hammer and Anvil","shotgun",3,"high","26bf13d021eb7f409a855d4366892e13",["fa",18121,"elec",1813],[133,1,1.1,1,6,1.55],"Multiple Barrels"],
+["211034001","Unleashed Instinct","shotgun",4,"high","8161a9ed3a2204ade11aca73d10c03fe",["fa",35233,"fire",63420],[100,2,1.1,1,8,1.4],"Bloody Hunt"],
+["211041001","Albinism","smg",1,"gen","4a421dec7ac3fa78c8c18fc8333a19b8",["fa",11568],[750,15,1.3,1,26,1.46],""],
+["211042001","Devil's Call","smg",2,"gen","9fba15e1cc595992e17f324d4ce87ef7",["fa",12732],[779,7,1.5,1,26,1.32],""],
+["211042002","Blue Blood Bloomer","smg",2,"gen","bd3db3617859fab6dc91f200d74ca5a4",["fa",11408],[1000,12,1.5,1,27,1.32],""],
+["211042003","Alter Ego","smg",2,"gen","0415b366d335b63f5425a76c065edc86",["fa",13284],[800,8,1.5,1,35,1.74],""],
+["211042004","Tiger Moth","smg",2,"gen","34f8b2d90578bb54653e3c4c5689fc5e",["fa",10879],[857,20,1.2,1,35,1.35],""],
+["211043001","Thunder Cage","smg",3,"gen","ceafb2c5d45299b6e9c767098f454797",["fa",11055,"elec",9176],[666,20,2,1.2,26,1.4],"Overcharge"],
+["211043002","Python","smg",3,"gen","d88f60aa86c8dc57e21e6f88511b33ba",["fa",11908,"toxic",7503],[923,5,1.3,2,30,1.5],"Python Instinct"],
+["211043003","E-Buster","smg",3,"gen","f6901e57369f73220170d4ebcc3b0b63",["fa",18999],[769,5,1,1,33,1.32],"Entropy Overlap"],
+["211044001","Storm Cage","smg",4,"gen","1ecbe0773a111a3848e75a1a2541f18d",["fa",11318,"elec",23767],[810,20,2,1.2,26,1.4],"Lightning Storm"],
+["211051001","Cygnus","mg",1,"gen","c4bd46e95cf93bf3c7ec7607bad632f7",["fa",11934],[521,1,1.1,1,107,2.59],""],
+["211052001","Rascal V-51","mg",2,"gen","649e6efb22411c0744ec40dcfad412aa",["fa",12929],[571,4,1.5,1,105,2.4499999999999997],""],
+["211052002","Unfinished Study","mg",2,"gen","219624813995aa89d6b377530c66c3db",["fa",13612],[545,3,1.5,1,125,3.01],""],
+["211052003","Lion of Blue Mane","mg",2,"gen","62364058a1293c938868e5000a1efe18",["fa",18413],[428,10,1.5,1,110,3.29],""],
+["211052004","Tamer","mg",2,"gen","cba78809c898b611e44e8bb01b8ca57a",["fa",17631],[625,10,1.6,1,100,2.6],""],
+["211053001","Enduring Legacy","mg",3,"gen","13e0b9972056d43d525c1faabefd54b4",["fa",13155,"fire",6578],[571,20,2.3,1.85,115,2.7],"Craftsmanship"],
+["211053002","Albion Cavalry Gun","mg",3,"gen","a08287f1127679b3657b09c1489c8aa9",["fa",13469,"chill",8217],[451,7,2,1,75,2.5],"Cavalry"],
+["211053003","Frenzied Locomotive","mg",3,"gen","b9ec90213d422187070f3f1fb43b4e1b",["fa",17631],[857,1,1.1,1,100,2.6],"Sprint Instinct"],
+["211054001","Frost Blossom","mg",4,"gen","61a28b3b2e9388f9eb0b15f01b8ec8e9",["fa",6765,"chill",14884],[689,22,2.25,1.2,75,2.5],"Bloom"],
+["211061001","Ominous Hound","ar",1,"gen","33d70ee26acd0c326890ce19016af4a7",["fa",13930],[600,5,1.2,1,31,1.75],""],
+["211062001","Magnus AA","ar",2,"gen","99b656aaf694c1745565d282539e0a97",["fa",15755],[571,9,1.5,1,30,1.68],""],
+["211062002","Caligo's Horn","ar",2,"gen","51a7b036e039b1a86c28f45ba5ad943c",["fa",14851],[631,9,1.5,1,30,1.68],""],
+["211062003","Phantom Pain","ar",2,"gen","e3c1be91430caed3f152f1b48af10ed6",["fa",12200],[722,9,1.5,1,33,1.6099999999999999],""],
+["211062004","Eternal Willpower","ar",2,"gen","9e0444f2b466d65115c1c9f8020b1e5f",["fa",21370],[500,20,1.5,1,25,1.9],""],
+["211063001","Fallen Hope","ar",3,"gen","03c388bc95f43507ff5f56c7ac85d85d",["fa",12813,"toxic",12429],[600,12,1.7,1.2,35,1.7],"Perdition"],
+["211063002","Divine Punishment","ar",3,"gen","3df0f8cae97e98ef7a0cccd0bf4613ba",["fa",10624,"fire",9031],[705,10,1.7,1.56,35,1.55],"Prayer"],
+["211063003","EXCAVA","ar",3,"gen","2e7b02f88abeb7d04a23d0126d00fc78",["fa",14937,"elec",12249],[588,3,1.2,1.4,36,2],"Voltage Accel Energy Grenade Launcher"],
+["211063004","Ancient Knight","ar",3,"gen","e288f918ccfda4dd9c67f226d1a0b6b7",["fa",16318,"fire",5875],[521,3,1.2,1,27,1.8],"Descending Judgment"],
+["211064001","ARMIS","ar",4,"gen","c4733f74592aaa72c5bf05f65bbbc5b5",["fa",32201,"fire",77282],[582,2,1.15,1.2,30,1.65],"Autonomous Interception System"],
+["211064002","Monster Hunter","ar",4,"gen","de66c142cebdc01ba257577af28eaf10",["fa",33850,"fire",67700],[618,25,1.8,1.3,35,1.48],"Hunter's Sense"],
+["211071001","Red Eye","tac",1,"enh","df74e8a2a4aeb0672025f2f887858a1d",["fa",12712],[514,30,1.3,1.5,48,1.89],""],
+["211072001","Young Noble's Ambition","tac",2,"enh","e8d6df58bebb6ba872ed95fb57b9747b",["fa",13141],[455,35,1.3,1.5,51,1.68],""],
+["211072002","The Unwelcomed","tac",2,"enh","a7d4522f4305acb1183381405cd36624",["fa",18108],[300,40,1.5,1.5,36,1.54],""],
+["211072003","Viper","tac",2,"enh","13fa1786c49743724139e4cd057a31da",["fa",10359],[750,30,1.85,1.5,50,1.75],""],
+["211072004","Detachment","tac",2,"enh","e557c0bb7adaaa72ab0a8f0f4fa027f5",["fa",17102],[360,30,1.2,1.5,42,1.55],""],
+["211073001","Secret Garden","tac",3,"enh","6189e473cbb4181c2a7da06d48cb886d",["fa",10534],[480,50,2.25,1.77,48,1.6],"Gardener"],
+["211073002","Greg's Reversed Fate","tac",3,"enh","628a4b24dc92c15e765a859935a42b4c",["fa",15614,"fire",11399],[342,20,2,2,30,1.4],"Shaping Destiny"],
+["211073003","Hive Master","tac",3,"enh","6572b9082619d605e64fd0ab3ebf5e77",["fa",10824,"toxic",7092],[600,20,1.2,2.2,50,1.4],"Colony Domination"],
+["211073004","Whirlwind","tac",3,"enh","579b0a14804ce671673032bd96196662",["fa",15446,"chill",10817],[641,25,2.25,2,44,1.5],"Wind Snare"],
+["211074001","ATR-0 Prototype","tac",4,"enh","ce9019d936a7d6feeffbd095f0a6272f",["fa",14009,"chill",29419],[375,5,1.05,1.6,45,1.47],"Protocol Zero"],
+["211082001","Hero's Scar","scout",2,"imp","f325b8200ac7115e72bf27b2868bc668",["fa",33071],[240,10,1.5,1.5,20,2.0999999999999996],""],
+["211123005","Eye of the Typhoon","beam",3,"enh","17a34341edd0ea4188155e0a60378579",["fa",13364,"elec",6919],[375,35,1.72,1,38,2.05],"Typhoon"],
+["211124001","Emperor's Guard Lance","beam",4,"enh","49e39c84e0cdc17f461037127f928094",["fa",8888,"chill",21333],[689,3,1.15,1.25,50,2],"Emperor's Guard Lance"],
+["221133001","Shadow","mbal",3,"imp","397dcdd2d54de105d1f9b1f13ac30400",["melee",418048,"toxic",209024],[0,5,1.1,0,0,0,2.785],"Shadow Slash"],
+["221133002","Deus Ex Manus","mpow",3,"high","dc6c85d573e39232f9d381ec0b7ea3c0",["melee",523934,"chill",157180],[0,50,2,0,0,0,2.314],"Liberation"],
+["221133003","Hypernova","mbal",3,"imp","b6a9ae763035b500354f1ed4dba2701b",["melee",326661,"chill",163331],[0,42,1.7,0,0,0,4.464],"Supernova Explosion"],
+["221133004","Crime and Punishment","mbal",3,"imp","704c530e3bf1e4de9547b22dd0e9bd72",["melee",233336,"fire",158436],[0,5,1,0,0,0,3.424],"Final Verdict"]
+];
+const W_META="https://open.api.nexon.com/static/tfd/meta/";
+const W_IMG="https://open.api.nexon.com/static/tfd/img/";
+const W_SK=["fr","cr","cd","wp","mag","rl","as"];
+const W_MAX=3;
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// Eingebaute Liste (englische Namen) als Fallback; aktuelle Daten kommen zur Laufzeit von NEXON.
+const W_FALLBACK=W_BASE.map(r=>{const atk=[];for(let i=0;i<r[6].length;i+=2)atk.push([r[6][i],r[6][i+1]]);
+  const st={};r[7].forEach((v,i)=>{if(v)st[W_SK[i]]=v;});
+  return{id:r[0],n:r[1],ty:r[2],tier:r[3],rd:r[4],img:W_IMG+r[5],atk,st,pn:r[8],pd:""};});
+const W_EN=Object.fromEntries(W_FALLBACK.map(w=>[w.id,w.n]));
+let W_LIVE={},W_BUSY={},W_ERR="",WSEL=[];
+const WF={q:"",ty:"",rd:"",tiers:new Set()};
+const weapons=()=>W_LIVE[LANG]||W_FALLBACK;
+const wById=id=>weapons().find(w=>w.id===id)||W_FALLBACK.find(w=>w.id===id);
+const wLoc=(map,k)=>map[k]?map[k][LANG==="de"?1:0]:k;
+const wTierCls=w=>"t"+Math.min(4,Math.max(1,w.tier||1));
+const W_GLYPH={
+ long:'<path d="M6 20h58v-4h10v4h16v6H70l-4 6H52l-3-6H30l-6 14H12l5-14H6Z"/>',
+ hand:'<path d="M22 14h52v10H48l-3 6h-8l-4 14H21l5-20h-4Z"/>',
+ launcher:'<path d="M8 16h64l12-5v26l-12-5H8Z"/><path d="M34 32h9l-3 12h-9Z"/>',
+ melee:'<path d="M26 34 78 6l10-2-4 9-50 29Z"/><path d="M16 26l22 16-4 4-22-16Z"/><path d="M8 44l10-8 4 4-9 8Z"/>'};
+function wSvg(w){
+  const g=/^m(bal|pow|spd)$/.test(w.ty)?"melee":w.ty==="launcher"?"launcher":(w.ty==="handgun"||w.ty==="hc")?"hand":"long";
+  return `<svg class="wimg" viewBox="0 0 96 48" aria-hidden="true"><g fill="var(--tc)" opacity=".85">${W_GLYPH[g]}</g></svg>`;
+}
+function wPic(w){
+  const fb=wSvg(w);
+  if(!USE_OFFICIAL||!/^https:\/\//.test(w.img||""))return `<span class="wpic">${fb}</span>`;
+  return `<span class="wpic"><img class="wimg" src="${escH(w.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb" data-fb="${escH(fb)}"></span>`;
+}
+const wSub=w=>escH(wLoc(W_TYPES,w.ty))+" · "+escH(wLoc(W_ROUNDS,w.rd));
+function wTip(w){
+  const num=(v,d)=>d?fmt(v,d).replace(/0+$/,"").replace(/[,.]$/,""):fmt(v,0);
+  const rows=w.atk.map(a=>[t("wa_"+a[0]),fmt(a[1],0)]);
+  const s=w.st;
+  if(s.fr)rows.push([t("ws_fr"),num(s.fr,0)]);
+  if(s.as)rows.push([t("ws_as"),num(s.as,2)]);
+  if(s.cr)rows.push([t("ws_cr"),num(s.cr,1)+" %"]);
+  if(s.cd)rows.push([t("ws_cd"),"×"+num(s.cd,2)]);
+  if(s.wp)rows.push([t("ws_wp"),"×"+num(s.wp,2)]);
+  if(s.mag)rows.push([t("ws_mag"),num(s.mag,0)]);
+  if(s.rl)rows.push([t("ws_rl"),num(s.rl,2)+" s"]);
+  const en=W_EN[w.id]&&W_EN[w.id]!==w.n?` · ${escH(W_EN[w.id])}`:"";
+  const perk=w.pn?`<div class="wt-p"><b>${escH(w.pn)}</b><p>${w.pd?escH(w.pd):`<span class="note">${t(W_BUSY[LANG]?"wLoading":"wNoDesc")}</span>`}</p></div>`:"";
+  return `<div class="wt-h"><b class="wn">${escH(w.n)}</b><span class="wtier">${t("tier"+wTierCls(w).slice(1))}</span></div>
+   <div class="wsub">${wSub(w)}${en}</div>
+   <table>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
+   <div class="note">${t("wLv")}</div>${perk}`;
+}
+function wFiltered(){
+  const q=WF.q.trim().toLowerCase();
+  return weapons().filter(w=>(!WF.ty||w.ty===WF.ty)&&(!WF.rd||w.rd===WF.rd)&&(!WF.tiers.size||WF.tiers.has(Math.min(4,Math.max(1,w.tier))))&&
+    (!q||w.n.toLowerCase().includes(q)||(W_EN[w.id]||"").toLowerCase().includes(q)||(w.pn||"").toLowerCase().includes(q)))
+   .sort((a,b)=>b.tier-a.tier||wLoc(W_TYPES,a.ty).localeCompare(wLoc(W_TYPES,b.ty))||a.n.localeCompare(b.n));
+}
+function renderWeaponFilters(){
+  const all=weapons(),uniq=k=>[...new Set(all.map(w=>w[k]))];
+  const opts=(map,keys,first)=>`<option value="">${first}</option>`+keys.map(k=>[k,wLoc(map,k)]).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,l])=>`<option value="${escH(k)}">${escH(l)}</option>`).join("");
+  $("wType").innerHTML=opts(W_TYPES,uniq("ty"),t("wAllTypes"));$("wType").value=WF.ty;
+  $("wRounds").innerHTML=opts(W_ROUNDS,uniq("rd"),t("wAllRounds"));$("wRounds").value=WF.rd;
+  $("wSearch").placeholder=t("wSearch");$("wSearch").setAttribute("aria-label",t("wSearch"));
+  $("wType").setAttribute("aria-label",t("wAllTypes"));$("wRounds").setAttribute("aria-label",t("wAllRounds"));
+  $("wTiers").innerHTML=[4,3,2,1].map(n=>`<button type="button" class="chip t${n}" data-tier="${n}" aria-pressed="${WF.tiers.has(n)}">${t("tier"+n)}</button>`).join("");
+}
+function renderWeaponGrid(){
+  const list=wFiltered();
+  $("wGrid").innerHTML=list.map(w=>`<button type="button" class="wcard ${wTierCls(w)}" data-w="${escH(w.id)}" aria-pressed="${WSEL.includes(w.id)}">${wPic(w)}<span class="wn">${escH(w.n)}</span><span class="wsub">${wSub(w)}</span><span><span class="wtier">${t("tier"+wTierCls(w).slice(1))}</span></span></button>`).join("")||`<p class="note">${t("wNoHit")}</p>`;
+  $("wCount").textContent=t("wCount",{n:list.length,m:weapons().length});
+}
+function renderWeaponSel(){
+  $("wSlots").innerHTML=Array.from({length:W_MAX},(_,i)=>{const w=WSEL[i]&&wById(WSEL[i]);
+    return w?`<div class="wslot ${wTierCls(w)}" data-w="${escH(w.id)}" tabindex="0">${wPic(w)}<div style="min-width:0"><div class="wn">${escH(w.n)}</div><div class="wsub">${wSub(w)}</div></div><button type="button" class="wrm" data-rm="${escH(w.id)}" aria-label="${escH(t("wRemove",{n:w.n}))}">✕</button></div>`
+            :`<div class="wslot empty">${t("wEmptySlot",{n:i+1})}</div>`;}).join("");
+  const sel=WSEL.map(wById).filter(Boolean);
+  $("wOpt").innerHTML=sel.length?sel.map(w=>`<div class="wmini ${wTierCls(w)}" data-w="${escH(w.id)}" tabindex="0">${wPic(w)}<div style="min-width:0"><div class="wn">${escH(w.n)}</div><div class="wsub">${escH(wLoc(W_TYPES,w.ty))}</div></div></div>`).join(""):`<p class="note">${t("wNone")}</p>`;
+  document.querySelectorAll("[data-wline]").forEach(el=>{el.innerHTML=sel.length?`<div class="wline"><span class="wl-h">${t("wLine")}</span>${sel.map(w=>`<span class="pill ${wTierCls(w)}" data-w="${escH(w.id)}" tabindex="0">${wPic(w)}<span class="wn">${escH(w.n)}</span></span>`).join("")}</div>`:"";});
+  document.querySelectorAll("#wGrid .wcard").forEach(b=>b.setAttribute("aria-pressed",WSEL.includes(b.dataset.w)));
+}
+function renderWeaponStatus(){
+  const el=$("wStatus");
+  if(W_BUSY[LANG]){el.className="status";el.textContent=t("wLoading");}
+  else if(W_LIVE[LANG]){el.className="status ok";el.textContent=t("wSrcLive",{n:W_LIVE[LANG].length});}
+  else if(W_ERR){el.className="status bad";el.textContent=t("wErr",{e:W_ERR});}
+  else{el.className="status";el.textContent=t("wSrcBase");}
+}
+function renderWeapons(){renderWeaponFilters();renderWeaponGrid();renderWeaponSel();renderWeaponStatus();}
+function saveSel(){try{localStorage.setItem("tfdWeapons",JSON.stringify(WSEL));}catch(e){}}
+function toggleWeapon(id){
+  const msg=$("wMsg");msg.textContent="";
+  if(WSEL.includes(id))WSEL=WSEL.filter(x=>x!==id);
+  else if(WSEL.length>=W_MAX){msg.textContent=t("wMax",{n:W_MAX});return;}
+  else WSEL.push(id);
+  saveSel();renderWeaponSel();
+}
+function setWeapons(lang,arr){
+  const l=(Array.isArray(arr)?arr:[]).map(slimWeapon).filter(Boolean);
+  if(!l.length)throw new Error(LANG==="de"?"keine Waffen gefunden":"no weapons found");
+  W_LIVE[lang]=l;W_ERR="";
+  try{localStorage.setItem("tfdWeap_"+lang,JSON.stringify({t:Date.now(),l}));}catch(e){}
+}
+async function loadWeapons(lang){
+  if(W_BUSY[lang])return;
+  W_BUSY[lang]=true;renderWeaponStatus();
+  try{const r=await fetch(W_META+lang+"/weapon.json");if(!r.ok)throw new Error("weapon.json: HTTP "+r.status);setWeapons(lang,await r.json());}
+  catch(e){W_ERR=(e&&e.message)||String(e);}
+  W_BUSY[lang]=false;renderWeapons();
+}
+// Zwischenspeicher (nur Text + Bild-Links) nutzen; fehlt er oder ist er älter als 7 Tage, neu von NEXON holen.
+function ensureWeapons(){
+  let age=Infinity;
+  if(!W_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdWeap_"+LANG)||"null");if(c&&Array.isArray(c.l)&&c.l.length){W_LIVE[LANG]=c.l;age=Date.now()-c.t;}}catch(e){}}
+  else age=0;
+  if(age>7*864e5)loadWeapons(LANG);
+}
+$("wSearch").oninput=e=>{WF.q=e.target.value;renderWeaponGrid();};
+$("wType").onchange=e=>{WF.ty=e.target.value;renderWeaponGrid();};
+$("wRounds").onchange=e=>{WF.rd=e.target.value;renderWeaponGrid();};
+$("wTiers").onclick=e=>{const b=e.target.closest("[data-tier]");if(!b)return;const n=+b.dataset.tier;WF.tiers.has(n)?WF.tiers.delete(n):WF.tiers.add(n);b.setAttribute("aria-pressed",WF.tiers.has(n));renderWeaponGrid();};
+$("wGrid").onclick=e=>{const b=e.target.closest(".wcard");if(b)toggleWeapon(b.dataset.w);};
+$("wSlots").onclick=e=>{const b=e.target.closest("[data-rm]");if(b){hideTip();toggleWeapon(b.dataset.rm);}};
+$("wReload").onclick=()=>loadWeapons(LANG);
+$("wGo").onclick=()=>showView("weap");
+// Tooltip (Maus und Tastatur-Fokus)
+let tipFor=null;
+function showTip(el){
+  const w=wById(el.dataset.w);if(!w)return;
+  const tip=$("wtip");tipFor=el;
+  tip.className="on "+wTierCls(w);tip.innerHTML=wTip(w);
+  el.setAttribute("aria-describedby","wtip");placeTip();
+}
+function placeTip(){
+  const el=tipFor,tip=$("wtip");if(!el)return;
+  if(!el.isConnected){hideTip();return;}
+  const r=el.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight,vw=document.documentElement.clientWidth,vh=window.innerHeight;
+  let x=r.right+8,y=r.top;
+  if(x+tw>vw-8)x=r.left-tw-8;
+  if(x<8){x=Math.max(8,Math.min(r.left,vw-tw-8));y=r.bottom+8;if(y+th>vh-8&&r.top-th-8>8)y=r.top-th-8;}
+  else y=Math.max(8,Math.min(y,vh-th-8));
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+function hideTip(){if(tipFor)tipFor.removeAttribute("aria-describedby");tipFor=null;$("wtip").className="";}
+const tipTarget=e=>e.target.closest&&e.target.closest("[data-w]");
+document.addEventListener("mouseover",e=>{const el=tipTarget(e);if(el){if(el!==tipFor)showTip(el);}else if(tipFor)hideTip();});
+document.addEventListener("focusin",e=>{const el=tipTarget(e);if(el)showTip(el);else hideTip();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")hideTip();});
+document.addEventListener("scroll",placeTip,true);window.addEventListener("resize",placeTip);
+try{const s=JSON.parse(localStorage.getItem("tfdWeapons")||"[]");if(Array.isArray(s))WSEL=s.map(String).slice(0,W_MAX);}catch(e){}
 // ---------- ORIGINAL-ICONS LADEN ----------
 const META="https://open.api.nexon.com/static/tfd/meta/en/";
 let icErr="";
@@ -737,7 +1131,8 @@ $("icKeyBtn").onclick=()=>{const k=$("apiKey").value.trim();try{localStorage.set
 $("metaFiles").onchange=async e=>{
   let desc=null,mods=null;
   for(const f of e.target.files){try{const j=JSON.parse(await f.text());const a=Array.isArray(j)?j:Object.values(j).find(Array.isArray)||[];
-    if(a.some(x=>x&&x.descendant_skill))desc=a;else if(a.some(x=>x&&x.module_name))mods=a;}catch(err){icErr=f.name+": "+err.message;}}
+    if(a.some(x=>x&&x.weapon_name))setWeapons(a.some(x=>x&&Object.values(W_TYPES).some(v=>v[1]===x.weapon_type))?"de":"en",a);
+    else if(a.some(x=>x&&x.descendant_skill))desc=a;else if(a.some(x=>x&&x.module_name))mods=a;}catch(err){icErr=f.name+": "+err.message;}}
   const o=applyMeta(desc,mods);const old=OFFICIAL;
   store({mods:Object.keys(o.mods).length?o.mods:old.mods,skills:o.skills.length?o.skills:old.skills});
 };
@@ -745,6 +1140,7 @@ $("useOff").onchange=e=>{USE_OFFICIAL=e.target.checked;try{localStorage.setItem(
 try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OFFICIAL={mods:c.mods,skills:c.skills||[]};
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
+ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
 renderStatic();renderEmpty();
 if(!Object.keys(OFFICIAL.mods).length)loadOnline($("apiKey").value.trim()||undefined);
 </script>
