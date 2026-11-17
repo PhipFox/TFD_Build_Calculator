@@ -68,7 +68,8 @@ input[type=text],input[type=password]{background:var(--panel2);color:var(--txt);
 .row .btn{width:auto;margin:0;white-space:nowrap}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ===== Sci-Fi-Theme im Stil des Spiels ===== */
 :root{
@@ -77,11 +78,12 @@ input[type=text],input[type=password]{background:var(--panel2);color:var(--txt);
   --hdr:linear-gradient(100deg,rgba(13,11,12,.96) 0%,rgba(27,22,24,.94) 55%,rgba(74,44,52,.55) 100%);--bar:rgba(11,9,10,.92);
   --panel:rgba(20,18,20,.88);--panel2:rgba(31,27,30,.92);--line:rgba(120,190,220,.18);--line2:rgba(120,210,240,.42);
   --txt:#dbe7ef;--mut:#7f95a6;--acc:#3fe0ff;--acc2:#ffb347;--ok:#59f2b0;--warn:#ffb347;--bad:#ff5c6c;
-  --cut:12px;--head:"Rajdhani","Bahnschrift","Segoe UI",sans-serif;
+  --cut:12px;--head:"Saira Condensed","Bahnschrift Condensed","Arial Narrow",sans-serif;--body:"Barlow","Segoe UI",system-ui,sans-serif;
+  --wrap:1280px;--gut:max(28px,calc((100% - var(--wrap))/2 + 28px));
 }
 html{background:var(--bg)}
 body{
-  font-family:"Exo 2","Segoe UI",system-ui,sans-serif;letter-spacing:.15px;
+  font-family:var(--body);letter-spacing:.1px;font-size:14.5px;
   background:
     radial-gradient(1200px 600px at 85% -10%,var(--bg-glow1),transparent 60%),
     radial-gradient(900px 500px at -10% 110%,var(--bg-glow2),transparent 60%),
@@ -95,14 +97,14 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
 ::selection{background:rgba(63,224,255,.35)}
 
 /* Kopfbereich */
-header{position:relative;overflow:hidden;padding:16px 28px 22px;border-bottom:1px solid var(--line2);
+header{position:relative;overflow:hidden;padding:18px var(--gut) 22px;border-bottom:1px solid var(--line2);
   background:var(--hdr)}
 header::before{content:"";position:absolute;right:-40px;top:0;bottom:0;width:420px;opacity:.5;
   background:repeating-linear-gradient(-60deg,transparent 0 14px,rgba(214,170,174,.08) 14px 16px);
   -webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
 header::after{content:"";position:absolute;left:0;bottom:-1px;width:260px;height:3px;
   background:linear-gradient(90deg,var(--acc),transparent)}
-header h1{font-family:var(--head);font-weight:700;font-size:30px;text-transform:uppercase;letter-spacing:2.5px;line-height:1.1;
+header h1{font-family:var(--head);font-weight:700;font-size:34px;text-transform:uppercase;letter-spacing:3px;line-height:1.1;
   text-shadow:0 0 18px rgba(63,224,255,.25)}
 header h1 span[style]{color:var(--acc2)!important;text-shadow:0 0 18px rgba(255,179,71,.35)}
 header p{font-family:var(--head);font-size:13px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
@@ -112,14 +114,17 @@ header p{font-family:var(--head);font-size:13px;letter-spacing:1.6px;text-transf
 .switch[aria-checked="true"]::after{box-shadow:0 0 10px var(--acc2)}
 
 /* Navigation */
-nav{gap:2px;padding:0 28px;background:var(--bar);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+nav{gap:2px;padding:0 var(--gut);background:var(--bar);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
 nav button{font-family:var(--head);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:1.8px;
   border:0;border-radius:0;padding:14px 18px 12px;color:var(--mut);position:relative;transition:color .15s,background .15s}
 nav button:hover{color:var(--txt);background:rgba(63,224,255,.05)}
 nav button.on{background:linear-gradient(180deg,rgba(63,224,255,.0),rgba(63,224,255,.12));color:var(--acc);border:0}
 nav button.on::after{content:"";position:absolute;left:10%;right:10%;bottom:0;height:2px;background:var(--acc);box-shadow:0 0 12px var(--acc)}
 
-main{padding:22px 28px}
+main{padding:24px 28px 40px;max-width:var(--wrap);margin:0 auto}
+footer{max-width:var(--wrap);margin:0 auto;padding:18px 28px 90px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px;
+  display:flex;flex-wrap:wrap;gap:6px 22px;justify-content:center;text-align:center;font-family:var(--head);letter-spacing:1px;text-transform:uppercase}
+footer a{color:var(--mut)}
 
 /* Panels mit abgeschrägten Ecken */
 .card{position:relative;border:0;border-radius:0;background:
@@ -138,10 +143,10 @@ main{padding:22px 28px}
 /* Formulare */
 label span{color:var(--mut)}
 select,input[type=number],input[type=text],input[type=password]{border-radius:0;border:1px solid var(--line2);background:rgba(8,7,8,.88);
-  color:var(--txt);font-family:"Exo 2",sans-serif;padding:6px 8px;transition:border-color .15s,box-shadow .15s}
+  color:var(--txt);font-family:var(--body);padding:6px 8px;transition:border-color .15s,box-shadow .15s}
 select:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 12px rgba(63,224,255,.25)}
 input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px}
-input[type=file]{color:var(--mut);font-family:"Exo 2",sans-serif}
+input[type=file]{color:var(--mut);font-family:var(--body)}
 input[type=file]::file-selector-button{background:rgba(18,30,44,.9);color:var(--txt);border:1px solid var(--line2);padding:6px 12px;margin-right:10px;cursor:pointer;font-family:var(--head);letter-spacing:1px;text-transform:uppercase}
 
 /* Buttons */
@@ -197,14 +202,14 @@ a{color:var(--acc)}
 ::-webkit-scrollbar-thumb{background:rgba(63,224,255,.25);border:2px solid var(--bg)}
 
 /* Zahnrad (Daten & Annahmen) oben rechts */
-.gear{position:absolute;right:28px;top:14px;z-index:2;width:36px;height:36px;padding:7px;cursor:pointer;color:var(--mut);
+.gear{position:absolute;right:var(--gut);top:16px;z-index:2;width:36px;height:36px;padding:7px;cursor:pointer;color:var(--mut);
   background:rgba(8,7,8,.6);border:1px solid var(--line2);transition:color .15s,box-shadow .15s,border-color .15s;
   clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
 .gear svg{display:block;width:100%;height:100%;transition:transform .4s}
 .gear:hover{color:var(--txt)}.gear:hover svg{transform:rotate(60deg)}
 .gear.on{color:var(--acc);border-color:var(--acc);box-shadow:inset 0 0 12px rgba(63,224,255,.25)}
 .gear:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-@media(max-width:900px){.gear{right:14px}}
+@media(max-width:900px){.gear{right:14px}header,nav{padding-left:14px;padding-right:14px}footer{padding-left:14px;padding-right:14px}}
 /* Charakter-Portrait */
 .hero{display:flex;gap:18px;align-items:flex-start;margin-bottom:14px}
 .hero>div:last-child{min-width:0;flex:1}
@@ -219,7 +224,7 @@ a{color:var(--acc)}
 /* Descendants: Übersicht + Einzelseite */
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
 .dcard{display:flex;flex-direction:column;gap:6px;align-items:stretch;cursor:pointer;padding:6px 6px 9px;min-width:0;border:0;color:var(--txt);
-  font-family:"Exo 2",sans-serif;background:linear-gradient(180deg,rgba(201,138,146,.10),rgba(8,7,8,.85) 70%);box-shadow:inset 0 0 0 1px var(--line);
+  font-family:var(--body);background:linear-gradient(180deg,rgba(201,138,146,.10),rgba(8,7,8,.85) 70%);box-shadow:inset 0 0 0 1px var(--line);
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:filter .15s,box-shadow .15s}
 .dcard:hover{filter:brightness(1.2);box-shadow:inset 0 0 0 1px var(--acc)}
 .dcard:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
@@ -228,6 +233,7 @@ a{color:var(--acc)}
 .dcard .dn{font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.6px;text-align:center;line-height:1.15;overflow-wrap:anywhere}
 .dcard.t3 .dn,h2.t3{color:var(--t3)}
 .btn.back{width:auto;margin:0 0 14px;font-size:14px;padding:8px 16px}
+.dbtns{display:flex;flex-wrap:wrap;gap:8px}.dbtns .btn.back{margin:4px 0 0}
 td.pre{white-space:pre-line}
 .tscroll{overflow-x:auto}
 #dDetail td:first-child{min-width:190px}#dDetail td.pre{min-width:240px}
@@ -256,14 +262,102 @@ td.pre{white-space:pre-line}
   background:#0e0c0e;border:1px solid var(--acc);box-shadow:0 14px 34px rgba(0,0,0,.65)}
 .dd-list[hidden]{display:none}
 .dd-list:focus{outline:none}
-.dd-list li{display:flex;align-items:center;gap:10px;padding:3px 8px 3px 3px;cursor:pointer;font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.5px}
+.dd-list ul{list-style:none;margin:0;padding:0}
+.dd-list li[role=presentation]{display:block;padding:0;cursor:default}
+.dd-list .dd-sec{position:sticky;top:-4px;z-index:1;display:flex!important;justify-content:space-between;align-items:center;margin:0 -4px;padding:8px 12px 6px!important;
+  font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--acc2);background:#0e0c0e;border-bottom:1px solid var(--line2)}
+.dd-list .dd-sec small{color:var(--mut);font-size:11px;letter-spacing:1px}
+.dd-list ul[aria-labelledby="ddg-u"] .dd-sec{color:var(--t3);margin-top:6px}
+.dd-list li[role=option]{scroll-margin-top:38px;display:flex;align-items:center;gap:10px;padding:3px 8px 3px 3px;cursor:pointer;font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.5px}
 .dd-list li .dd-pic{width:30px;height:30px}
 .dd-list li.act{background:rgba(63,224,255,.13)}
 .dd-list li[aria-selected="true"]{box-shadow:inset 3px 0 0 var(--acc)}
 .dd-list li[aria-selected="true"] .dd-n:not(.t3){color:var(--acc)}
 .card label select{min-width:0;max-width:62%}
 .grid>div{min-width:0}
+.card label.stack{flex-direction:column;align-items:stretch;gap:4px;margin:8px 0 10px}
+.card label.stack select{max-width:100%;width:100%;padding:8px}
 #transNote:empty{display:none}
+
+/* Optimierer: Ausrüstung als Kacheln mit offiziellen Icons */
+.eqset{border:0;margin:14px 0 0;padding:12px 0 0;border-top:1px solid var(--line);min-width:0}
+.eqset legend{float:left;width:100%;padding:0;margin-bottom:8px;font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--acc2)}
+.eqpick{display:grid;grid-template-columns:1fr 1fr;gap:8px;clear:both}
+.eqt{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;margin:0;padding:10px 8px 9px;cursor:pointer;text-align:center;min-width:0;
+  background:rgba(8,7,8,.7);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+  transition:box-shadow .15s,background .15s}
+.eqt:hover{background:rgba(63,224,255,.05);box-shadow:inset 0 0 0 1px var(--line2)}
+.eqt input{position:absolute;opacity:0;pointer-events:none}
+.eqt:has(input:checked){background:linear-gradient(180deg,rgba(63,224,255,.14),rgba(63,224,255,.03));box-shadow:inset 0 0 0 1px var(--acc),0 0 14px rgba(63,224,255,.15)}
+.eqt:has(input:focus-visible){outline:2px solid var(--acc);outline-offset:2px}
+.eqt:has(input:checked)::after{content:"";position:absolute;right:6px;top:6px;width:7px;height:7px;background:var(--acc);transform:rotate(45deg);box-shadow:0 0 8px var(--acc)}
+.eqt .eqi{display:flex;justify-content:center;gap:3px;height:46px;align-items:center}
+.eqt .eqi .ico{width:46px;height:46px}
+.eqt .eqi.four .ico{width:28px;height:28px}
+.eqt .eqi.four{display:grid;grid-template-columns:repeat(2,28px);gap:3px;height:auto}
+.eqt b{font-family:var(--head);font-weight:700;font-size:14px;letter-spacing:.5px;line-height:1.15;overflow-wrap:anywhere}
+.eqt small{color:var(--mut);font-size:12px;line-height:1.25}
+.eqt.off .eqi{opacity:.45;filter:grayscale(1)}
+.eqline{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px;padding:8px 10px;background:rgba(8,7,8,.55);box-shadow:inset 0 0 0 1px var(--line)}
+.eqline .wl-h{font-family:var(--head);text-transform:uppercase;letter-spacing:1.5px;font-size:12px;color:var(--mut);margin-right:2px}
+.eqline .eqc{display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 2px;background:rgba(18,30,44,.5);box-shadow:inset 0 0 0 1px var(--line)}
+.eqline .eqc .ico{width:30px;height:30px}
+.eqline .eqc b{font-family:var(--head);font-weight:600;font-size:13.5px;letter-spacing:.4px}
+.eqline .eqc.bad{box-shadow:inset 0 0 0 1px rgba(255,92,108,.5)}
+
+/* Material-Tracker */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:-1px;padding:0;border:0}
+.trk{position:fixed;right:16px;bottom:16px;z-index:45;width:min(352px,calc(100vw - 24px));display:flex;flex-direction:column;
+  background:rgba(12,10,12,.97);box-shadow:inset 0 0 0 1px var(--line2),0 16px 40px rgba(0,0,0,.65);
+  clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+.trk::before{content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,var(--ok),transparent 70%)}
+.trk-head{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:0;background:none;color:var(--txt);cursor:pointer;text-align:left}
+.trk-head:hover{background:rgba(89,242,176,.05)}
+.trk-head:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.trk-logo{width:18px;height:18px;color:var(--ok);flex:none}
+.trk-h{font-family:var(--head);font-weight:700;font-size:16px;letter-spacing:2px;text-transform:uppercase}
+.trk-sum{flex:1;color:var(--mut);font-family:var(--head);font-size:13px;letter-spacing:1px;text-align:right}
+.trk-head .dd-chev{transition:transform .15s}
+.trk.open .trk-head .dd-chev{transform:rotate(180deg)}
+.trk-body{border-top:1px solid var(--line)}
+.trk-list{max-height:min(44vh,400px);overflow-y:auto;padding:6px 10px}
+.trk-row{display:flex;gap:10px;align-items:flex-start;padding:9px 4px 10px;border-bottom:1px solid var(--line)}
+.trk-row:last-child{border-bottom:0}
+.trk-row.flash{animation:trkFlash 1.4s ease-out}
+@keyframes trkFlash{0%{background:rgba(89,242,176,.22)}100%{background:transparent}}
+.trk-ic .fth{width:38px;height:38px}
+.trk-main{flex:1;min-width:0}
+.trk-top{display:flex;align-items:center;gap:6px}
+.trk-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.4px}
+.trk-x{flex:none;width:22px;height:22px;padding:0;border:0;background:none;color:var(--mut);font-size:17px;line-height:1;cursor:pointer}
+.trk-x:hover{color:var(--bad)}
+.trk-ctl{display:flex;align-items:center;gap:6px;margin-top:5px}
+.trk-b{flex:none;width:28px;height:26px;padding:0;cursor:pointer;color:var(--txt);font-size:17px;line-height:1;font-weight:600;
+  background:rgba(18,30,44,.9);border:1px solid var(--line2);transition:border-color .15s,color .15s}
+.trk-b:hover{border-color:var(--acc);color:var(--acc)}
+.trk-cnt{display:flex;align-items:center;gap:3px;font-family:var(--head);font-size:16px;font-weight:700}
+.trk-num{min-width:34px;padding:1px 6px;border:1px solid transparent;background:none;color:#fff;font:inherit;cursor:text;text-align:center}
+.trk-num:hover{border-color:var(--line2);background:rgba(8,7,8,.8)}
+.trk-num.need{color:var(--mut)}
+.trk-sl{color:var(--mut)}
+.trk-in{width:76px;padding:1px 6px!important;font-family:var(--head)!important;font-size:16px;font-weight:700;text-align:center}
+.trk-pct{margin-left:auto;font-family:var(--head);font-size:13px;letter-spacing:1px;color:var(--mut)}
+.trk-row.done .trk-pct{color:var(--ok);font-weight:700}
+.trk-b:focus-visible,.trk-num:focus-visible,.trk-x:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.trk-bar{position:relative;height:5px;margin-top:8px;background:rgba(89,242,176,.08);box-shadow:inset 0 0 0 1px rgba(89,242,176,.18);overflow:visible}
+.trk-bar i{display:block;height:100%;background:linear-gradient(90deg,#2fbf83,var(--ok));box-shadow:0 0 8px rgba(89,242,176,.65),0 0 2px rgba(89,242,176,.9);transition:width .35s ease}
+.trk-row.done .trk-bar i{background:var(--ok);box-shadow:0 0 12px rgba(89,242,176,.9),0 0 3px #b9ffe0}
+@media(prefers-reduced-motion:reduce){.trk-bar i{transition:none}.trk-row.flash{animation:none}}
+.trk-empty{padding:14px 6px;text-align:center;color:var(--mut);font-size:13.5px}
+.trk-empty p{margin:0 0 8px}
+@media(max-width:700px){.trk{right:12px;bottom:12px}.trk-list{max-height:38vh}}
+.trk-foot{display:flex;justify-content:space-between;gap:8px;padding:8px 12px 12px;border-top:1px solid var(--line)}
+.trk-foot .flink{margin:0}
+.flink.danger{color:var(--bad);border-color:rgba(255,92,108,.35);background:rgba(255,92,108,.06)}
+.flink:disabled{opacity:.4;cursor:default}
+.ftrk{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ftrk .flink{margin:0}
+.flink.on{color:var(--ok);border-color:rgba(89,242,176,.45);background:rgba(89,242,176,.08)}
 
 /* Item Finder */
 .fgrid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
@@ -274,7 +368,7 @@ td.pre{white-space:pre-line}
 .fbar label{margin:0}
 .flist{display:flex;flex-direction:column;gap:4px;max-height:640px;overflow-y:auto;padding-right:4px}
 @media(max-width:900px){.flist{max-height:300px}}
-.frow{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;padding:6px 8px;min-width:0;border:0;color:var(--txt);font-family:"Exo 2",sans-serif;
+.frow{display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;padding:6px 8px;min-width:0;border:0;color:var(--txt);font-family:var(--body);
   background:rgba(8,7,8,.6);box-shadow:inset 0 0 0 1px var(--line)}
 .frow>span{min-width:0;display:flex;flex-direction:column}
 .frow:hover{background:rgba(63,224,255,.07)}
@@ -285,12 +379,23 @@ td.pre{white-space:pre-line}
 .fn.big{font-size:22px}
 .fth{flex:none;width:36px;height:36px;object-fit:contain}
 .fth.l{width:72px;height:72px}.fth.s{width:22px;height:22px}
-.fhead{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+.fhead{display:flex;gap:16px;align-items:center;justify-content:center;text-align:left;margin:4px 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+#fDetail>h3{text-align:center}
+#fDetail>.note:only-child{text-align:center;padding:40px 10px}
+.fmapbox{max-width:780px;margin:0 auto;padding:14px 14px 10px;position:relative;
+  background:linear-gradient(rgba(214,190,184,.035) 1px,transparent 1px) 0 0/100% 24px,linear-gradient(90deg,rgba(214,190,184,.035) 1px,transparent 1px) 0 0/24px 100%,
+    radial-gradient(ellipse at 50% 40%,rgba(63,224,255,.06),rgba(8,7,8,.9) 70%);
+  box-shadow:inset 0 0 0 1px var(--line2),inset 0 0 40px rgba(0,0,0,.6);clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.fmapbox .legend{justify-content:center;margin-top:6px}
+.fmapnote{text-align:center;max-width:640px;margin:8px auto 0}
+.fsrcs,#fDetail .fchips,#fDetail>p.note{max-width:780px;margin-left:auto;margin-right:auto}
+#fDetail .fchips{justify-content:center}
+.fm-glow{pointer-events:none}
 .flink{cursor:pointer;font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.6px;color:var(--acc);background:rgba(63,224,255,.07);
   border:1px solid rgba(63,224,255,.3);padding:1px 8px;margin-top:4px}
 .flink:hover{background:rgba(63,224,255,.16)}
 .fchips{display:flex;flex-wrap:wrap;gap:6px}
-.fchips .flink{display:inline-flex;align-items:center;gap:6px;color:var(--txt);margin:0;padding:3px 9px;font-family:"Exo 2",sans-serif;font-weight:400;font-size:12.5px}
+.fchips .flink{display:inline-flex;align-items:center;gap:6px;color:var(--txt);margin:0;padding:3px 9px;font-family:var(--body);font-weight:400;font-size:12.5px}
 .fsrc{list-style:none;padding:0;margin:0}
 .fsrc li{display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .fsrc li:hover{background:rgba(63,224,255,.045)}
@@ -336,7 +441,7 @@ td.pre{white-space:pre-line}
 .chip:focus-visible,.wcard:focus-visible,.wrm:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
 .wcard{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;padding:8px 10px 10px;min-width:0;
-  font-family:"Exo 2",sans-serif;color:var(--txt);border:0;border-top:2px solid var(--tc);
+  font-family:var(--body);color:var(--txt);border:0;border-top:2px solid var(--tc);
   background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 13%,transparent),rgba(4,10,16,.85) 60%);
   box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .15s,filter .15s}
 .wcard:hover{filter:brightness(1.15);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 55%,transparent)}
@@ -408,8 +513,8 @@ td.pre{white-space:pre-line}
   </div>
   <div class="card">
     <h2 data-i="goal"></h2>
-    <label><span data-i="tSkill"></span><select id="tSkill"></select></label>
-    <label><span data-i="transSel"></span><select id="trans"></select></label>
+    <label class="stack"><span data-i="tSkill"></span><select id="tSkill"></select></label>
+    <label class="stack"><span data-i="transSel"></span><select id="trans"></select></label>
     <div class="note" id="transNote"></div>
     <label><span data-i="wCd"></span><input type="number" id="wCd" value="0.5" step="0.1" min="0" max="2"></label>
     <label><span data-i="wRange"></span><input type="number" id="wRange" value="0" step="0.1" min="0" max="2"></label>
@@ -424,21 +529,9 @@ td.pre{white-space:pre-line}
     <label><span data-i="modLvl"></span><select id="lvl"></select></label>
     <label class="chk"><input type="checkbox" id="allMatch" checked> <span data-i="allMatch"></span></label>
     <div class="note" data-i="allMatchNote"></div>
-    <h3 data-i="reactorH"></h3>
-    <label><span data-i="reactorH"></span>
-      <select id="reactor"></select></label>
-    <h3 data-i="compsH"></h3>
-    <label><span data-i="set"></span>
-      <select id="comps">
-        <option value="hunter">2× Hunter + 2× Ascending</option>
-        <option value="slayer">4× Slayer</option>
-      </select></label>
-    <h3 data-i="triggerH"></h3>
-    <label><span>Trigger</span>
-      <select id="trigger">
-        <option value="pb">Power Beyond (+15 % Skill Power)</option>
-        <option value="none" data-i="none"></option>
-      </select></label>
+    <fieldset class="eqset"><legend data-i="reactorH"></legend><div class="eqpick" id="eqReactor"></div></fieldset>
+    <fieldset class="eqset"><legend data-i="compsH"></legend><div class="eqpick" id="eqComps"></div></fieldset>
+    <fieldset class="eqset"><legend data-i="triggerH"></legend><div class="eqpick" id="eqTrigger"></div></fieldset>
     <button class="btn" id="run" data-i="run"></button>
     <button class="btn sec" id="cmp" data-i="cmp"></button>
   </div>
@@ -516,20 +609,6 @@ td.pre{white-space:pre-line}
   <div class="row"><button class="btn sec" id="fReload" data-i="fReload"></button></div>
   <p class="note" data-i="fSrcNote"></p>
 </div>
-<div class="card">
-  <h2 data-i="unlockH"></h2>
-  <p data-i="prereq"></p>
-  <h3 data-i="bpH"></h3>
-  <ul data-i="bpList"></ul>
-  <h3 data-i="matH"></h3>
-  <div class="tscroll"><table id="matTbl"></table></div>
-  <p class="note" data-i="shop"></p>
-</div>
-<div class="card">
-  <h2 data-i="srcH"></h2>
-  <div class="tscroll"><table id="srcTbl"></table></div>
-  <p class="note" data-i="srcTip"></p>
-</div>
 </section>
 
 <!-- DATEN -->
@@ -571,6 +650,19 @@ td.pre{white-space:pre-line}
 </div>
 </section>
 </main>
+<footer><span data-i="footL"></span><span data-i="footR"></span></footer>
+<aside id="trk" class="trk" aria-labelledby="trkH">
+  <button type="button" class="trk-head" id="trkToggle" aria-expanded="true" aria-controls="trkBody">
+    <svg class="trk-logo" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 15h14M3 10h9M3 5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 4l1.5 1.5L18 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="trk-h" id="trkH"></span><span class="trk-sum" id="trkSum"></span>
+    <svg class="dd-chev" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 6.5l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+  </button>
+  <div class="trk-body" id="trkBody">
+    <div class="trk-list" id="trkList"></div>
+    <div class="trk-foot" id="trkFoot"><button type="button" class="flink" id="trkClearDone"></button><button type="button" class="flink danger" id="trkClear"></button></div>
+  </div>
+  <p class="sr-only" id="trkStatus" role="status" aria-live="polite"></p>
+</aside>
 <div id="wtip" role="tooltip"></div>
 
 <script>
@@ -592,12 +684,12 @@ de:{
  transH:"Transzendente Module",
  shEff:"Macht Skill 4 zum Angriffsskill (Breach Spikes, Suspicion-Stacks), +20 % Skill-Crit-Rate auf die Passive, eigene Ressourcenleiste.",shUse:"Best in Slot für alle Builds",
  rhEff:"Macht Skill 2 und 3 zu Buff-Skills für Verbündete.",rhUse:"Support-Nische",
- unlockH:"Nell freischalten",prereq:"Voraussetzung: Meisterschaftsrang 15 und die Sigma-Sector-Hauptquest, damit du in die Axion Plains kommst.",
- bpH:"Baupläne",bpList:"<li><b>Blueprint Loot Cache</b> (Nell-Bauplan je 6,5 %) – im Journal als Ziel setzen, bei 100 % Fortschritt garantiert.</li><li><b>Arche Loot Cache</b> (nur Nell-Baupläne, je 25 %).</li><li>Missionen in den Axion Plains: Sealed Residential District, First Crater, AX Refinery, Technical Research Institute, Liquefied AX Vault, Emergency Deployment Zone, AX Power Converter Station.</li><li>Der Nell-Code kommt fertig aus den Caches.</li>",
- matH:"Forschungsmaterialien",thPart:"Teil",thMat:"Material",thQty:"Menge",thWhere:"Fundort",shop:"Alternativ im Shop: 900 Caliber (nur Nell).",
- srcH:"Module, Reaktor, Komponenten",thItem:"Item",thSrc:"Quelle",
- srcTip:"Tipp: Im Spiel auf der Karte unter <i>Zugangsinfo → Module</i> steht für jedes Modul die aktuelle Quelle. Reaktor-Drops rotieren täglich (Belohnungen nach Schwierigkeitsgrad auf der Karte).",
- noSrc:"noch nicht erfasst – im Spiel: Zugangsinfo → Module",srcShort:"Zugangsinfo im Spiel",
+ 
+ 
+ 
+ thSrc:"Quelle",
+ 
+ srcShort:"Zugangsinfo im Spiel",
  howH:"Wie gerechnet wird",
  fDmg:"<b>Schadensfaktor</b> = (1 + Skill Power) × (1 + Skill-Power-Modifier) × (1 + Critrate × (Critschaden − 1))",
  fScore:"<b>Score</b> = Schadensfaktor × (1 / (1 − Cooldown-Reduktion))<sup>Gewicht CD</sup> × (1 + Reichweite)<sup>Gewicht Reichweite</sup>",
@@ -636,20 +728,26 @@ icH:"Original-Icons (lokal)",icIntro:"Diese Datei lädt die offiziellen Icons be
  fMapH:"Übersichtskarte",fMapModes:"Einsätze ohne festes Gebiet",fMapNote:"Schematische Übersicht, keine Spielkarte: markiert ist das Gebiet bzw. die Einsatzart, die Zahl nennt die Fundstellen dort. Klick auf ein Gebiet filtert die Liste. Die genaue Position zeigt die Karte im Spiel.",
  fk_mission:"Mission",fk_boss:"Boss",fk_field:"Gebiet (Kisten, Gegner)",fk_npc:"NPC",
  fSrcLive:"Item-Daten von NEXON aktiv: {n} Items, {a} Fundstellen.",fLoading:"Lade Item-Daten …",fErr:"Item-Daten konnten nicht geladen werden ({e}).",
- fReload:"Item-Daten neu laden",fSrcNote:"Namen, Bilder und Fundstellen: NEXON Open API. Für Module liefert NEXON keine Fundstellen – siehe die Tabelle unten.",
+ fReload:"Item-Daten neu laden",fSrcNote:"Namen, Bilder und Fundstellen: NEXON Open API. Für Module liefert NEXON keine Fundstellen.",
  fc__weapon:"Waffe",fc__desc:"Descendant",fc_ResearchMaterial:"Forschungsmaterial",fc_FunctionalItem:"Funktionsitem",fc_AmorphousMaterial:"Amorphes Material",fc_ItemSelectBox:"Auswahlkiste",
  fc_CoreItem:"Kern-Item",fc_Bundle:"Bündel",fc_GuaranteedRandomBox:"Zufallskiste (garantiert)",fc_RandomBox:"Zufallskiste",fc_PurchaseTicket:"Kaufticket",fc_OtherMaterials:"Sonstige Materialien",
  fc_EventCoin:"Event-Münze",fc_ShapeStabilizer:"Formstabilisator",fc_EnhancementMaterial:"Verbesserungsmaterial",fc_ResearchAcceleration:"Forschungsbeschleunigung",fc_OptionTierFixItem:"Options-Fixierung",
  fc_RotationShopCoin:"Rotationsshop-Münze",fc_CombinedSpectrumMaterials:"Spektrum-Material",fc_FellowExpItem:"Begleiter-EP",fc_CharacterExpItem:"Descendant-EP",fc_WeaponProficiencyItem:"Waffenfertigkeit",
  fc_EigenfactorExpItem:"Eigenfaktor-EP",fc_CollectibleShopCoin:"Sammelshop-Münze",fc_ContentCoin:"Inhalts-Münze",fc_RegionShopCoin:"Gebietsshop-Münze",
- overCdr:"Cooldown-Reduktion über 75 % – der Rest wirkt nicht (Grenze angenommen).",oDescH:"Descendant",tSkill:"Ziel-Skill",transSel:"Transzendent",trNone:"keins",target:"Ziel",
- trNoCalc:"Wirkung wird nicht eingerechnet – nur die Kapazität zählt.",reacMatch:"Passend: {t}",reacOther:"Anderer Typ (×0,6)",
+ overCdr:"Cooldown-Reduktion über 75 % – der Rest wirkt nicht (Grenze angenommen).",footL:"Inoffizielles Fan-Tool · nicht mit NEXON verbunden",footR:"Daten und Bilder: NEXON Open API",ddNormal:"Descendants",ddUlt:"Ultimate-Descendants",oDescH:"Descendant",tSkill:"Ziel-Skill",transSel:"Transzendent",trNone:"keins",target:"Ziel",
+ trNoCalc:"Wirkung wird nicht eingerechnet – nur die Kapazität zählt.",
  oLive:"Echte Modulwerte pro Level aus der NEXON Open API.",oLoading:"Lade Moduldaten von NEXON …",
  oLegacy:"Ohne NEXON-Daten: eingebaute Nell-Werte, Level über 0 geschätzt.",
  oNeedData:"Für {n} braucht der Optimierer die Moduldaten von NEXON – dafür ist eine Verbindung nötig.",
  bestFor:"Bestes Build · {n}",calcMsLive:"{ms} ms gerechnet · {k} passende Module geprüft · Werte: NEXON Open API.",
  dToOpt:"Build im Optimierer berechnen",
  r7:"Crit-Werte von Modulen (in NEXONs Daten mit [x] markiert) wirken multiplikativ: Critrate = Basis × (1 + Summe der Module). Skill Power, Modifier und Cooldown werden addiert.",
+ eqH:"Ausrüstung",reacMatchShort:"Passender Reaktor",reacFits:"passt zu {t}",reacOtherShort:"Anderer Reaktor",reacOtherSub:"falscher Typ · Schaden ×0,6",
+ compHunterSub:"−4 % Cooldown (Set-Bonus, angenommen)",compSlayerSub:"+26,1 % Skill Power (Set-Bonus, angenommen)",trigPbSub:"+15 % Skill Power",trigNoneSub:"kein Bonus",
+ trkH:"Tracker",trkDone:"{d}/{n} fertig",trkEmpty:"Noch nichts getrackt. Im Item Finder ein Item wählen und „+ Tracken“ drücken.",trkGoFinder:"Zum Item Finder",
+ trkClearDone:"Erledigte entfernen",trkClear:"Alle entfernen",trkConfirm:"Alle Einträge aus dem Tracker entfernen?",trkLess:"Eins weniger",trkMore:"Eins mehr",
+ trkEditHave:"Vorhandene Menge ändern",trkEditNeed:"Zielmenge ändern",trkRemove:"{n} entfernen",trkHint:"Shift + Klick: ±10",trkAdded:"{n} Einträge im Tracker",
+ fTrack:"+ Tracken",fTracked:"Im Tracker ✓",fTrackRec:"+ Rezept tracken",fTrackBase:"+ Grundmaterialien tracken",dTrack:"Materialien tracken",
  navWeap:"Waffen",wSelH:"Deine Waffen",wSelNote:"Bis zu 3 Waffen wie im Spiel. Die Auswahl wird in diesem Browser gespeichert und beim Build angezeigt – in den Score fließt sie noch nicht ein (der Rechner bewertet bisher nur Skill-Schaden).",
  wAllH:"Alle Waffen",wSearch:"Waffe oder Fähigkeit suchen …",wAllTypes:"Alle Waffentypen",wAllRounds:"Alle Munitionsarten",wEmptySlot:"Slot {n} – frei",wRemove:"{n} entfernen",
  wMax:"Es sind schon {n} Waffen gewählt – entferne zuerst eine.",wNone:"Noch keine Waffe gewählt.",wNoHit:"Keine Waffe passt zu diesen Filtern.",wCount:"{n} von {m} Waffen",
@@ -680,12 +778,12 @@ en:{
  transH:"Transcendent modules",
  shEff:"Turns Skill 4 into an attack skill (Breach Spikes, Suspicion stacks), +20% Skill Crit Rate on the passive, own resource bar.",shUse:"Best in slot for all builds",
  rhEff:"Turns Skills 2 and 3 into ally buff skills.",rhUse:"Support niche",
- unlockH:"Unlocking Nell",prereq:"Requirement: Mastery Rank 15 and the Sigma Sector main quest to access Axion Plains.",
- bpH:"Blueprints",bpList:"<li><b>Blueprint Loot Cache</b> (6.5% per Nell blueprint) – set it as a target reward in the journal, guaranteed at 100% progress.</li><li><b>Arche Loot Cache</b> (Nell blueprints only, 25% each).</li><li>Axion Plains missions: Sealed Residential District, First Crater, AX Refinery, Technical Research Institute, Liquefied AX Vault, Emergency Deployment Zone, AX Power Converter Station.</li><li>The Nell Code comes fully built from the caches.</li>",
- matH:"Research materials",thPart:"Part",thMat:"Material",thQty:"Amount",thWhere:"Location",shop:"Alternatively in the shop: 900 Caliber (Nell only).",
- srcH:"Modules, reactor, components",thItem:"Item",thSrc:"Source",
- srcTip:"Tip: In game, the map's <i>Access Info → Modules</i> shows the current source of every module. Reactor drops rotate daily (Difficulty Level Rewards on the map).",
- noSrc:"not recorded yet – in game: Access Info → Modules",srcShort:"Access Info in game",
+ 
+ 
+ 
+ thSrc:"Source",
+ 
+ srcShort:"Access Info in game",
  howH:"How it's calculated",
  fDmg:"<b>Damage factor</b> = (1 + Skill Power) × (1 + Skill Power Modifier) × (1 + Crit Rate × (Crit Damage − 1))",
  fScore:"<b>Score</b> = Damage factor × (1 / (1 − Cooldown reduction))<sup>CD weight</sup> × (1 + Range)<sup>Range weight</sup>",
@@ -724,20 +822,26 @@ icH:"Original icons (local)",icIntro:"This file loads the official icons straigh
  fMapH:"Overview map",fMapModes:"Operations without a fixed region",fMapNote:"Schematic overview, not the in-game map: it marks the region or operation type, the number counts the sources there. Click a region to filter the list. The exact position is shown on the in-game map.",
  fk_mission:"Mission",fk_boss:"Boss",fk_field:"Region (boxes, enemies)",fk_npc:"NPC",
  fSrcLive:"Item data from NEXON active: {n} items, {a} sources.",fLoading:"Loading item data …",fErr:"Item data could not be loaded ({e}).",
- fReload:"Reload item data",fSrcNote:"Names, images and sources: NEXON Open API. NEXON provides no sources for modules – see the table below.",
+ fReload:"Reload item data",fSrcNote:"Names, images and sources: NEXON Open API. NEXON provides no sources for modules.",
  fc__weapon:"Weapon",fc__desc:"Descendant",fc_ResearchMaterial:"Research material",fc_FunctionalItem:"Functional item",fc_AmorphousMaterial:"Amorphous material",fc_ItemSelectBox:"Selection box",
  fc_CoreItem:"Core item",fc_Bundle:"Bundle",fc_GuaranteedRandomBox:"Random box (guaranteed)",fc_RandomBox:"Random box",fc_PurchaseTicket:"Purchase ticket",fc_OtherMaterials:"Other materials",
  fc_EventCoin:"Event coin",fc_ShapeStabilizer:"Shape stabilizer",fc_EnhancementMaterial:"Enhancement material",fc_ResearchAcceleration:"Research acceleration",fc_OptionTierFixItem:"Option tier fix item",
  fc_RotationShopCoin:"Rotation shop coin",fc_CombinedSpectrumMaterials:"Spectrum material",fc_FellowExpItem:"Fellow EXP",fc_CharacterExpItem:"Descendant EXP",fc_WeaponProficiencyItem:"Weapon proficiency",
  fc_EigenfactorExpItem:"Eigenfactor EXP",fc_CollectibleShopCoin:"Collectible shop coin",fc_ContentCoin:"Content coin",fc_RegionShopCoin:"Region shop coin",
- overCdr:"Cooldown reduction above 75% – the rest has no effect (assumed cap).",oDescH:"Descendant",tSkill:"Target skill",transSel:"Transcendent",trNone:"none",target:"Target",
- trNoCalc:"Effect is not calculated – only its capacity counts.",reacMatch:"Matching: {t}",reacOther:"Other type (×0.6)",
+ overCdr:"Cooldown reduction above 75% – the rest has no effect (assumed cap).",footL:"Unofficial fan tool · not affiliated with NEXON",footR:"Data and images: NEXON Open API",ddNormal:"Descendants",ddUlt:"Ultimate Descendants",oDescH:"Descendant",tSkill:"Target skill",transSel:"Transcendent",trNone:"none",target:"Target",
+ trNoCalc:"Effect is not calculated – only its capacity counts.",
  oLive:"Real module values per level from the NEXON Open API.",oLoading:"Loading module data from NEXON …",
  oLegacy:"Without NEXON data: built-in Nell values, levels above 0 estimated.",
  oNeedData:"For {n} the optimizer needs NEXON's module data – this needs a connection.",
  bestFor:"Best build · {n}",calcMsLive:"Calculated in {ms} ms · {k} matching modules checked · values: NEXON Open API.",
  dToOpt:"Calculate build in the optimizer",
  r7:"Crit values of modules (marked [x] in NEXON's data) are multiplicative: crit rate = base × (1 + sum of modules). Skill Power, modifiers and cooldown are added up.",
+ eqH:"Gear",reacMatchShort:"Matching reactor",reacFits:"matches {t}",reacOtherShort:"Other reactor",reacOtherSub:"wrong type · damage ×0.6",
+ compHunterSub:"−4% cooldown (set bonus, assumed)",compSlayerSub:"+26.1% Skill Power (set bonus, assumed)",trigPbSub:"+15% Skill Power",trigNoneSub:"no bonus",
+ trkH:"Tracker",trkDone:"{d}/{n} done",trkEmpty:"Nothing tracked yet. Pick an item in the Item Finder and press “+ Track”.",trkGoFinder:"Open Item Finder",
+ trkClearDone:"Remove finished",trkClear:"Remove all",trkConfirm:"Remove all entries from the tracker?",trkLess:"One less",trkMore:"One more",
+ trkEditHave:"Change owned amount",trkEditNeed:"Change target amount",trkRemove:"Remove {n}",trkHint:"Shift + click: ±10",trkAdded:"{n} entries in the tracker",
+ fTrack:"+ Track",fTracked:"Tracked ✓",fTrackRec:"+ Track recipe",fTrackBase:"+ Track base materials",dTrack:"Track materials",
  navWeap:"Weapons",wSelH:"Your weapons",wSelNote:"Up to 3 weapons, as in the game. Your selection is saved in this browser and shown with the build – it does not affect the score yet (the calculator only rates skill damage so far).",
  wAllH:"All weapons",wSearch:"Search weapon or ability …",wAllTypes:"All weapon types",wAllRounds:"All ammo types",wEmptySlot:"Slot {n} – empty",wRemove:"Remove {n}",
  wMax:"{n} weapons are already selected – remove one first.",wNone:"No weapon selected yet.",wNoHit:"No weapon matches these filters.",wCount:"{n} of {m} weapons",
@@ -768,25 +872,6 @@ const NELL_SKILLS=[
   e:{de:"Kehrt die Gravitation im Breach um, zieht Gegner zusammen und schadet.",en:"Reverses gravity inside the Breach, pulling enemies together and damaging them."}},
  {n:{de:"4 · Gaze of the Abyss",en:"4 · Gaze of the Abyss"},ty:"Non-Attr · Tech",
   e:{de:"Waffen treffen Schwachstellen (auch für Verbündete). Treffer auf gescannte Gegner verlängern die Dauer.",en:"Firearms target weak points (also for allies). Hits on scanned enemies extend the duration."}}
-];
-const LOC={
- fort:{de:"Fortress – Ressourcenkisten/Munition (Hard)",en:"Fortress – resource boxes/munitions (Hard)"},
- hag:{de:"Hagios – Ressourcenkisten/Munition (Hard)",en:"Hagios – resource boxes/munitions (Hard)"},
- axi:{de:"Axion Plains – Kommandanten",en:"Axion Plains – commanders"},
- ste:{de:"Sterile Land – Ressourcenkisten/Munition (Hard)",en:"Sterile Land – resource boxes/munitions (Hard)"},
- ves:{de:"Vespers – Ressourcenkisten/Munition (Hard)",en:"Vespers – resource boxes/munitions (Hard)"},
- agn:{de:"Agna Desert – Ressourcenkisten/Munition (Hard)",en:"Agna Desert – resource boxes/munitions (Hard)"}
-};
-const MATS=[
- ["Enhanced Cell","Hellion",279,"fort"],["Enhanced Cell","Shape Memory Alloy",496,"hag"],["Enhanced Cell","Entropium",100,"axi"],
- ["Stabilizer","Metal Accelerant",515,"ste"],["Stabilizer","Hardener",330,"ves"],["Stabilizer","Entropium",100,"axi"],
- ["Spiral Catalyst","Monomolecular Extractor",544,"agn"],["Spiral Catalyst","Reverse Charging Coil",437,"fort"],["Spiral Catalyst","Entropium",100,"axi"]
-];
-const SRC_EXTRA=[
- ["Shattered Heart / Restored Heart",{de:"Modul-Kombination oder Missionen in den Axion Plains",en:"Module combine or Axion Plains missions"}],
- [{de:"Materialized Mechanics / Mixture (Reaktor)",en:"Materialized Mechanics / Mixture (reactor)"},{de:"Täglich wechselnde Drop-Orte – Karte → Belohnungen nach Schwierigkeitsgrad",en:"Drop locations rotate daily – map → Difficulty Level Rewards"}],
- [{de:"Hunter / Ascending / Slayer (Komponenten)",en:"Hunter / Ascending / Slayer (components)"},{de:"Je nach Set Void Intercept / Missionsbelohnungen – im Spiel unter Zugangsinfo prüfen",en:"Depending on set, Void Intercept / mission rewards – check Access Info in game"}],
- ["Mutant Cell (Arche Tuning)",{de:"Sigma Sector Dropoff Operation (geringe Chance)",en:"Sigma Sector Dropoff Operation (low chance)"}]
 ];
 const tr=x=>typeof x==="string"?x:x[LANG];
 // stats: sp=Skill Power, spNA=Non-Attr. Skill Power, spm=Modifier, spmTech/spmFus, cr=Critrate, cd=Critschaden, cdr=Cooldown-Red., cost, range, hp
@@ -889,15 +974,11 @@ function renderStatic(){
   document.title=t("title");
   document.querySelectorAll("[data-i]").forEach(el=>el.innerHTML=t(el.dataset.i));
   [...$("lvl").options].forEach((o,i)=>o.textContent=t("lvl")+" "+i+(i==10?` (${t("max")})`:""));
-  $("matTbl").innerHTML=`<tr><th>${t("thPart")}</th><th>${t("thMat")}</th><th>${t("thQty")}</th><th>${t("thWhere")}</th></tr>`+
-    MATS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${tr(LOC[r[3]])}</td></tr>`).join("");
-  $("srcTbl").innerHTML=`<tr><th>${t("thItem")}</th><th>${t("thSrc")}</th></tr>`+
-    MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="src">${m.src||t("noSrc")}</td></tr>`).join("")+
-    SRC_EXTRA.map(r=>`<tr><td>${tr(r[0])}</td><td class="src">${tr(r[1])}</td></tr>`).join("");
   $("modTbl").innerHTML=`<tr><th>${t("thModule")}</th><th>${t("thSocket")}</th><th>${t("thCap0")}</th><th>${t("thTag")}</th><th>${t("thEff0")}</th></tr>`+
     MODS.map(m=>`<tr><td><div class="mname">${modIcon(m)}${m.n}</div></td><td class="s-${m.s}">${m.s}</td><td>${m.c}</td><td>${m.t||"–"}</td><td>${statTxt(m.st)}${m.condSt?(Object.keys(m.st).length?" · ":"")+t("cond")+": "+statTxt(m.condSt):""}</td></tr>`).join("");
   $("gear").title=t("navData");$("gear").setAttribute("aria-label",t("navData"));
   renderIconStatus();
+  if(typeof renderTracker==="function")renderTracker();
   ensureWeapons();renderWeapons();
   ensureDesc(true,"en");if(LANG!=="en")ensureDesc(true,LANG);renderDesc();renderOptPanel();
   ensureItems($("farm").classList.contains("on"));renderFinder();
@@ -1328,7 +1409,7 @@ function renderDescDetail(d){
     <h2${dUlt(d)?' class="t3"':""}>${escH(d.n)}</h2>
     <div class="hero"><div class="portrait">${dPic(d).replace('alt=""',`alt="${escH(d.n)}"`)}</div><div>
       ${nell?`<p>${t("nellIntro")}</p><h3>${t("comboH")}</h3><p>${t("combo")}</p>`:`<p class="note">${t("dOnlyNell")}</p>`}
-      <button type="button" class="btn sec back" data-opt="${escH(d.id)}">${t("dToOpt")} →</button>
+      <div class="dbtns"><button type="button" class="btn sec back" data-opt="${escH(d.id)}">${t("dToOpt")} →</button><button type="button" class="btn sec back" data-dmat="${escH(d.id)}">${t("dTrack")} →</button></div>
     </div></div>
     <h3>${t("dSkillsH")}</h3><div class="tscroll">${skills}</div>
   </div>
@@ -1374,7 +1455,8 @@ function ensureDesc(mayFetch,lang=LANG){
 }
 $("dSearch").oninput=e=>{DQ=e.target.value;renderDescGrid();};
 $("dGrid").onclick=e=>{const b=e.target.closest("[data-d]");if(b)openDesc(b.dataset.d);};
-$("dDetail").onclick=e=>{const o=e.target.closest("[data-opt]");if(o){oSetDesc(o.dataset.opt);showView("opt");$("oDdBtn").focus({preventScroll:true});return;}
+$("dDetail").onclick=e=>{const dm=e.target.closest("[data-dmat]");if(dm){showView("farm");fSelect("d:"+dm.dataset.dmat);$("fDetail").scrollIntoView({block:"nearest"});return;}
+  const o=e.target.closest("[data-opt]");if(o){oSetDesc(o.dataset.opt);showView("opt");$("oDdBtn").focus({preventScroll:true});return;}
   if(e.target.closest("[data-back]")){const id=DSEL;openDesc(null);const c=[...document.querySelectorAll("#dGrid [data-d]")].find(x=>x.dataset.d===id);if(c)c.focus();}};
 $("dReload").onclick=()=>{D_ERR="";loadDesc(LANG);};
 // ---------- OPTIMIERER: alle Descendants ----------
@@ -1423,7 +1505,7 @@ function cfg(){
   const d=oDesc(),sk=oSkills(d)[OSK]||{n:"",el:"",ek:"na",ar:"",ak:"tech"},trm=oTrans(d).find(m=>m.id===OTR)||null;
   const c={d,sk,ek:sk.ek,ak:sk.ak,tr:trm,live:!!oLive(),wCd:+$("wCd").value,wRange:+$("wRange").value,needHp:$("needHp").checked,
     condDecimator:$("condDecimator").checked,condAmbush:$("condAmbush").checked,cap:+$("cap").value,lvl:+$("lvl").value,
-    allMatch:$("allMatch").checked,reactor:$("reactor").value,comps:$("comps").value,trigger:$("trigger").value,
+    allMatch:$("allMatch").checked,reactor:EQ.reactor,comps:EQ.comps,trigger:EQ.trigger,
     baseCr:+$("baseCr").value,baseCd:+$("baseCd").value,shCap:+$("shCap").value};
   const half=r=>c.allMatch?Math.ceil(r/2):r;
   c.trCost=!trm?0:Array.isArray(trm.c)&&trm.c.length?half(trm.c[Math.min(c.lvl,trm.c.length-1)]):c.shCap;
@@ -1528,6 +1610,44 @@ function oIcon(o,c){
 }
 const oSrc=o=>{const m=MODS.find(x=>x.n===o.en);return m&&m.src||t("srcShort");};
 
+const EQ_REACTOR={chill_dim:["Frozen Phase Reactor", "Frostphasen-Reaktor", "62944368a848779247dfdbeebbe5261e"],chill_fus:["Frozen Mixture Reactor", "Frostverschmelzung-Reaktor", "b453cd8881b6e3f236b20773a17ea383"],chill_sing:["Frozen Singularity Reactor", "Frostsingularität-Reaktor", "b0b5acdb3ef15a8c3c4e948191d65a33"],chill_tech:["Frozen Mechanics Reactor", "Frostmechanik-Reaktor", "c67f0731e692a0095b54176dac7dadb5"],elec_dim:["Tingling Phase Reactor", "Stromphasen-Reaktor", "1e46b67f5a7e53acd16b26581d04e4de"],elec_fus:["Tingling Mixture Reactor", "Stromverschmelzung-Reaktor", "0620b72056a73d506ee8d5cab82a9480"],elec_sing:["Tingling Singularity Reactor", "Stromsingularität-Reaktor", "0604b688ffcb382174368f653f337f89"],elec_tech:["Tingling Mechanics Reactor", "Strommechanik-Reaktor", "485f43024aa0fdb395bc6786a32086cc"],fire_dim:["Burning Phase Reactor", "Brandphasen-Reaktor", "bac6a8bdb86d3086956dfd9a17958ebc"],fire_fus:["Burning Mixture Reactor", "Brandverschmelzung-Reaktor", "fb82f976d11da73477a0129e5305211f"],fire_sing:["Burning Singularity Reactor", "Brandsingularität-Reaktor", "411dc933d10f279463d3ac4a0c24c5b4"],fire_tech:["Burning Mechanics Reactor", "Brandmechanik-Reaktor", "6e6ef342b1748c0895b0d08ec543352b"],na_dim:["Materialized Phase Reactor", "Materiephasen-Reaktor", "6e6b84d6f63f6e9031efff1f6f86af15"],na_fus:["Materialized Mixture Reactor", "Materieverschmelzung-Reaktor", "6f556a975f69a49fed991af67392d3a6"],na_sing:["Materialized Singularity Reactor", "Materiesingularität-Reaktor", "148f088aed00d4d916fae8ea7d780c22"],na_tech:["Materialized Mechanics Reactor", "Materiemechanik-Reaktor", "f22d70fb11e234c96dd6ad3090acddfc"],toxic_dim:["Toxic Phase Reactor", "Giftphasen-Reaktor", "b1f1275bd1ee5c55e0d81569afec8265"],toxic_fus:["Toxic Mixture Reactor", "Giftverschmelzung-Reaktor", "745e4c72028736d35a138bbf41505003"],toxic_sing:["Toxic Singularity Reactor", "Giftsingularität-Reaktor", "ec52ce9434b85ba86bc9630845993b0b"],toxic_tech:["Toxic Mechanics Reactor", "Giftmechanik-Reaktor", "553963ec0e03c31032f39fe3fc718a52"]};
+const EQ_COMP={slayer:[["Slayer Auxiliary Power", "Metzler-Hilfsaggregat", "3ae763ba683fc5fec98d303b15ca621e"], ["Slayer Sensor", "Metzler-Sensor", "0dfa30138e29f548118f8b38f7eb8867"], ["Slayer Memory", "Metzler-Speicher", "600a999b784019c6bb9e5333dcc61400"], ["Slayer Processor", "Metzler-Prozessor", "bced5dd90718567635edcd1f54021f5b"]],hunter:[["Hunter Auxiliary Power", "Jäger-Hilfsaggregat", "f2f2f0cb2b39f2d5099856d6c01dde38"], ["Hunter Sensor", "Jäger-Sensor", "e5f137a168344087781f916f8b4d96c0"], ["Hunter Memory", "Jäger-Speicher", "7db5598f56c70deb0dcb7bcfeddf0c0d"], ["Hunter Processor", "Jäger-Prozessor", "8006209bd90d19fbb7291563cc6bac8a"]],asc:[["Ascending Armory Auxiliary Power", "Aufstieg-Waffenkammer-Hilfsaggregat", "76b8637efaa0f5ec562426bfc068e118"], ["Ascending Armory Sensor", "Aufstieg-Waffenkammer-Sensor", "c79ea2291e9b95e83750dcfda6158e81"], ["Ascending Armory Memory", "Aufstieg-Waffenkammer-Speicher", "8728931bba76c678b9488236526793a7"], ["Ascending Armory Processor", "Aufstieg-Waffenkammer-Prozessor", "58ead54cb6a62365645115ba30b3db0d"]]};
+const EQ_TRIGGER={pb:["Power Beyond", "Jenseitige Macht", "d6c744fcbd2fd0768e2e1cf5621f71b2"]};
+// Ausrüstung im Optimierer: nur Bild-Links von NEXON, keine Bilder im Projekt. [Name EN, Name DE, Bild-Hash]
+let EQ={reactor:"match",comps:"hunter",trigger:"pb"};
+const eqName=x=>x[LANG==="de"?1:0];
+const EQ_SVG={
+ reactor:'<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 1.5H46.5V39L39 46.5H1.5V9Z" fill="#141114" stroke="#9fb3c8" stroke-opacity=".5" stroke-width="2"/><circle cx="24" cy="24" r="11" fill="none" stroke="#9fb3c8" stroke-width="3"/><circle cx="24" cy="24" r="4" fill="#9fb3c8"/></svg>',
+ comp:'<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 1.5H46.5V39L39 46.5H1.5V9Z" fill="#141114" stroke="#9fb3c8" stroke-opacity=".5" stroke-width="2"/><rect x="14" y="14" width="20" height="20" fill="none" stroke="#9fb3c8" stroke-width="3"/></svg>',
+ empty:'<svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 1.5H46.5V39L39 46.5H1.5V9Z" fill="none" stroke="#9fb3c8" stroke-opacity=".4" stroke-width="2" stroke-dasharray="4 3"/></svg>'};
+const eqImg=(x,fb)=>withImg(W_IMG+x[2],fb).replace('alt=""',`alt="" title="${escH(eqName(x))}"`);
+const eqComps=k=>k==="hunter"?[EQ_COMP.hunter[0],EQ_COMP.hunter[1],EQ_COMP.asc[2],EQ_COMP.asc[3]]:EQ_COMP.slayer;
+const eqReactor=c=>EQ_REACTOR[c.ek+"_"+c.ak];
+function eqTile(name,val,cur,icons,title,sub,cls=""){
+  return `<label class="eqt ${cls}"><input type="radio" name="${name}" value="${val}"${val===cur?" checked":""}><span class="eqi${icons.length>1?" four":""}">${icons.join("")}</span><b>${title}</b><small>${sub}</small></label>`;
+}
+function renderEqPick(){
+  const d=oDesc(),sk=oSkills(d)[OSK],key=sk?sk.ek+"_"+sk.ak:"",r=EQ_REACTOR[key];
+  $("eqReactor").innerHTML=
+    eqTile("eqR","match",EQ.reactor,[r?eqImg(r,EQ_SVG.reactor):EQ_SVG.reactor],r?escH(eqName(r)):t("reacMatchShort"),escH(t("reacFits",{t:sk?sk.el+" · "+sk.ar:"–"})))+
+    eqTile("eqR","other",EQ.reactor,[EQ_SVG.reactor],t("reacOtherShort"),t("reacOtherSub"),"off");
+  const cn=k=>escH(eqName(EQ_COMP[k][0]).replace(/[- ](Auxiliary Power|Hilfsaggregat)$/,""));
+  $("eqComps").innerHTML=
+    eqTile("eqC","hunter",EQ.comps,eqComps("hunter").map(x=>eqImg(x,EQ_SVG.comp)),`2× ${cn("hunter")} + 2× ${cn("asc")}`,t("compHunterSub"))+
+    eqTile("eqC","slayer",EQ.comps,eqComps("slayer").map(x=>eqImg(x,EQ_SVG.comp)),`4× ${cn("slayer")}`,t("compSlayerSub"));
+  $("eqTrigger").innerHTML=
+    eqTile("eqT","pb",EQ.trigger,[eqImg(EQ_TRIGGER.pb,EQ_SVG.comp)],escH(eqName(EQ_TRIGGER.pb)),t("trigPbSub"))+
+    eqTile("eqT","none",EQ.trigger,[EQ_SVG.empty],t("none"),t("trigNoneSub"),"off");
+}
+["eqReactor","eqComps","eqTrigger"].forEach(id=>$(id).addEventListener("change",e=>{
+  const v=e.target.value;if(e.target.name==="eqR")EQ.reactor=v;else if(e.target.name==="eqC")EQ.comps=v;else EQ.trigger=v;
+}));
+function eqLine(c){
+  const r=eqReactor(c),comps=eqComps(c.comps).map(x=>`<span class="eqc">${eqImg(x,EQ_SVG.comp)}</span>`).join("");
+  const rea=c.reactor==="match"&&r?`<span class="eqc">${eqImg(r,EQ_SVG.reactor)}<b>${escH(eqName(r))}</b></span>`:`<span class="eqc bad">${EQ_SVG.reactor}<b>${t("reacOtherShort")}</b></span>`;
+  const trg=c.trigger==="pb"?`<span class="eqc">${eqImg(EQ_TRIGGER.pb,EQ_SVG.comp)}<b>${escH(eqName(EQ_TRIGGER.pb))}</b></span>`:"";
+  return `<div class="eqline"><span class="wl-h">${t("eqH")}</span>${rea}${comps}${trg}</div>`;
+}
 // ---------- OPTIMIERER: Auswahl (Drop-down mit Bild) ----------
 function renderOptPanel(){
   oDefaults();
@@ -1548,15 +1668,17 @@ function renderOptPanel(){
   $("trans").innerHTML=`<option value="">${t("trNone")}</option>`+tm.map(m=>`<option value="${escH(m.id)}">${escH(m.n)}</option>`).join("");
   $("trans").value=OTR;
   $("transNote").textContent=OTR&&OTR!==SH_ID?t("trNoCalc"):"";
-  const s=sk[OSK],rv=$("reactor").value||"match";
-  $("reactor").innerHTML=`<option value="match">${escH(t("reacMatch",{t:s?s.el+" · "+s.ar:"–"}))}</option><option value="other">${t("reacOther")}</option>`;
-  $("reactor").value=rv;
+  renderEqPick();
   $("cmp").style.display=d.id===NELL_ID?"":"none";
 }
 function renderOptList(){
-  const id=oDesc().id;
-  $("oDdList").innerHTML=dSorted().map(x=>`<li role="option" id="oo-${escH(x.id)}" data-id="${escH(x.id)}" aria-selected="${x.id===id}"><span class="dd-pic">${dPic(x)}</span><span class="dd-n${dUlt(x)?" t3":""}">${escH(x.n)}</span></li>`).join("");
+  const id=oDesc().id,all=dSorted(),opt=x=>`<li role="option" id="oo-${escH(x.id)}" data-id="${escH(x.id)}" aria-selected="${x.id===id}"><span class="dd-pic">${dPic(x)}</span><span class="dd-n${dUlt(x)?" t3":""}">${escH(x.n)}</span></li>`;
+  const grp=(gid,label,list)=>list.length?`<li role="presentation"><ul role="group" aria-labelledby="${gid}"><li role="presentation" class="dd-sec" id="${gid}">${escH(label)} <small>${list.length}</small></li>${list.map(opt).join("")}</ul></li>`:"";
+  // Erst normale Descendants (alphabetisch), darunter die Ultimate-Varianten als eigene Kategorie
+  $("oDdList").innerHTML=grp("ddg-n",t("ddNormal"),all.filter(x=>!dUlt(x)).sort((a,b)=>a.n.localeCompare(b.n)))
+    +grp("ddg-u",t("ddUlt"),all.filter(x=>dUlt(x)).sort((a,b)=>dBase(a).n.localeCompare(dBase(b).n)));
 }
+const ddOpts=()=>[...$("oDdList").querySelectorAll("[role=option]")];
 function oSetDesc(id){
   if(!id||id===OSEL)return;
   OSEL=id;OSK=null;OTR=null;
@@ -1565,7 +1687,7 @@ function oSetDesc(id){
 }
 let ddAct=null,ddType="",ddTimer=0;
 function ddMove(id,scroll=true){
-  const l=$("oDdList"),li=[...l.children].find(x=>x.dataset.id===id)||l.firstElementChild;if(!li)return;
+  const l=$("oDdList"),li=ddOpts().find(x=>x.dataset.id===id)||ddOpts()[0];if(!li)return;
   l.querySelectorAll(".act").forEach(x=>x.classList.remove("act"));li.classList.add("act");
   l.setAttribute("aria-activedescendant",li.id);ddAct=li.dataset.id;
   if(scroll)li.scrollIntoView({block:"nearest"});
@@ -1582,10 +1704,10 @@ function ddClose(focusBtn){
 function ddPick(id){ddClose(true);oSetDesc(id);}
 $("oDdBtn").onclick=()=>$("oDdList").hidden?ddOpen():ddClose(true);
 $("oDdBtn").onkeydown=e=>{if(["ArrowDown","ArrowUp","Enter"," "].includes(e.key)){e.preventDefault();ddOpen();}};
-$("oDdList").onclick=e=>{const li=e.target.closest("[data-id]");if(li)ddPick(li.dataset.id);};
+$("oDdList").onclick=e=>{const li=e.target.closest("[role=option]");if(li)ddPick(li.dataset.id);};
 $("oDdList").onmousemove=e=>{const li=e.target.closest("[data-id]");if(li&&li.dataset.id!==ddAct)ddMove(li.dataset.id,false);};
 $("oDdList").onkeydown=e=>{
-  const items=[...$("oDdList").children],i=items.findIndex(x=>x.dataset.id===ddAct);
+  const items=ddOpts(),i=items.findIndex(x=>x.dataset.id===ddAct);
   const go=j=>{const x=items[Math.max(0,Math.min(items.length-1,j))];if(x)ddMove(x.dataset.id);};
   if(e.key==="ArrowDown"){e.preventDefault();go(i+1);}
   else if(e.key==="ArrowUp"){e.preventDefault();go(i-1);}
@@ -1598,7 +1720,7 @@ $("oDdList").onkeydown=e=>{
   else if(e.key==="Tab")ddClose(false);
   else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){ // Tippen springt zum Namen
     ddType+=e.key.toLowerCase();clearTimeout(ddTimer);ddTimer=setTimeout(()=>ddType="",700);
-    const x=items.find(x=>x.textContent.toLowerCase().startsWith(ddType));if(x)ddMove(x.dataset.id);
+    const x=items.find(x=>x.querySelector(".dd-n").textContent.toLowerCase().startsWith(ddType));if(x)ddMove(x.dataset.id);
   }
 };
 document.addEventListener("click",e=>{if(e.target.isConnected&&!$("oDd").contains(e.target))ddClose(false);});
@@ -1623,6 +1745,7 @@ function renderBuild(r,c,title,ref){
    <div class="kpi"><small>${t("cdr")}</small><b>${fmt(r.cdr,1)} %</b></div>
    <div class="kpi"><small>${t("capK")}</small><b>${r.capUsed} / ${c.cap}</b></div>
   </div>
+  ${eqLine(c)}
   <div data-wline></div>
   ${r.overCr?`<p class="warn">${t("overCr")}</p>`:""}
   ${r.cdr>75?`<p class="warn">${t("overCdr")}</p>`:""}
@@ -1748,12 +1871,13 @@ function fMap(srcs){
     const l1=two?words.slice(0,Math.ceil(words.length/2)).join(sep):name,l2=two?words.slice(Math.ceil(words.length/2)).join(sep):"";
     const kinds=a?[...a.k].sort().map((kd,i)=>`<path transform="translate(${26+i*15} -20)" d="${F_GLYPH[kd]}" fill="${F_KCOL[kd]}"/>`).join(""):"";
     return `<g class="fm-n${a?" act":""}${FREG===k?" sel":""}" transform="translate(${r.x} ${r.y})" data-reg="${k}"${a?` tabindex="0" role="button" aria-pressed="${FREG===k}" aria-label="${escH(name)}: ${a.n}"`:""}>
-      <path class="fm-ring" d="${hex(27)}"/><path class="fm-h" d="${hex(19)}"/>${a?`<text class="fm-c" y="5">${a.n}</text>`:""}${kinds}
+      ${a?`<circle class="fm-glow" r="46" fill="url(#fmGlow)"/>`:""}<path class="fm-ring" d="${hex(27)}"/><path class="fm-h" d="${hex(19)}"/>${a?`<text class="fm-c" y="5">${a.n}</text>`:""}${kinds}
       <text class="fm-t" y="${40}">${escH(l1)}</text>${l2?`<text class="fm-t" y="54">${escH(l2)}</text>`:""}</g>`;}).join("");
-  return `<div class="tscroll"><svg class="fmap" viewBox="0 0 640 480" role="group" aria-label="${escH(t("fMapH"))}">
+  return `<div class="fmapbox"><div class="tscroll"><svg class="fmap" viewBox="0 0 640 480" role="group" aria-label="${escH(t("fMapH"))}">
+    <defs><radialGradient id="fmGlow"><stop offset="0" stop-color="rgba(63,224,255,.35)"/><stop offset="1" stop-color="rgba(63,224,255,0)"/></radialGradient></defs>
     <path class="fm-div" d="M20 338H620"/><text class="fm-cap" x="20" y="360">${escH(t("fMapModes"))}</text>${lines}${nodes}</svg></div>
-   <div class="legend">${F_KINDS.map(k=>`<span>${fGlyph(k)}${t("fk_"+k)}</span>`).join("")}</div>
-   <p class="note">${t("fMapNote")}</p>`;
+   <div class="legend">${F_KINDS.map(k=>`<span>${fGlyph(k)}${t("fk_"+k)}</span>`).join("")}</div></div>
+   <p class="note fmapnote">${t("fMapNote")}</p>`;
 }
 function renderFinderDetail(){
   const o=FSEL&&F_BY[FSEL],el=$("fDetail");
@@ -1768,7 +1892,7 @@ function renderFinderDetail(){
   const rec=o.rec?`<h3>${t("fRecipe")}</h3><p class="note">${t("fRecipeNote")}</p><div class="fchips">`+o.rec.map(([id,c])=>{const m=F_BY["c:"+id];
     return m?`<button type="button" class="pill flink" data-f="${escH(m.k)}">${fThumb(m,"fth s")}${escH(m.n)} ×${c}</button>`:`<span class="pill">#${escH(id)} ×${c}</span>`;}).join("")+"</div>":"";
   el.innerHTML=`<div class="fhead">${fThumb(o,"fth l")}<div><div class="fn big ${o.cls||""}">${escH(o.n)}</div><div class="wsub">${escH(fCat(o.cat))}</div>
-      ${o.cat==="_desc"?`<button type="button" class="flink" data-desc="${escH(o.k.slice(2))}">${t("fToDesc")} →</button>`:""}</div></div>
+      ${o.cat==="_desc"?`<button type="button" class="flink" data-desc="${escH(o.k.slice(2))}">${t("fToDesc")} →</button>`:""}${trkButtons(o)}</div></div>
     ${srcs.length?`<h3>${t("fMapH")}</h3>${fMap(srcs)}`:""}
     ${rec}
     ${srcs.length?`<div class="fsrcs"><h3 class="fs-h">${t("fSrcH")} <small>(${srcs.length})</small>${FREG?` <button type="button" class="flink" data-regclear>${t("fAllRegs")}</button>`:""}</h3>${list}</div>`:""}
@@ -1781,7 +1905,7 @@ function renderFinderStatus(){
   else if(I_ERR){el.className="status bad";el.textContent=t("fErr",{e:I_ERR});}
   else{el.className="status";el.textContent=t("fNeedData");}
 }
-function renderFinder(){fBuild();if(FSEL&&!F_BY[FSEL])FSEL=null;renderFinderFilters();renderFinderList();renderFinderDetail();renderFinderStatus();}
+function renderFinder(){fBuild();if(typeof renderTracker==="function")renderTracker();if(FSEL&&!F_BY[FSEL])FSEL=null;renderFinderFilters();renderFinderList();renderFinderDetail();renderFinderStatus();}
 function fSelect(k,scroll){
   FSEL=k;FREG=null;renderFinderDetail();
   document.querySelectorAll("#fList .frow").forEach(b=>b.setAttribute("aria-pressed",b.dataset.f===k));
@@ -1813,6 +1937,7 @@ $("fList").onclick=e=>{const b=e.target.closest("[data-f]");if(b)fSelect(b.datas
 $("fReload").onclick=()=>{I_ERR="";loadItems(LANG);};
 function fRegToggle(k){FREG=FREG===k?null:k;renderFinderDetail();const n=$("fDetail").querySelector(`.fm-n[data-reg="${k}"]`);if(n)n.focus({preventScroll:true});}
 $("fDetail").onclick=e=>{
+  const tb=e.target.closest("[data-trk]");if(tb){trkFromFinder(tb.dataset.trk,FSEL);return;}
   const f=e.target.closest("[data-f]"),d=e.target.closest("[data-desc]"),n=e.target.closest(".fm-n.act");
   if(f){fSelect(f.dataset.f);$("fDetail").scrollIntoView({block:"nearest"});}
   else if(d){showView("char");openDesc(d.dataset.desc);}
@@ -1824,6 +1949,105 @@ $("fDetail").onkeydown=e=>{const n=e.target.closest&&e.target.closest(".fm-n.act
 function fHot(reg){document.querySelectorAll("#fDetail .fm-n").forEach(n=>n.classList.toggle("hot",!!reg&&n.dataset.reg===reg));}
 $("fDetail").addEventListener("mouseover",e=>{const li=e.target.closest(".fsrc li");fHot(li&&li.dataset.reg);});
 $("fDetail").addEventListener("mouseleave",()=>fHot(null));
+// ---------- MATERIAL-TRACKER (unten rechts) ----------
+// Einträge: {k: Item-Schlüssel wie im Item Finder, n: Name, img: Bild-Link, have: vorhanden, need: Ziel}. Gespeichert nur im Browser.
+let TRK=[],TRK_OPEN=true,trkFlash=null;
+try{const a=JSON.parse(localStorage.getItem("tfdTrack")||"[]");if(Array.isArray(a))TRK=a.filter(x=>x&&x.k).map(x=>({k:String(x.k),n:String(x.n||""),img:String(x.img||""),have:Math.max(0,+x.have||0),need:Math.max(1,+x.need||1)}));}catch(e){}
+try{const o=localStorage.getItem("tfdTrackOpen");TRK_OPEN=o==null?TRK.length>0:o==="1";}catch(e){}
+if(window.matchMedia("(max-width:700px)").matches)TRK_OPEN=false;
+const trkSave=()=>{try{localStorage.setItem("tfdTrack",JSON.stringify(TRK));}catch(e){}};
+const trkFind=k=>TRK.find(x=>x.k===k);
+function trkInfo(x){const o=F_BY[x.k];if(o){x.n=o.n;x.img=o.img||x.img;}return x;}
+function renderTracker(){
+  const done=TRK.filter(x=>x.have>=x.need).length;
+  $("trk").classList.toggle("open",TRK_OPEN);
+  $("trkToggle").setAttribute("aria-expanded",TRK_OPEN);
+  $("trkH").textContent=t("trkH");
+  $("trkSum").textContent=TRK.length?t("trkDone",{d:done,n:TRK.length}):"";
+  $("trkBody").hidden=!TRK_OPEN;
+  $("trkClearDone").textContent=t("trkClearDone");$("trkClearDone").disabled=!done;
+  $("trkClear").textContent=t("trkClear");$("trkClear").disabled=!TRK.length;
+  $("trkFoot").hidden=!TRK.length;
+  if(!TRK.length){$("trkList").innerHTML=`<div class="trk-empty"><p>${t("trkEmpty")}</p><button type="button" class="flink" data-trkgo>${t("trkGoFinder")} →</button></div>`;return;}
+  $("trkList").innerHTML=TRK.map(trkInfo).map(x=>{
+    const pct=Math.min(100,Math.round(x.have/x.need*100)),ok=x.have>=x.need,k=escH(x.k),n=escH(x.n);
+    return `<div class="trk-row${ok?" done":""}${trkFlash===x.k?" flash":""}" data-k="${k}">
+      <span class="trk-ic">${fThumb({img:x.img},"fth")}</span>
+      <div class="trk-main">
+        <div class="trk-top"><span class="trk-n" title="${n}">${n}</span><button type="button" class="trk-x" data-act="rm" aria-label="${escH(t("trkRemove",{n:x.n}))}" title="${escH(t("trkRemove",{n:x.n}))}">×</button></div>
+        <div class="trk-ctl">
+          <button type="button" class="trk-b" data-act="dec" aria-label="${escH(t("trkLess"))}: ${n}" title="${escH(t("trkHint"))}">−</button>
+          <span class="trk-cnt"><button type="button" class="trk-num" data-act="edit" data-f="have" aria-label="${escH(t("trkEditHave"))}: ${x.have}">${x.have}</button><span class="trk-sl">/</span><button type="button" class="trk-num need" data-act="edit" data-f="need" aria-label="${escH(t("trkEditNeed"))}: ${x.need}">${x.need}</button></span>
+          <button type="button" class="trk-b" data-act="inc" aria-label="${escH(t("trkMore"))}: ${n}" title="${escH(t("trkHint"))}">+</button>
+          <span class="trk-pct">${ok?"✓":pct+" %"}</span>
+        </div>
+        <div class="trk-bar" role="progressbar" aria-label="${n}" aria-valuemin="0" aria-valuemax="${x.need}" aria-valuenow="${Math.min(x.have,x.need)}"><i style="width:${pct}%"></i></div>
+      </div></div>`;}).join("");
+  trkFlash=null;
+}
+// Liste neu zeichnen und den Fokus auf denselben Knopf zurücksetzen
+function trkUpdate(k,act,f){
+  trkSave();renderTracker();
+  if(!k)return;
+  const row=[...document.querySelectorAll("#trkList .trk-row")].find(r=>r.dataset.k===k);
+  const el=row&&row.querySelector(act?`[data-act="${act}"]${f?`[data-f="${f}"]`:""}`:".trk-b");
+  if(el)el.focus();
+}
+function trkAdd(entries,flashKey){ // entries: [[Schlüssel, Menge]] – vorhandene Einträge bekommen die Menge aufs Ziel addiert
+  entries.forEach(([k,c])=>{const o=F_BY[k]||{n:k,img:""},x=trkFind(k);if(x)x.need+=c;else TRK.push({k,n:o.n,img:o.img||"",have:0,need:Math.max(1,c)});});
+  TRK_OPEN=true;try{localStorage.setItem("tfdTrackOpen","1");}catch(e){}
+  trkFlash=flashKey||(entries.length===1?entries[0][0]:null);
+  trkSave();renderTracker();renderFinderDetail();
+  $("trkStatus").textContent=t("trkAdded",{n:entries.length});
+}
+// Rezept rekursiv bis zu den Grundmaterialien auflösen (Mengen werden multipliziert)
+function trkBase(k,mult,acc,depth){
+  const o=F_BY[k];
+  (o&&o.rec||[]).forEach(([id,c])=>{const mk="c:"+id,sub=F_BY[mk];
+    if(sub&&sub.rec&&depth<5)trkBase(mk,mult*c,acc,depth+1);else acc[mk]=(acc[mk]||0)+mult*c;});
+  return acc;
+}
+function trkFromFinder(kind,k){
+  const o=F_BY[k];if(!o)return;
+  if(kind==="one"){if(trkFind(k)){TRK_OPEN=true;trkFlash=k;renderTracker();}else trkAdd([[k,1]]);return;}
+  if(kind==="rec")trkAdd((o.rec||[]).map(([id,c])=>["c:"+id,c]));
+  if(kind==="base")trkAdd(Object.entries(trkBase(k,1,{},0)));
+}
+function trkButtons(o){
+  if(!I_LIVE[LANG]&&o.cat!=="_weapon"&&o.cat!=="_desc"&&!o.k.startsWith("c:"))return "";
+  const on=trkFind(o.k);
+  return `<div class="ftrk"><button type="button" class="flink${on?" on":""}" data-trk="one">${t(on?"fTracked":"fTrack")}</button>`+
+    (o.rec?`<button type="button" class="flink" data-trk="rec">${t("fTrackRec")}</button>`:"")+
+    (o.rec&&o.rec.some(([id])=>(F_BY["c:"+id]||{}).rec)?`<button type="button" class="flink" data-trk="base">${t("fTrackBase")}</button>`:"")+`</div>`;
+}
+function trkEdit(btn){
+  const row=btn.closest(".trk-row"),x=trkFind(row.dataset.k),f=btn.dataset.f;if(!x)return;
+  const inp=document.createElement("input");
+  inp.type="number";inp.min=f==="need"?"1":"0";inp.step="1";inp.inputMode="numeric";inp.className="trk-in";inp.value=x[f];
+  inp.setAttribute("aria-label",btn.getAttribute("aria-label"));
+  btn.replaceWith(inp);inp.focus();inp.select();
+  let fin=false;
+  const commit=save=>{if(fin)return;fin=true;
+    if(save){const v=Math.floor(+inp.value);if(Number.isFinite(v))x[f]=Math.max(f==="need"?1:0,Math.min(999999,v));}
+    trkUpdate(x.k,"edit",f);};
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();commit(true);}else if(e.key==="Escape"){e.preventDefault();commit(false);}});
+  inp.addEventListener("blur",()=>commit(true));
+}
+$("trkToggle").onclick=()=>{TRK_OPEN=!TRK_OPEN;try{localStorage.setItem("tfdTrackOpen",TRK_OPEN?"1":"0");}catch(e){}renderTracker();};
+$("trkList").onclick=e=>{
+  if(e.target.closest("[data-trkgo]")){showView("farm");$("fSearch").focus();return;}
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const row=b.closest(".trk-row"),x=row&&trkFind(row.dataset.k);if(!x)return;
+  const step=e.shiftKey?10:1,act=b.dataset.act;
+  if(act==="inc")x.have=Math.min(999999,x.have+step);
+  else if(act==="dec")x.have=Math.max(0,x.have-step);
+  else if(act==="edit"){trkEdit(b);return;}
+  else if(act==="rm"){const i=TRK.indexOf(x);TRK.splice(i,1);trkSave();renderTracker();renderFinderDetail();
+    const rows=document.querySelectorAll("#trkList .trk-row");const nx=rows[Math.min(i,rows.length-1)];(nx?nx.querySelector(".trk-b"):$("trkToggle")).focus();return;}
+  trkUpdate(x.k,act);
+};
+$("trkClearDone").onclick=()=>{TRK=TRK.filter(x=>x.have<x.need);trkSave();renderTracker();renderFinderDetail();$("trkToggle").focus();};
+$("trkClear").onclick=()=>{if(!confirm(t("trkConfirm")))return;TRK=[];trkSave();renderTracker();renderFinderDetail();$("trkToggle").focus();};
 // ---------- ORIGINAL-ICONS LADEN ----------
 const META="https://open.api.nexon.com/static/tfd/meta/en/";
 let icErr="";
