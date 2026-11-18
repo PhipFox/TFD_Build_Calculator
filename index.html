@@ -226,6 +226,7 @@ a{color:var(--acc)}
 .dcard{display:flex;flex-direction:column;gap:6px;align-items:stretch;cursor:pointer;padding:6px 6px 9px;min-width:0;border:0;color:var(--txt);
   font-family:var(--body);background:linear-gradient(180deg,rgba(201,138,146,.10),rgba(8,7,8,.85) 70%);box-shadow:inset 0 0 0 1px var(--line);
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:filter .15s,box-shadow .15s}
+#dGrid>.note,#wGrid>.note{grid-column:1/-1}
 .dcard:hover{filter:brightness(1.2);box-shadow:inset 0 0 0 1px var(--acc)}
 .dcard:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
 .dcard .dpic{display:block;aspect-ratio:1;background:radial-gradient(circle at 50% 30%,rgba(201,138,146,.22),rgba(10,9,10,.95) 75%)}
@@ -1158,7 +1159,10 @@ const W_BASE=[
 ["221133004","Crime and Punishment","mbal",3,"imp","704c530e3bf1e4de9547b22dd0e9bd72",["melee",233336,"fire",158436],[0,5,1,0,0,0,3.424],"Final Verdict"]
 ];
 const W_META="https://open.api.nexon.com/static/tfd/meta/";
-const DATA_MAX_AGE=864e5; // NEXON-Daten höchstens 1 Tag aus dem Zwischenspeicher, damit neue Descendants schnell erscheinen
+const DATA_MAX_AGE=864e5;
+// NEXON schickt keine Cache-Anweisung – ohne „no-cache“ liefert der Browser teils tagelang eine alte Datei aus seinem HTTP-Cache.
+// Mit „no-cache“ fragt er jedes Mal nach (unverändert = kurze 304-Antwort, sonst die neue Datei).
+const NX={cache:"no-cache"}; // NEXON-Daten höchstens 1 Tag aus dem Zwischenspeicher, damit neue Descendants schnell erscheinen
 const W_IMG="https://open.api.nexon.com/static/tfd/img/";
 const W_SK=["fr","cr","cd","wp","mag","rl","as"];
 const W_MAX=3;
@@ -1261,7 +1265,7 @@ function setWeapons(lang,arr){
 async function loadWeapons(lang){
   if(W_BUSY[lang])return;
   W_BUSY[lang]=true;renderWeaponStatus();
-  try{const r=await fetch(W_META+lang+"/weapon.json");if(!r.ok)throw new Error("weapon.json: HTTP "+r.status);setWeapons(lang,await r.json());}
+  try{const r=await fetch(W_META+lang+"/weapon.json",NX);if(!r.ok)throw new Error("weapon.json: HTTP "+r.status);setWeapons(lang,await r.json());}
   catch(e){W_ERR=(e&&e.message)||String(e);}
   W_BUSY[lang]=false;renderWeapons();
 }
@@ -1356,6 +1360,8 @@ const D_BASE=[
 ["101000026","Ines","101200026","3fbc78e2b4e4253ac0b81d93d7ad3251"]
 ];
 const D_FALLBACK=D_BASE.map(r=>({id:r[0],n:r[1],g:r[2],img:W_IMG+r[3],sk:null,tm:null}));
+// Fehlt in NEXONs Antwort ein Descendant der eingebauten Liste (z. B. veraltete Datei), wird er ohne Skills ergänzt.
+function dMerge(l){const have=new Set(l.map(d=>d.id));return l.concat(D_FALLBACK.filter(d=>!have.has(d.id)).map(d=>({...d})));}
 function slimDescendants(desc,mods,lang){
   const tm={},pool=[];
   (Array.isArray(mods)?mods:[]).forEach(m=>{
@@ -1461,11 +1467,11 @@ async function loadDesc(lang){
   if(D_BUSY[lang])return;
   D_BUSY[lang]=true;renderDesc();renderOptPanel();
   try{
-    const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(W_META+lang+"/"+f).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
+    const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(W_META+lang+"/"+f,NX).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
     const r=slimDescendants(d,m,lang);
     if(!r.l.length)throw new Error(LANG==="de"?"keine Descendants gefunden":"no descendants found");
-    D_LIVE[lang]=r.l;O_POOL[lang]=r.pool;D_ERR="";
-    try{localStorage.setItem("tfdDesc3_"+lang,JSON.stringify({t:Date.now(),l:r.l,pool:r.pool}));}catch(e){}
+    D_LIVE[lang]=dMerge(r.l);O_POOL[lang]=r.pool;D_ERR="";
+    try{localStorage.setItem("tfdDesc4_"+lang,JSON.stringify({t:Date.now(),l:r.l,pool:r.pool}));}catch(e){}
   }catch(e){D_ERR=(e&&e.message)||String(e);}
   D_BUSY[lang]=false;renderDesc();renderOptPanel();
 }
@@ -1473,8 +1479,8 @@ async function loadDesc(lang){
 // Der Optimierer braucht immer die englischen Daten (Werte werden aus den englischen Texten gelesen).
 function ensureDesc(mayFetch,lang=LANG){
   let age=Infinity;
-  if(!D_LIVE[lang]){try{const c=JSON.parse(localStorage.getItem("tfdDesc3_"+lang)||"null");
-    if(c&&Array.isArray(c.l)&&c.l.length&&Array.isArray(c.pool)){D_LIVE[lang]=c.l;O_POOL[lang]=c.pool;age=Date.now()-c.t;}}catch(e){}}
+  if(!D_LIVE[lang]){try{const c=JSON.parse(localStorage.getItem("tfdDesc4_"+lang)||"null");
+    if(c&&Array.isArray(c.l)&&c.l.length&&Array.isArray(c.pool)){D_LIVE[lang]=dMerge(c.l);O_POOL[lang]=c.pool;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
   if(mayFetch&&age>DATA_MAX_AGE&&!D_ERR)loadDesc(lang);
 }
@@ -1954,18 +1960,18 @@ async function loadItems(lang){
   if(I_BUSY[lang])return;
   I_BUSY[lang]=true;renderFinder();
   try{
-    const [c,a,r]=await Promise.all(["consumable-material.json","acquisition-detail.json","research.json"].map(f=>fetch(W_META+lang+"/"+f).then(x=>{if(!x.ok)throw new Error(f+": HTTP "+x.status);return x.json();})));
+    const [c,a,r]=await Promise.all(["consumable-material.json","acquisition-detail.json","research.json"].map(f=>fetch(W_META+lang+"/"+f,NX).then(x=>{if(!x.ok)throw new Error(f+": HTTP "+x.status);return x.json();})));
     const s=slimItems(c,a,r);
     if(!s.items.length)throw new Error(LANG==="de"?"keine Items gefunden":"no items found");
     I_LIVE[lang]=s;I_ERR="";
-    try{localStorage.setItem("tfdItems2_"+lang,JSON.stringify({t:Date.now(),s}));}catch(e){}
+    try{localStorage.setItem("tfdItems3_"+lang,JSON.stringify({t:Date.now(),s}));}catch(e){}
   }catch(e){I_ERR=(e&&e.message)||String(e);}
   I_BUSY[lang]=false;renderFinder();
 }
 // Zwischenspeicher nutzen; nachladen (wenn älter als 1 Tag) erst, wenn der Reiter geöffnet wird.
 function ensureItems(mayFetch){
   let age=Infinity;
-  if(!I_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdItems2_"+LANG)||"null");if(c&&c.s&&Array.isArray(c.s.items)&&c.s.items.length){I_LIVE[LANG]=c.s;age=Date.now()-c.t;}}catch(e){}}
+  if(!I_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdItems3_"+LANG)||"null");if(c&&c.s&&Array.isArray(c.s.items)&&c.s.items.length){I_LIVE[LANG]=c.s;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
   if(mayFetch&&age>DATA_MAX_AGE&&!I_ERR)loadItems(LANG);
 }
@@ -2118,7 +2124,7 @@ function renderIconStatus(){
 }
 async function loadOnline(key){
   const st=$("icStatus");st.className="status";st.textContent=t("icLoading");
-  const opt=key?{headers:{"x-nxopen-api-key":key}}:{};
+  const opt=key?{cache:"no-cache",headers:{"x-nxopen-api-key":key}}:{cache:"no-cache"};
   try{
     const [d,m]=await Promise.all(["descendant.json","module.json"].map(f=>fetch(META+f,opt).then(r=>{if(!r.ok)throw new Error(f+": HTTP "+r.status);return r.json();})));
     const o=applyMeta(d,m);
@@ -2141,7 +2147,7 @@ try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OF
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
 ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
-try{["tfdDesc_de","tfdDesc_en","tfdDesc2_de","tfdDesc2_en","tfdItems_de","tfdItems_en"].forEach(k=>localStorage.removeItem(k));}catch(e){}
+try{["tfdDesc_de","tfdDesc_en","tfdDesc2_de","tfdDesc2_en","tfdDesc3_de","tfdDesc3_en","tfdItems_de","tfdItems_en","tfdItems2_de","tfdItems2_en"].forEach(k=>localStorage.removeItem(k));}catch(e){}
 renderStatic();renderEmpty();
 if(!Object.keys(OFFICIAL.mods).length)loadOnline($("apiKey").value.trim()||undefined);
 </script>
