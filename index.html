@@ -1158,6 +1158,7 @@ const W_BASE=[
 ["221133004","Crime and Punishment","mbal",3,"imp","704c530e3bf1e4de9547b22dd0e9bd72",["melee",233336,"fire",158436],[0,5,1,0,0,0,3.424],"Final Verdict"]
 ];
 const W_META="https://open.api.nexon.com/static/tfd/meta/";
+const DATA_MAX_AGE=864e5; // NEXON-Daten höchstens 1 Tag aus dem Zwischenspeicher, damit neue Descendants schnell erscheinen
 const W_IMG="https://open.api.nexon.com/static/tfd/img/";
 const W_SK=["fr","cr","cd","wp","mag","rl","as"];
 const W_MAX=3;
@@ -1264,12 +1265,12 @@ async function loadWeapons(lang){
   catch(e){W_ERR=(e&&e.message)||String(e);}
   W_BUSY[lang]=false;renderWeapons();
 }
-// Zwischenspeicher (nur Text + Bild-Links) nutzen; fehlt er oder ist er älter als 7 Tage, neu von NEXON holen.
+// Zwischenspeicher (nur Text + Bild-Links) nutzen; fehlt er oder ist er älter als 1 Tag (DATA_MAX_AGE), neu von NEXON holen.
 function ensureWeapons(){
   let age=Infinity;
   if(!W_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdWeap_"+LANG)||"null");if(c&&Array.isArray(c.l)&&c.l.length){W_LIVE[LANG]=c.l;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
-  if(age>7*864e5)loadWeapons(LANG);
+  if(age>DATA_MAX_AGE)loadWeapons(LANG);
 }
 $("wSearch").oninput=e=>{WF.q=e.target.value;renderWeaponGrid();};
 $("wType").onchange=e=>{WF.ty=e.target.value;renderWeaponGrid();};
@@ -1326,32 +1327,33 @@ const D_BASE=[
 ["101000034","Ultimate Esiemo","101200015","8d490cc1df0e29ac1dc24a3b3945aee8"],
 ["101000035","Raven","101200033","f91fbdce7c3673aeeaa15c356b806005"],
 ["101000036","Ultimate Hailey","101200021","d416d87b261380b4d68582169f5b9438"],
+["101000037","Monet","101200034","bb8e026ee3f6626ff8a09f48e88aaadf"],
+["101000001","Lepic","101200001","6cecbb40acd1b4479a44caaf22817751"],
+["101000002","Ajax","101200002","74d88097b3547c406a36651c9378638c"],
 ["101000015","Esiemo","101200015","4f2cbea689b4118dc58895e5e0771270"],
 ["101000016","Enzo","101200016","dd903ca869faef90ddbe9a64127c8ca1"],
-["101000017","Yujin","101200017","2bb766e96b8aa777faf6ef1b5afcbc3f"],
-["101000018","Luna","101200018","c07d494b9cb1d8285fee1f1752ff41c0"],
-["101000019","Ultimate Bunny","101200006","d4e6462f87513fe6652633620b7f8d19"],
-["101000001","Lepic","101200001","6cecbb40acd1b4479a44caaf22817751"],
-["101000020","Ultimate Gley","101200009","c4c10b88e178305521d044f5a969583d"],
-["101000021","Hailey","101200021","3c82dcb5ee799c149a7034365a1bd698"],
-["101000022","Ultimate Valby","101200013","8ae81e3d05a981d5da24c26c09106330"],
-["101000023","Ultimate Freyna","101200008","133a00069f113afbdcd05b7bfc4c2cfa"],
-["101000002","Ajax","101200002","74d88097b3547c406a36651c9378638c"],
 ["101000003","Viessa","101200003","b2be3dc734d2fb10e694de951a5d1079"],
-["101000024","Keelan","101200024","4b0e795f45dda42996c7d2719ba7821d"],
 ["101000004","Ultimate Lepic","101200001","e2f1ec94648d91eede78f377c3b7aa19"],
-["101000025","Ultimate Sharen","101200011","a80304228f8f2ad8abcf54e6a15d235e"],
+["101000017","Yujin","101200017","2bb766e96b8aa777faf6ef1b5afcbc3f"],
 ["101000005","Jayber","101200005","79c5cbb60e2e06209a0a515775cfa3b6"],
+["101000018","Luna","101200018","c07d494b9cb1d8285fee1f1752ff41c0"],
 ["101000006","Bunny","101200006","eaffb014c98c36d8b30d90d7778bb840"],
-["101000026","Ines","101200026","3fbc78e2b4e4253ac0b81d93d7ad3251"],
+["101000019","Ultimate Bunny","101200006","d4e6462f87513fe6652633620b7f8d19"],
 ["101000007","Ultimate Ajax","101200002","118d86964484b25593b9a4dfe62e96c1"],
+["101000020","Ultimate Gley","101200009","c4c10b88e178305521d044f5a969583d"],
 ["101000008","Freyna","101200008","6737a4c79a8a2fe617cb458031e11358"],
+["101000021","Hailey","101200021","3c82dcb5ee799c149a7034365a1bd698"],
 ["101000009","Gley","101200009","d72fa90551e23916f18a81dbd4030d8f"],
+["101000022","Ultimate Valby","101200013","8ae81e3d05a981d5da24c26c09106330"],
 ["101000010","Ultimate Viessa","101200003","665a53a9b478437b13f7d6ae5f5322db"],
+["101000023","Ultimate Freyna","101200008","133a00069f113afbdcd05b7bfc4c2cfa"],
 ["101000011","Sharen","101200011","f14fdb3a55fc96e409a10b5dfa2b31b0"],
+["101000024","Keelan","101200024","4b0e795f45dda42996c7d2719ba7821d"],
 ["101000012","Blair","101200012","1a5ae4f83650ec541226f55c06deef64"],
 ["101000013","Valby","101200013","f1236f2af539bd14c431b5befdd120f4"],
-["101000014","Kyle","101200014","2ae6db799a211e64aa6a0cd1494c1b0d"]
+["101000025","Ultimate Sharen","101200011","a80304228f8f2ad8abcf54e6a15d235e"],
+["101000014","Kyle","101200014","2ae6db799a211e64aa6a0cd1494c1b0d"],
+["101000026","Ines","101200026","3fbc78e2b4e4253ac0b81d93d7ad3251"]
 ];
 const D_FALLBACK=D_BASE.map(r=>({id:r[0],n:r[1],g:r[2],img:W_IMG+r[3],sk:null,tm:null}));
 function slimDescendants(desc,mods,lang){
@@ -1463,18 +1465,18 @@ async function loadDesc(lang){
     const r=slimDescendants(d,m,lang);
     if(!r.l.length)throw new Error(LANG==="de"?"keine Descendants gefunden":"no descendants found");
     D_LIVE[lang]=r.l;O_POOL[lang]=r.pool;D_ERR="";
-    try{localStorage.setItem("tfdDesc2_"+lang,JSON.stringify({t:Date.now(),l:r.l,pool:r.pool}));}catch(e){}
+    try{localStorage.setItem("tfdDesc3_"+lang,JSON.stringify({t:Date.now(),l:r.l,pool:r.pool}));}catch(e){}
   }catch(e){D_ERR=(e&&e.message)||String(e);}
   D_BUSY[lang]=false;renderDesc();renderOptPanel();
 }
-// Zwischenspeicher nutzen; älter als 7 Tage oder fehlend → neu von NEXON holen.
+// Zwischenspeicher nutzen; älter als 1 Tag (DATA_MAX_AGE) oder fehlend → im Hintergrund neu von NEXON holen.
 // Der Optimierer braucht immer die englischen Daten (Werte werden aus den englischen Texten gelesen).
 function ensureDesc(mayFetch,lang=LANG){
   let age=Infinity;
-  if(!D_LIVE[lang]){try{const c=JSON.parse(localStorage.getItem("tfdDesc2_"+lang)||"null");
+  if(!D_LIVE[lang]){try{const c=JSON.parse(localStorage.getItem("tfdDesc3_"+lang)||"null");
     if(c&&Array.isArray(c.l)&&c.l.length&&Array.isArray(c.pool)){D_LIVE[lang]=c.l;O_POOL[lang]=c.pool;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
-  if(mayFetch&&age>7*864e5&&!D_ERR)loadDesc(lang);
+  if(mayFetch&&age>DATA_MAX_AGE&&!D_ERR)loadDesc(lang);
 }
 $("dSearch").oninput=e=>{DQ=e.target.value;renderDescGrid();};
 $("dGrid").onclick=e=>{const b=e.target.closest("[data-d]");if(b)openDesc(b.dataset.d);};
@@ -1956,16 +1958,16 @@ async function loadItems(lang){
     const s=slimItems(c,a,r);
     if(!s.items.length)throw new Error(LANG==="de"?"keine Items gefunden":"no items found");
     I_LIVE[lang]=s;I_ERR="";
-    try{localStorage.setItem("tfdItems_"+lang,JSON.stringify({t:Date.now(),s}));}catch(e){}
+    try{localStorage.setItem("tfdItems2_"+lang,JSON.stringify({t:Date.now(),s}));}catch(e){}
   }catch(e){I_ERR=(e&&e.message)||String(e);}
   I_BUSY[lang]=false;renderFinder();
 }
-// Zwischenspeicher nutzen; nachladen (max. alle 7 Tage) erst, wenn der Reiter geöffnet wird.
+// Zwischenspeicher nutzen; nachladen (wenn älter als 1 Tag) erst, wenn der Reiter geöffnet wird.
 function ensureItems(mayFetch){
   let age=Infinity;
-  if(!I_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdItems_"+LANG)||"null");if(c&&c.s&&Array.isArray(c.s.items)&&c.s.items.length){I_LIVE[LANG]=c.s;age=Date.now()-c.t;}}catch(e){}}
+  if(!I_LIVE[LANG]){try{const c=JSON.parse(localStorage.getItem("tfdItems2_"+LANG)||"null");if(c&&c.s&&Array.isArray(c.s.items)&&c.s.items.length){I_LIVE[LANG]=c.s;age=Date.now()-c.t;}}catch(e){}}
   else age=0;
-  if(mayFetch&&age>7*864e5&&!I_ERR)loadItems(LANG);
+  if(mayFetch&&age>DATA_MAX_AGE&&!I_ERR)loadItems(LANG);
 }
 $("fSearch").oninput=e=>{FF.q=e.target.value;renderFinderList();};
 $("fCat").onchange=e=>{FF.cat=e.target.value;renderFinderList();};
@@ -2139,7 +2141,7 @@ try{const c=JSON.parse(localStorage.getItem("tfdIcons")||"null");if(c&&c.mods)OF
   const k=localStorage.getItem("tfdKey");if(k)$("apiKey").value=k;
   if(localStorage.getItem("tfdUseOff")==="0"){USE_OFFICIAL=false;$("useOff").checked=false;}}catch(e){}
 ensureWeapons();WSEL=WSEL.filter(id=>wById(id));
-try{localStorage.removeItem("tfdDesc_de");localStorage.removeItem("tfdDesc_en");}catch(e){}
+try{["tfdDesc_de","tfdDesc_en","tfdDesc2_de","tfdDesc2_en","tfdItems_de","tfdItems_en"].forEach(k=>localStorage.removeItem(k));}catch(e){}
 renderStatic();renderEmpty();
 if(!Object.keys(OFFICIAL.mods).length)loadOnline($("apiKey").value.trim()||undefined);
 </script>
